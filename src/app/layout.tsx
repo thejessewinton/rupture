@@ -40,7 +40,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang='en' suppressHydrationWarning>
       <body className={classNames('font-sans tracking-wide', sansFont.variable, monoFont.variable)}>
         <SessionProvider session={session}>
-          <ThemeProvider>
+          <ThemeProvider attribute='class'>
             <TRPCReactProvider cookies={cookies().toString()}>
               <main className='flex min-h-screen w-full flex-row'>{children}</main>
               <Dialog />

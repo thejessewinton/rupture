@@ -11,7 +11,7 @@ export const Navigation = () => {
   const items: Array<{
     label: string
     href: Route<string>
-  }> = [{ label: 'Workouts', href: '/' }]
+  }> = [{ label: 'Overview', href: '/' }]
 
   return (
     <nav className='-mb-px flex overflow-x-auto text-sm'>
