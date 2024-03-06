@@ -2,7 +2,7 @@ import { TRPCError } from '@trpc/server'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
 import { protectedProcedure, createTRPCRouter } from '~/server/api/trpc'
-import { users } from '~/server/db/schema'
+import { unit, unitEnum, users } from '~/server/db/schema'
 
 export const userRouter = createTRPCRouter({
   getCurrent: protectedProcedure.query(({ ctx }) => {
@@ -34,10 +34,10 @@ export const userRouter = createTRPCRouter({
   updateWeightUnit: protectedProcedure
     .input(
       z.object({
-        weight_unit: z.enum(['kgs', 'lbs'])
+        value: z.enum(unitEnum)
       })
     )
     .mutation(async ({ input, ctx }) => {
-      return await ctx.db.update(users).set({ weight_unit: input.weight_unit })
+      return await ctx.db.update(unit).set({ value: input.value }).where(eq(unit.user_id, ctx.session.user.id))
     })
 })

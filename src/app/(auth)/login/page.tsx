@@ -17,7 +17,7 @@ export default async function SignIn() {
   }
 
   return (
-    <div className='flex h-screen w-screen items-center justify-center bg-gradient-to-b from-neutral-900 to-neutral-950'>
+    <div className='flex h-screen w-screen items-center justify-center bg-neutral-900'>
       <div className='w-full max-w-sm space-y-4 text-center'>
         <form
           action={async () => {
@@ -26,7 +26,7 @@ export default async function SignIn() {
           }}
           className='w-full'
         >
-          <Button className='w-full !bg-neutral-600 !py-3 !text-white' icon={<SvgGoogle className='h-6 w-6' />}>
+          <Button className='w-full !bg-neutral-800 !py-3 !text-white' icon={<SvgGoogle className='h-6 w-6' />}>
             Continue with Google
           </Button>
         </form>

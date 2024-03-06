@@ -12,7 +12,6 @@ import {
   boolean
 } from 'drizzle-orm/mysql-core'
 import type { AdapterAccount } from '@auth/core/adapters'
-import { nanoid } from 'nanoid'
 
 // Necessary for Next Auth
 export const users = mysqlTable('user', {
@@ -23,13 +22,13 @@ export const users = mysqlTable('user', {
     mode: 'date',
     fsp: 3
   }).default(sql`CURRENT_TIMESTAMP(3)`),
-  image: varchar('image', { length: 255 }),
-  weight_unit: mysqlEnum('unit', ['kgs', 'lbs']).default('lbs')
+  image: varchar('image', { length: 255 })
 })
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   accounts: many(accounts),
-  sessions: many(sessions)
+  sessions: many(sessions),
+  unit: one(unit, { fields: [users.id], references: [unit.user_id] })
 }))
 
 export const accounts = mysqlTable(
@@ -90,3 +89,13 @@ export const verificationTokens = mysqlTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] })
   })
 )
+
+export const unitEnum = ['kgs', 'lbs'] as const
+
+export const unit = mysqlTable('unit', {
+  id: bigint('id', { mode: 'number' }).primaryKey().autoincrement(),
+  value: mysqlEnum('value', unitEnum).notNull().default('lbs'),
+  user_id: varchar('user_id', { length: 255 })
+    .notNull()
+    .references(() => users.id)
+})

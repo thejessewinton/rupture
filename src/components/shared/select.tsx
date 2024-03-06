@@ -1,16 +1,22 @@
-import { type ComponentPropsWithRef, Ref } from 'react'
-import * as SelectPrimitive from '@radix-ui/react-select'
+import { forwardRef, type ComponentPropsWithRef, type Ref } from 'react'
 
-type SelectProps = ComponentPropsWithRef<typeof SelectPrimitive.Root>
+import { classNames } from '~/utils/core'
 
-export const Select = ({ children, ...props }: SelectProps) => {
+export type SelectProps = ComponentPropsWithRef<'select'>
+
+export const Select = forwardRef(({ children, className, ...props }: SelectProps, ref: Ref<HTMLSelectElement>) => {
   return (
-    <SelectPrimitive.Root {...props}>
-      <SelectPrimitive.Trigger>Open</SelectPrimitive.Trigger>
-      <SelectPrimitive.Content>
-        <SelectPrimitive.Item value='kgs'>KG</SelectPrimitive.Item>
-        <SelectPrimitive.Item value='lbs'>LB</SelectPrimitive.Item>
-      </SelectPrimitive.Content>
-    </SelectPrimitive.Root>
+    <select
+      className={classNames(
+        'inline-block rounded-sm border border-neutral-200 bg-transparent py-1 pr-4 text-sm font-normal transition autofill:bg-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-transparent hover:focus:border-blue-500/50 dark:border-neutral-800',
+        className
+      )}
+      ref={ref}
+      {...props}
+    >
+      {children}
+    </select>
   )
-}
+})
+
+Select.displayName = 'Select'

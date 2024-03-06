@@ -11,6 +11,7 @@ import { SessionProvider } from '~/providers/session'
 import { auth } from '~/server/auth'
 import { type Metadata } from 'next'
 import { Toaster } from '~/providers/toaster'
+import { Header } from '~/components/layout/header'
 
 export const metadata: Metadata = {
   title: {

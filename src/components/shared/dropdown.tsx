@@ -18,7 +18,7 @@ export const Dropdown = ({ trigger, children, align }: DropdownProps) => {
         <DropdownPrimitive.Content
           align={align}
           className={classNames(
-            'relative z-50 mt-1 min-w-32 space-y-2 rounded border border-neutral-800 bg-neutral-900 p-2 transition-colors',
+            'relative z-50 mt-1 min-w-32 space-y-2 rounded border border-neutral-200 bg-neutral-900 p-2 transition-colors dark:border-neutral-800',
             'radix-state-open:animate-scale-in-content',
             'radix-state-closed:animate-scale-out-content'
           )}

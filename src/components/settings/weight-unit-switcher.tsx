@@ -1,21 +1,12 @@
 'use client'
 
-import { useForm } from 'react-hook-form'
 import { api } from '~/trpc/react'
-import { RouterInputs } from '~/trpc/shared'
-import { Select } from '../shared/select'
+import { LabelSelect } from '../shared/label-select'
 
-type DefaultValues = RouterInputs['user']['updateWeightUnit']
-
-export const WeightUnitSwitcher = () => {
+export const WeightUnitSwitcher = ({ className }: { className?: string }) => {
   const utils = api.useUtils()
-  const { data } = api.user.getCurrent.useQuery(undefined)
 
-  const { register, handleSubmit } = useForm<DefaultValues>({
-    defaultValues: {
-      weight_unit: data?.weight_unit!
-    }
-  })
+  const { data } = api.workouts.getUnit.useQuery()
 
   const submit = api.user.updateWeightUnit.useMutation({
     onSuccess: async () => {
@@ -23,16 +14,24 @@ export const WeightUnitSwitcher = () => {
     }
   })
 
-  const onSubmit = async (values: DefaultValues) => {
-    await submit.mutateAsync(values)
-  }
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} defaultValue={data?.weight_unit!}>
-      <Select {...register('weight_unit')}>
+  if (!data)
+    return (
+      <LabelSelect label='Weight Unit' name='weight-unit' defaultValue='lbs'>
         <option value='kgs'>KG</option>
         <option value='lbs'>LB</option>
-      </Select>
-    </form>
+      </LabelSelect>
+    )
+
+  return (
+    <LabelSelect
+      label='Weight Unit'
+      name='weight-unit'
+      defaultValue={data.value}
+      onChange={async (e) => await submit.mutateAsync({ value: e.target.value as 'kgs' | 'lbs' })}
+      className={className}
+    >
+      <option value='kgs'>KG</option>
+      <option value='lbs'>LB</option>
+    </LabelSelect>
   )
 }

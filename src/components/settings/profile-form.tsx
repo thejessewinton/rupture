@@ -14,8 +14,8 @@ export const ProfileForm = ({ initialUserData }: { initialUserData: RouterOutput
 
   const { register, handleSubmit } = useForm<ProfileValues>({
     defaultValues: {
-      name: data.name!,
-      email: data.email!
+      name: data!.name!,
+      email: data!.email!
     }
   })
 
@@ -35,7 +35,10 @@ export const ProfileForm = ({ initialUserData }: { initialUserData: RouterOutput
         <h3 className='text-lg'>Profile</h3>
         <p className='text-sm text-neutral-500'>Manage your Rupture profile</p>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 border-t border-neutral-600 pt-8'>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className='flex flex-col gap-4 border-t border-neutral-200 pt-8 dark:border-neutral-800'
+      >
         <Input type='text' {...register('name')} label='Name' />
         <Input type='text' {...register('email')} label='Email' />
         <Button type='submit' disabled={submit.isLoading}>

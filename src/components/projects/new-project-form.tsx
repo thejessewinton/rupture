@@ -56,7 +56,7 @@ export const NewProjectForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='relative flex w-full flex-col gap-3 font-sans'>
-      <div className='border-b border-neutral-300 pb-2 dark:border-neutral-800'>
+      <div className='border-b border-neutral-300 pb-2 dark:border-neutral-200 dark:border-neutral-800'>
         <div className='relative flex flex-col gap-2'>
           <Input
             className='border-none bg-transparent text-xl !ring-0'
@@ -79,7 +79,7 @@ export const NewProjectForm = () => {
         }}
       /> */}
 
-      <div className='flex items-center justify-center gap-2 border-t border-neutral-300 pt-6 dark:border-neutral-800'>
+      <div className='flex items-center justify-center gap-2 border-t border-neutral-300 pt-6 dark:border-neutral-200 dark:border-neutral-800'>
         <Button type='submit' disabled={submit.isLoading} className='ml-auto mr-0'>
           {submit.isLoading ? 'Loading' : 'Create project'}
         </Button>
