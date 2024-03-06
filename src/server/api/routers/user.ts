@@ -6,7 +6,9 @@ import { users } from '~/server/db/schema'
 
 export const userRouter = createTRPCRouter({
   getCurrent: protectedProcedure.query(({ ctx }) => {
-    return ctx.session.user
+    return ctx.db.query.users.findFirst({
+      where: eq(users.id, ctx.session.user.id)
+    })
   }),
   updateUser: protectedProcedure
     .input(
@@ -28,5 +30,14 @@ export const userRouter = createTRPCRouter({
       }
 
       return await ctx.db.update(users).set(input).where(eq(users.id, ctx.session.user.id!))
+    }),
+  updateWeightUnit: protectedProcedure
+    .input(
+      z.object({
+        weight_unit: z.enum(['kgs', 'lbs'])
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.update(users).set({ weight_unit: input.weight_unit })
     })
 })

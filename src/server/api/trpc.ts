@@ -4,8 +4,6 @@ import { ZodError } from 'zod'
 
 import { db } from '~/server/db'
 import { auth } from '~/server/auth'
-import { eq } from 'drizzle-orm'
-import { users } from '../db/schema'
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
   const session = await auth()
@@ -14,26 +12,10 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
     throw new TRPCError({ code: 'UNAUTHORIZED' })
   }
 
-  const user = await db.query.users.findFirst({
-    where: eq(users.id, session.user.id),
-    with: {
-      membership: {
-        with: {
-          team: true
-        }
-      }
-    }
-  })
-
   return {
     db,
     session: {
-      ...session,
-      user: {
-        ...user,
-        membership: user!.membership,
-        team: user!.membership.team
-      }
+      ...session
     },
     ...opts
   }

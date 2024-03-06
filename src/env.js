@@ -7,9 +7,7 @@ export const env = createEnv({
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
     AUTH_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),
-    AUTH_GOOGLE_SECRET: z.string(),
-    STRIPE_SECRET_KEY: z.string(),
-    RESEND_API_KEY: z.string()
+    AUTH_GOOGLE_SECRET: z.string()
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().url()
@@ -20,8 +18,6 @@ export const env = createEnv({
     AUTH_SECRET: process.env.AUTH_SECRET,
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
     AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
-    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
-    RESEND_API_KEY: process.env.RESEND_API_KEY,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL
   },
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,

@@ -4,7 +4,6 @@ import NextAuth, { type DefaultSession, type NextAuthConfig } from 'next-auth'
 import Google from 'next-auth/providers/google'
 import { db } from '~/server/db'
 import { stripe } from '~/server/server'
-import { members, team } from '~/server/db/schema'
 import { slugify } from '~/utils/core'
 import { users } from '~/server/db/schema'
 import { eq } from 'drizzle-orm'
@@ -19,6 +18,7 @@ declare module 'next-auth' {
 
 export const config = {
   callbacks: {
+    // @ts-expect-error types are bad
     session: ({ session, user }) => ({
       ...session,
       user: {
@@ -44,27 +44,6 @@ export const config = {
         metadata: {
           id: user.id!
         }
-      })
-
-      await db.transaction(async (tx) => {
-        const newTeam = await tx.insert(team).values({
-          name: user.name!,
-          slug: slugify(user.name!),
-          stripe_customer_id: newCustomer.id
-        })
-
-        await tx
-          .update(users)
-          .set({
-            team_id: Number(newTeam.insertId)
-          })
-          .where(eq(users.id, user.id!))
-
-        await tx.insert(members).values({
-          team_id: Number(newTeam.insertId),
-          user_id: user.id!,
-          role: 'admin'
-        })
       })
     }
   }
