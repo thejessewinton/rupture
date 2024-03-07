@@ -39,6 +39,7 @@ export default async function SignIn() {
   return (
     <div className='flex h-screen w-screen items-center justify-center dark:bg-neutral-900'>
       <div className='w-full max-w-sm space-y-4 text-center'>
+        <h1 className='text-xl'>Rupture</h1>
         {providers.map((provider) => (
           <form action={provider.action} className='w-full' key={provider.name}>
             <Button
