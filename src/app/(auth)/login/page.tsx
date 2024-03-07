@@ -20,7 +20,7 @@ export default async function SignIn() {
   const providers = [
     {
       name: 'Google',
-      icon: <SvgGoogle className='h-6 w-6' />,
+      icon: <SvgGoogle className='h-6 w-6 text-neutral-800 dark:text-white' />,
       action: async () => {
         'use server'
         await signIn('google')
@@ -28,7 +28,7 @@ export default async function SignIn() {
     },
     {
       name: 'Discord',
-      icon: <SvgDiscord className='h-6 w-6' />,
+      icon: <SvgDiscord className='h-6 w-6 text-neutral-800 dark:text-white' />,
       action: async () => {
         'use server'
         await signIn('discord')
@@ -37,11 +37,14 @@ export default async function SignIn() {
   ]
 
   return (
-    <div className='flex h-screen w-screen items-center justify-center bg-neutral-900'>
+    <div className='flex h-screen w-screen items-center justify-center dark:bg-neutral-900'>
       <div className='w-full max-w-sm space-y-4 text-center'>
         {providers.map((provider) => (
-          <form action={provider.action} className='w-full'>
-            <Button className='w-full !bg-neutral-800 !py-3 !text-white' icon={provider.icon}>
+          <form action={provider.action} className='w-full' key={provider.name}>
+            <Button
+              className='w-full bg-neutral-50 py-3 text-neutral-800 dark:bg-neutral-800 dark:text-white'
+              icon={provider.icon}
+            >
               Continue with {provider.name}
             </Button>
           </form>
