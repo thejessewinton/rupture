@@ -21,7 +21,7 @@ export const liftsRouter = createTRPCRouter({
       return await ctx.db.insert(lift).values({
         name: input.name,
         user_id: ctx.session.user.id,
-        personal_record: parseInt(input.personal_record)
+        personal_record: Number(input.personal_record)
       })
     }),
   updatePersonalRecord: protectedProcedure
@@ -35,7 +35,7 @@ export const liftsRouter = createTRPCRouter({
       return await ctx.db
         .update(lift)
         .set({
-          personal_record: parseInt(input.personal_record)
+          personal_record: Number(input.personal_record)
         })
         .where(eq(lift.id, input.id))
     }),

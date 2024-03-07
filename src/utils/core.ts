@@ -43,5 +43,5 @@ export const calculateWeight = ({
   unit: 'kgs' | 'lbs'
   convertTo: 'kgs' | 'lbs'
 }) => {
-  return unit === convertTo ? weight : unit === 'lbs' ? (weight * 0.453592).toFixed() : (weight / 0.453592).toFixed()
+  return unit === convertTo ? weight : unit === 'lbs' ? weight * 0.453592 : weight / 0.453592
 }

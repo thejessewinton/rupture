@@ -3,10 +3,6 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import NextAuth, { type DefaultSession, type NextAuthConfig } from 'next-auth'
 import Google from 'next-auth/providers/google'
 import { db } from '~/server/db'
-import { stripe } from '~/server/server'
-import { slugify } from '~/utils/core'
-import { users } from '~/server/db/schema'
-import { eq } from 'drizzle-orm'
 
 declare module 'next-auth' {
   interface Session extends DefaultSession {
@@ -35,18 +31,7 @@ export const config = {
     signOut: '/login'
   },
   adapter: DrizzleAdapter(db),
-  providers: [Google],
-  events: {
-    createUser: async ({ user }) => {
-      const newCustomer = await stripe.customers.create({
-        name: user.name!,
-        email: user.email!,
-        metadata: {
-          id: user.id!
-        }
-      })
-    }
-  }
+  providers: [Google]
 } satisfies NextAuthConfig
 
 export const { handlers, auth, signIn, signOut } = NextAuth(config)

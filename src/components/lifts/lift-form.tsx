@@ -35,7 +35,7 @@ export const LiftForm = () => {
           ...previousLifts,
           {
             ...data,
-            personal_record: parseFloat(data.personal_record),
+            personal_record: Number(data.personal_record),
             user_id: session.data?.user.id!,
             id: Math.random(),
             updated_at: new Date(),
@@ -64,11 +64,21 @@ export const LiftForm = () => {
       className='flex flex-col gap-4 border-t border-neutral-200 pt-8 dark:border-neutral-800'
     >
       <Input placeholder='Name' required {...register('name')} />
-      <Input placeholder='PR' {...register('personal_record')} required type='number' step={2.5} />
-      <Select {...register('unit')}>
-        <option value='lbs'>lbs</option>
-        <option value='kgs'>kgs</option>
-      </Select>
+
+      <div className='flex overflow-hidden rounded-sm transition-all focus-within:ring-1 focus-within:ring-blue-400'>
+        <Input
+          placeholder='PR'
+          {...register('personal_record')}
+          required
+          type='number'
+          step={2.5}
+          className='flex-1 rounded-r-none border-r-0 outline-none ring-0 focus:ring-0'
+        />
+        <Select {...register('unit')} className='rounded-r border-l-0 pl-2 outline-none ring-0 focus:ring-0'>
+          <option value='lbs'>lbs</option>
+          <option value='kgs'>kgs</option>
+        </Select>
+      </div>
 
       <Button type='submit' disabled={submit.isLoading}>
         Create lift
@@ -100,7 +110,7 @@ export const EditLiftForm = ({ lift }: { lift: RouterOutputs['lifts']['getAll'][
             if (l.id === lift.id) {
               return {
                 ...l,
-                personal_record: parseFloat(data.personal_record)
+                personal_record: Number(data.personal_record)
               }
             }
             return l

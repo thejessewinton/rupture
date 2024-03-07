@@ -1,6 +1,5 @@
 import { type ReactNode } from 'react'
 import { Header } from '~/components/layout/header'
-import { Sidebar } from '~/components/layout/sidebar'
 
 export default async function IndexLayout({ children }: { children: ReactNode }) {
   return (
