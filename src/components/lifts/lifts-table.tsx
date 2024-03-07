@@ -19,43 +19,42 @@ export const LiftsTable = () => {
 
   if (!lifts.data) return null
 
+  const tableHeadings = ['Name', 'PR']
+
   return (
     <table className='min-w-full border-separate border-spacing-0 border-none text-left'>
-      <thead className='h-8 rounded-md bg-neutral-800'>
+      <thead className='h-8 rounded-md bg-neutral-50 dark:bg-neutral-800'>
         <tr>
-          <th className='h-8 w-[500px] border-b border-t border-neutral-600 px-3 text-xs text-neutral-300 first:rounded-l-md first:border-l last:rounded-r-md last:border-r'>
-            Name
-          </th>
-          <th className='h-8 w-[500px] border-b border-t border-neutral-600 px-3 text-xs text-neutral-300 first:rounded-l-md first:border-l last:rounded-r-md last:border-r'>
-            Personal Record
-          </th>
-          <th className='h-8 w-[70px] border-b border-t border-neutral-600 px-3 text-xs text-neutral-300 first:rounded-l-md first:border-l last:rounded-r-md last:border-r' />
+          {tableHeadings.map((heading) => (
+            <th
+              className='h-8 w-[500px] border-b border-t border-neutral-200 px-3 text-xs text-neutral-800 first:rounded-l-md first:border-l last:rounded-r-md last:border-r dark:border-neutral-600 dark:text-neutral-300'
+              key={heading}
+            >
+              {heading}
+            </th>
+          ))}
+
+          <th className='h-8 w-[70px] border-b border-t border-neutral-200 px-3 text-xs text-neutral-300 first:rounded-l-md first:border-l last:rounded-r-md last:border-r dark:border-neutral-600' />
         </tr>
       </thead>
       <tbody>
         {lifts.data.map((lift) => (
           <tr key={lift.id}>
-            <td className='h-10 truncate border-b border-neutral-600 px-3 py-3 text-sm'>
-              <div className='flex items-center gap-1'>
-                <span className='border-slate-9 group-hover:border-blue-9 cursor-pointer transition duration-300 ease-in-out'>
-                  {lift.name}
-                </span>
-              </div>
+            <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm'>
+              <div className='flex items-center gap-1'>{lift.name}</div>
             </td>
-            <td className='h-10 truncate border-b border-neutral-600 px-3 py-3 text-sm'>
+            <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm dark:border-neutral-600'>
               <div className='flex items-center gap-1'>
-                <span className='border-slate-9 group-hover:border-blue-9 cursor-pointer transition duration-300 ease-in-out'>
-                  {calculateWeight({
-                    weight: lift.personal_record,
-                    unit: lift.unit,
-                    convertTo: lift.unit
-                  })}{' '}
-                  {lift.unit}.
-                </span>
+                {calculateWeight({
+                  weight: lift.personal_record,
+                  unit: lift.unit,
+                  convertTo: lift.unit
+                })}{' '}
+                {lift.unit}.
               </div>
             </td>
 
-            <td className='h-10 truncate border-b border-neutral-600 px-3 py-3 text-sm'>
+            <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm dark:border-neutral-600'>
               <LiftActions lift={lift} />
             </td>
           </tr>
@@ -89,7 +88,7 @@ export const LiftActions = ({ lift }: LiftActionsProps) => {
   return (
     <Dropdown
       trigger={
-        <button className='mx-auto rounded-sm p-1 outline-none transition-all hover:bg-neutral-800 focus:ring-2 focus:ring-blue-400'>
+        <button className='mx-auto rounded-sm p-1 outline-none transition-all hover:bg-neutral-50 focus:ring-2 focus:ring-blue-400 hover:dark:bg-neutral-800'>
           <SvgEllipsis className='h-4 w-4' />
         </button>
       }
