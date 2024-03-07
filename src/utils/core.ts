@@ -33,3 +33,15 @@ export const getInitials = (name: string) => {
   const [firstName, lastName] = name.split(' ')
   return `${firstName![0]}${lastName![0]}`
 }
+
+export const calculateWeight = ({
+  weight,
+  unit,
+  convertTo
+}: {
+  weight: number
+  unit: 'kgs' | 'lbs'
+  convertTo: 'kgs' | 'lbs'
+}) => {
+  return unit === convertTo ? weight : unit === 'lbs' ? (weight * 0.453592).toFixed() : (weight / 0.453592).toFixed()
+}

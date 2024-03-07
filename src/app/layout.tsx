@@ -10,8 +10,6 @@ import { Dialog } from '~/components/shared/dialog'
 import { SessionProvider } from '~/providers/session'
 import { auth } from '~/server/auth'
 import { type Metadata } from 'next'
-import { Toaster } from '~/providers/toaster'
-import { Header } from '~/components/layout/header'
 
 export const metadata: Metadata = {
   title: {
@@ -44,12 +42,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <TRPCReactProvider cookies={cookies().toString()}>
               <main className='flex min-h-screen w-full flex-row'>{children}</main>
               <Dialog />
-              <Toaster
-                position='bottom-right'
-                toastOptions={{
-                  duration: 5000
-                }}
-              />
             </TRPCReactProvider>
           </ThemeProvider>
         </SessionProvider>

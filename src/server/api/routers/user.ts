@@ -31,6 +31,11 @@ export const userRouter = createTRPCRouter({
 
       return await ctx.db.update(users).set(input).where(eq(users.id, ctx.session.user.id!))
     }),
+  getWeightUnit: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.query.unit.findFirst({
+      where: eq(unit.user_id, ctx.session.user.id)
+    })
+  }),
   updateWeightUnit: protectedProcedure
     .input(
       z.object({
@@ -38,6 +43,9 @@ export const userRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      return await ctx.db.update(unit).set({ value: input.value }).where(eq(unit.user_id, ctx.session.user.id))
+      return await ctx.db
+        .insert(unit)
+        .values({ value: input.value, user_id: ctx.session.user.id })
+        .onDuplicateKeyUpdate({ set: { value: input.value, user_id: ctx.session.user.id } })
     })
 })

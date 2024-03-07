@@ -4,7 +4,7 @@ import { type Session } from 'next-auth'
 import { Dropdown } from '~/components/shared/dropdown'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getInitials } from '~/utils/core'
+import { WeightUnitSwitcher } from '~/components/settings/weight-unit-switcher'
 
 type ActionsProps = {
   session: Session
@@ -14,7 +14,7 @@ type ActionsProps = {
 export const Actions = ({ session, signOut }: ActionsProps) => {
   return (
     <div className='z-40 text-neutral-900 dark:text-white'>
-      <header className='mx-auto'>
+      <div className='mx-auto'>
         <div className='flex items-center justify-between pb-2 pt-3 md:pb-3 md:pt-4'>
           <div>
             <Dropdown
@@ -33,10 +33,11 @@ export const Actions = ({ session, signOut }: ActionsProps) => {
                   <button type='submit'>Log out</button>
                 </form>
               </Dropdown.Item>
+              <WeightUnitSwitcher />
             </Dropdown>
           </div>
         </div>
-      </header>
+      </div>
     </div>
   )
 }

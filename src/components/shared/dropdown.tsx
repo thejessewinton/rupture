@@ -11,7 +11,7 @@ type DropdownProps = {
 export const Dropdown = ({ trigger, children, align }: DropdownProps) => {
   return (
     <DropdownPrimitive.Root>
-      <DropdownPrimitive.Trigger className='flex cursor-pointer items-center gap-2 focus-within:rounded-full' asChild>
+      <DropdownPrimitive.Trigger className='flex cursor-pointer items-center gap-2' asChild>
         {trigger}
       </DropdownPrimitive.Trigger>
       <DropdownPrimitive.Portal>

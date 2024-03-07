@@ -11,13 +11,16 @@ export const Header = async () => {
       <header className=''>
         <div className='mx-auto flex w-full items-center justify-between pb-8 pt-4'>
           <Link href='/'>Rupture</Link>
-          <Actions
-            session={session!}
-            signOut={async () => {
-              'use server'
-              return await signOut()
-            }}
-          />
+
+          <div className='flex items-center gap-2'>
+            <Actions
+              session={session!}
+              signOut={async () => {
+                'use server'
+                return await signOut()
+              }}
+            />
+          </div>
         </div>
         <Navigation />
       </header>

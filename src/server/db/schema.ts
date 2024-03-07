@@ -28,7 +28,8 @@ export const users = mysqlTable('user', {
 export const usersRelations = relations(users, ({ one, many }) => ({
   accounts: many(accounts),
   sessions: many(sessions),
-  unit: one(unit, { fields: [users.id], references: [unit.user_id] })
+  unit: one(unit, { fields: [users.id], references: [unit.user_id] }),
+  lifts: many(lift)
 }))
 
 export const accounts = mysqlTable(
@@ -90,6 +91,7 @@ export const verificationTokens = mysqlTable(
   })
 )
 
+// Units, Lifts, Workouts, and Sets
 export const unitEnum = ['kgs', 'lbs'] as const
 
 export const unit = mysqlTable('unit', {
@@ -97,5 +99,47 @@ export const unit = mysqlTable('unit', {
   value: mysqlEnum('value', unitEnum).notNull().default('lbs'),
   user_id: varchar('user_id', { length: 255 })
     .notNull()
-    .references(() => users.id)
+    .references(() => users.id),
+  created_at: timestamp('created_at', { mode: 'date', fsp: 3 })
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP(3)`),
+  updated_at: timestamp('updated_at', { mode: 'date', fsp: 3 })
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP(3)`)
+})
+
+export const lift = mysqlTable('lift', {
+  id: bigint('id', { mode: 'number' }).primaryKey().autoincrement(),
+  name: varchar('name', { length: 255 }).notNull(),
+  personal_record: bigint('personal_record', { mode: 'number' }).notNull(),
+  unit: mysqlEnum('value', unitEnum).notNull().default('lbs'),
+  user_id: varchar('user_id', { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  created_at: timestamp('created_at', { mode: 'date', fsp: 3 })
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP(3)`),
+  updated_at: timestamp('updated_at', { mode: 'date', fsp: 3 })
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP(3)`)
+})
+
+export const liftRelations = relations(lift, ({ one, many }) => ({
+  user: one(users, { fields: [lift.user_id], references: [users.id] }),
+  workout: one(workout, { fields: [lift.id], references: [workout.id] })
+}))
+
+export const workout = mysqlTable('workout', {
+  id: bigint('id', { mode: 'number' }).primaryKey().autoincrement(),
+  name: varchar('name', { length: 255 }).notNull(),
+  day: varchar('day', { length: 255 }).notNull(),
+  user_id: varchar('user_id', { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  created_at: timestamp('created_at', { mode: 'date', fsp: 3 })
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP(3)`),
+  updated_at: timestamp('updated_at', { mode: 'date', fsp: 3 })
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP(3)`)
 })

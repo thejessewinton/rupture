@@ -2,21 +2,27 @@
 
 import { api } from '~/trpc/react'
 import { LabelSelect } from '../shared/label-select'
+import { unitEnum } from '~/server/db/schema'
 
 export const WeightUnitSwitcher = ({ className }: { className?: string }) => {
   const utils = api.useUtils()
 
-  const { data } = api.workouts.getUnit.useQuery()
+  const { data } = api.user.getWeightUnit.useQuery()
 
   const submit = api.user.updateWeightUnit.useMutation({
     onSuccess: async () => {
-      await utils.user.getCurrent.invalidate()
+      await utils.user.getWeightUnit.invalidate()
     }
   })
 
   if (!data)
     return (
-      <LabelSelect label='Weight Unit' name='weight-unit' defaultValue='lbs'>
+      <LabelSelect
+        onChange={(e) => submit.mutate({ value: e.target.value as (typeof unitEnum)[number] })}
+        label='Weight Unit'
+        name='weight-unit'
+        defaultValue='lbs'
+      >
         <option value='kgs'>KG</option>
         <option value='lbs'>LB</option>
       </LabelSelect>
@@ -27,7 +33,7 @@ export const WeightUnitSwitcher = ({ className }: { className?: string }) => {
       label='Weight Unit'
       name='weight-unit'
       defaultValue={data.value}
-      onChange={async (e) => await submit.mutateAsync({ value: e.target.value as 'kgs' | 'lbs' })}
+      onChange={(e) => submit.mutate({ value: e.target.value as (typeof unitEnum)[number] })}
       className={className}
     >
       <option value='kgs'>KG</option>
