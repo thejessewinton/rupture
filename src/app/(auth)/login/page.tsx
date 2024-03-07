@@ -2,6 +2,7 @@ import { type Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
 import { Button } from '~/components/shared/button'
+import SvgDiscord from '~/components/svg/discord'
 import SvgGoogle from '~/components/svg/google'
 import { auth, signIn } from '~/server/auth'
 
@@ -27,10 +28,10 @@ export default async function SignIn() {
     },
     {
       name: 'Discord',
-      icon: <SvgGoogle className='h-6 w-6' />,
+      icon: <SvgDiscord className='h-6 w-6' />,
       action: async () => {
         'use server'
-        await signIn('google')
+        await signIn('discord')
       }
     }
   ]
