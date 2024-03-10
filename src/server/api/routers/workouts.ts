@@ -1,4 +1,4 @@
-import { workout } from '~/server/db/schema'
+import { lift, workout } from '~/server/db/schema'
 import { createTRPCRouter, protectedProcedure } from '../trpc'
 import { z } from 'zod'
 

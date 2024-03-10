@@ -45,23 +45,7 @@ export const WorkoutForm = () => {
     >
       <Input placeholder='Name' required {...register('name')} />
 
-      <div className='flex overflow-hidden rounded-sm transition-all focus-within:ring-1 focus-within:ring-blue-400'>
-        <Input
-          placeholder='PR'
-          {...register('personal_record')}
-          required
-          type='number'
-          step={2.5}
-          className='flex-1 rounded-r-none border-r-0 outline-none ring-0 focus:ring-0'
-        />
-        <Select
-          {...register('unit')}
-          className='rounded-l-none rounded-r-sm border-l-0 pl-2 outline-none ring-0 focus:ring-0'
-        >
-          <option value='lbs'>lbs</option>
-          <option value='kgs'>kgs</option>
-        </Select>
-      </div>
+      <div className='flex overflow-hidden rounded-sm transition-all focus-within:ring-1 focus-within:ring-blue-400'></div>
 
       <Button type='submit' disabled={submit.isLoading}>
         Create lift
