@@ -11,40 +11,20 @@ import { api } from '~/trpc/react'
 import { RouterOutputs, type RouterInputs } from '~/trpc/shared'
 import { Select } from '../shared/select'
 
-type NewLiftValues = RouterInputs['lifts']['createNew']
+type NewWorkoutValues = RouterInputs['workouts']['createNew']
 
-export const LiftForm = () => {
-  const { register, handleSubmit, reset } = useForm<NewLiftValues>({
+export const WorkoutForm = () => {
+  const { register, handleSubmit, reset } = useForm<NewWorkoutValues>({
     defaultValues: {
-      name: '',
-      personal_record: '',
-      unit: 'lbs'
+      name: ''
     }
   })
 
-  const { handleDialogClose } = useDialogStore()
   const utils = api.useUtils()
-  const session = useSession()
 
-  const submit = api.lifts.createNew.useMutation({
+  const submit = api.workouts.createNew.useMutation({
     onMutate: async (data) => {
-      const previousLifts = utils.lifts.getAll.getData()
-
-      if (previousLifts) {
-        utils.lifts.getAll.setData(undefined, [
-          ...previousLifts,
-          {
-            ...data,
-            personal_record: Number(data.personal_record),
-            user_id: session.data?.user.id!,
-            id: Math.random(),
-            updated_at: new Date(),
-            created_at: new Date()
-          }
-        ])
-      }
       reset()
-      handleDialogClose()
     },
     onSuccess: async () => {
       await utils.lifts.getAll.invalidate()
@@ -54,7 +34,7 @@ export const LiftForm = () => {
     }
   })
 
-  const onSubmit = async (values: NewLiftValues) => {
+  const onSubmit = async (values: NewWorkoutValues) => {
     await submit.mutateAsync(values)
   }
 

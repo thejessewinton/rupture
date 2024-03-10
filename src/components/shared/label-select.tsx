@@ -11,14 +11,14 @@ export const LabelSelect = forwardRef(
     return (
       <form
         className={classNames(
-          'focus-within-ring rounded-xs text-primary flex items-stretch rounded-sm border border-neutral-700 shadow-sm ring-1',
+          'focus-within-ring rounded-xs text-primary flex items-stretch rounded-sm border border-neutral-200 text-xs shadow-sm ring-1 dark:border-neutral-700',
           className
         )}
         ref={ref}
       >
         <label
           htmlFor={name}
-          className='rounded-l-xs mb-0 flex items-center whitespace-nowrap border-r border-neutral-700 bg-neutral-800 px-1.5 py-1 text-sm font-medium'
+          className='rounded-l-xs mb-0 flex items-center whitespace-nowrap border-r border-neutral-200 px-1.5 py-1 font-medium dark:border-neutral-700 dark:bg-neutral-800'
         >
           {label}
         </label>

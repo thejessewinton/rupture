@@ -126,7 +126,7 @@ export const lift = mysqlTable('lift', {
 
 export const liftRelations = relations(lift, ({ one, many }) => ({
   user: one(users, { fields: [lift.user_id], references: [users.id] }),
-  workout: one(workout, { fields: [lift.id], references: [workout.id] })
+  workout: many(workout)
 }))
 
 export const workout = mysqlTable('workout', {
@@ -143,3 +143,8 @@ export const workout = mysqlTable('workout', {
     .notNull()
     .default(sql`CURRENT_TIMESTAMP(3)`)
 })
+
+export const workoutRelations = relations(workout, ({ one, many }) => ({
+  user: one(users, { fields: [workout.user_id], references: [users.id] }),
+  lifts: many(lift)
+}))

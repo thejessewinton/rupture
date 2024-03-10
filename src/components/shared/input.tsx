@@ -25,7 +25,7 @@ export const Input = forwardRef(
           name={name}
           onChange={onChange}
           className={classNames(
-            'h-fit w-full appearance-none rounded border border-neutral-100 bg-transparent px-3 py-1.5 text-sm font-light outline-none transition-all placeholder:text-neutral-500 read-only:cursor-not-allowed focus:ring-1 focus:ring-blue-500 dark:border-neutral-700 dark:bg-neutral-800',
+            'h-fit w-full appearance-none rounded border border-neutral-200 bg-transparent px-3 py-1.5 text-sm font-light outline-none transition-all placeholder:text-neutral-500 read-only:cursor-not-allowed focus:ring-1 focus:ring-blue-500 dark:border-neutral-700 dark:bg-neutral-800',
             className
           )}
           {...rest}
