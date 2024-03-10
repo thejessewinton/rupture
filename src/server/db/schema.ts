@@ -126,7 +126,33 @@ export const lift = mysqlTable('lift', {
 
 export const liftRelations = relations(lift, ({ one, many }) => ({
   user: one(users, { fields: [lift.user_id], references: [users.id] }),
-  workout: many(workout)
+  workout: many(liftsToWorkouts)
+}))
+
+export const liftsToWorkouts = mysqlTable(
+  'workout_lifts',
+  {
+    workout_id: bigint('workout_id', { mode: 'number' })
+      .notNull()
+      .references(() => workout.id),
+    lift_id: bigint('lift_id', { mode: 'number' })
+      .notNull()
+      .references(() => lift.id)
+  },
+  (t) => ({
+    workoutLift: primaryKey({ columns: [t.workout_id, t.lift_id] })
+  })
+)
+
+export const workoutsToLiftsRelations = relations(liftsToWorkouts, ({ one }) => ({
+  workout: one(workout, {
+    fields: [liftsToWorkouts.workout_id],
+    references: [workout.id]
+  }),
+  lift: one(lift, {
+    fields: [liftsToWorkouts.lift_id],
+    references: [lift.id]
+  })
 }))
 
 export const workout = mysqlTable('workout', {
@@ -146,5 +172,5 @@ export const workout = mysqlTable('workout', {
 
 export const workoutRelations = relations(workout, ({ one, many }) => ({
   user: one(users, { fields: [workout.user_id], references: [users.id] }),
-  lifts: many(lift)
+  lifts: many(liftsToWorkouts)
 }))

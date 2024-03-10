@@ -9,14 +9,14 @@ import { Input } from '~/components/shared/input'
 import { useDialogStore } from '~/state/use-dialog-store'
 import { api } from '~/trpc/react'
 import { RouterOutputs, type RouterInputs } from '~/trpc/shared'
-import { Select } from '../shared/select'
 
 type NewWorkoutValues = RouterInputs['workouts']['createNew']
 
 export const WorkoutForm = () => {
   const { register, handleSubmit, reset } = useForm<NewWorkoutValues>({
     defaultValues: {
-      name: ''
+      name: '',
+      lift_ids: []
     }
   })
 

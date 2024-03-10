@@ -1,4 +1,4 @@
-import { lift, workout } from '~/server/db/schema'
+import { lift, liftsToWorkouts, workout } from '~/server/db/schema'
 import { createTRPCRouter, protectedProcedure } from '../trpc'
 import { z } from 'zod'
 
@@ -25,6 +25,13 @@ export const workoutsRouter = createTRPCRouter({
           day: input.day,
           user_id: ctx.session.user.id
         })
+
+        await ctx.db.insert(liftsToWorkouts).values(
+          input.lift_ids.map((lift_id) => ({
+            workout_id: Number(newWorkout.insertId),
+            lift_id
+          }))
+        )
 
         return newWorkout
       })
