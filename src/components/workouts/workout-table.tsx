@@ -8,7 +8,7 @@ export const WorkoutTable = () => {
 
   if (!workouts.data) return null
 
-  const tableHeadings = ['Name', 'PR']
+  const tableHeadings = ['Name', 'Day']
 
   return (
     <table className='min-w-full border-separate border-spacing-0 border-none text-left'>
@@ -33,14 +33,11 @@ export const WorkoutTable = () => {
               <div className='flex items-center gap-1'>{lift.name}</div>
             </td>
             <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm dark:border-neutral-600'>
+              <div className='flex items-center gap-1'>{lift.day}</div>
+            </td>
+            <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm dark:border-neutral-600'>
               <div className='flex items-center gap-1'></div>
             </td>
-
-            {lift.lifts.map((lift) => (
-              <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm dark:border-neutral-600'>
-                <LiftActions lift={lift} />
-              </td>
-            ))}
           </tr>
         ))}
       </tbody>

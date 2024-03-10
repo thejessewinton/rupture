@@ -1,7 +1,7 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 
 import { Button } from '~/components/shared/button'
 import { Input } from '~/components/shared/input'
@@ -13,11 +13,18 @@ import { RouterOutputs, type RouterInputs } from '~/trpc/shared'
 type NewWorkoutValues = RouterInputs['workouts']['createNew']
 
 export const WorkoutForm = () => {
-  const { register, handleSubmit, reset } = useForm<NewWorkoutValues>({
+  const lifts = api.lifts.getAll.useQuery()
+  const { register, handleSubmit, reset, control } = useForm<NewWorkoutValues>({
     defaultValues: {
       name: '',
-      lift_ids: []
+      lift_ids: [],
+      day: 'Saturday'
     }
+  })
+
+  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
+    control,
+    name: 'lift_ids' as never
   })
 
   const utils = api.useUtils()
@@ -35,6 +42,7 @@ export const WorkoutForm = () => {
   })
 
   const onSubmit = async (values: NewWorkoutValues) => {
+    console.log(values)
     await submit.mutateAsync(values)
   }
 
@@ -45,10 +53,31 @@ export const WorkoutForm = () => {
     >
       <Input placeholder='Name' required {...register('name')} />
 
+      {fields.map((field, index) => (
+        <input key={field.id} {...register(`lift_ids.${index}` as const)} />
+      ))}
+
+      {lifts.data?.map((lift) => (
+        <div key={lift.id} className='flex items-center gap-4'>
+          <input
+            type='checkbox'
+            value={lift.id}
+            onChange={(e) => {
+              if (e.target.checked) {
+                append(lift.id)
+              } else {
+                remove(lift.id)
+              }
+            }}
+          />
+          <label htmlFor={lift.id.toString()}>{lift.name}</label>
+        </div>
+      ))}
+
       <div className='flex overflow-hidden rounded-sm transition-all focus-within:ring-1 focus-within:ring-blue-400'></div>
 
       <Button type='submit' disabled={submit.isLoading}>
-        Create lift
+        Create workout
       </Button>
     </form>
   )
