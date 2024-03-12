@@ -1,12 +1,13 @@
-import { lift, liftsToWorkouts, workout } from '~/server/db/schema'
+import { lift, workout, exercise, dayEnum } from '~/server/db/schema'
 import { createTRPCRouter, protectedProcedure } from '../trpc'
 import { z } from 'zod'
+import { eq } from 'drizzle-orm'
 
 export const workoutsRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.query.workout.findMany({
       with: {
-        lifts: true
+        exercises: true
       }
     })
   }),
@@ -14,35 +15,61 @@ export const workoutsRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
-        day: z.enum(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']),
-        lift_ids: z.array(z.number())
+        days: z.array(
+          z.object({
+            day: z.enum(dayEnum),
+            lifts: z.array(
+              z.object({
+                id: z.string(),
+                sets: z.string(),
+                reps: z.string(),
+                percentage: z.string()
+              })
+            )
+          })
+        )
       })
     )
     .mutation(async ({ ctx, input }) => {
-      await ctx.db.transaction(async (db) => {
-        const newWorkout = await ctx.db.insert(workout).values({
+      return await ctx.db.transaction(async (db) => {
+        const newWorkout = await db.insert(workout).values({
           name: input.name,
-          day: input.day,
           user_id: ctx.session.user.id
         })
 
-        await ctx.db.insert(liftsToWorkouts).values(
-          input.lift_ids.map((lift_id) => ({
-            workout_id: Number(newWorkout.insertId),
-            lift_id
-          }))
-        )
+        for (const day of input.days) {
+          for (const lift of day.lifts) {
+            await db.insert(exercise).values({
+              workout_id: Number(newWorkout.insertId),
+              sets: Number(lift.sets),
+              day: day.day,
+              percentage: Number(lift.percentage),
+              lift_id: Number(lift.id),
+              reps: Number(lift.reps),
+              user_id: ctx.session.user.id
+            })
+          }
+        }
 
-        return newWorkout
+        return newWorkout.insertId
       })
     }),
-  getBySlug: protectedProcedure
+  getById: protectedProcedure
     .input(
       z.object({
-        slug: z.string()
+        id: z.string()
       })
     )
     .query(async ({ ctx, input }) => {
-      return {}
+      return await ctx.db.query.workout.findFirst({
+        where: eq(workout.id, Number(input.id)),
+        with: {
+          exercises: {
+            with: {
+              lift: true
+            }
+          }
+        }
+      })
     })
 })

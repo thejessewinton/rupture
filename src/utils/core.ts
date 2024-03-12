@@ -1,32 +1,8 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import { capitalize as c } from 'string-ts'
 
 export const classNames = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
-}
-
-export const slugify = (string: string) => {
-  return string
-    .toLowerCase()
-    .replace(/ /g, '-')
-    .replace(/[^\w-]+/g, '')
-}
-
-export const makePlural = (string: string, number: number) => {
-  if (number === 1) {
-    return string
-  } else {
-    return `${string}s`
-  }
-}
-
-export const removeSpecialCharacters = (string: string) => {
-  return string.replace(/[^a-zA-Z0-9]/g, ' ')
-}
-
-export const capitalize = (string: string) => {
-  return c(removeSpecialCharacters(string.toLowerCase()))
 }
 
 export const getInitials = (name: string) => {
@@ -44,4 +20,16 @@ export const calculateWeight = ({
   convertTo: 'kgs' | 'lbs'
 }) => {
   return unit === convertTo ? weight : unit === 'lbs' ? weight * 0.453592 : weight / 0.453592
+}
+
+export const convertToDecimal = (number: number) => {
+  if (number <= 100) {
+    return number / 100
+  } else {
+    return parseFloat((number / 100).toFixed(2))
+  }
+}
+
+export const getPercentage = ({ weight, percentage }: { weight: number; percentage: number }) => {
+  return weight * convertToDecimal(percentage)
 }

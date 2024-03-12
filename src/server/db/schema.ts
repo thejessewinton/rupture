@@ -126,39 +126,12 @@ export const lift = mysqlTable('lift', {
 
 export const liftRelations = relations(lift, ({ one, many }) => ({
   user: one(users, { fields: [lift.user_id], references: [users.id] }),
-  workout: many(liftsToWorkouts)
-}))
-
-export const liftsToWorkouts = mysqlTable(
-  'workout_lifts',
-  {
-    workout_id: bigint('workout_id', { mode: 'number' })
-      .notNull()
-      .references(() => workout.id),
-    lift_id: bigint('lift_id', { mode: 'number' })
-      .notNull()
-      .references(() => lift.id)
-  },
-  (t) => ({
-    workoutLift: primaryKey({ columns: [t.workout_id, t.lift_id] })
-  })
-)
-
-export const workoutsToLiftsRelations = relations(liftsToWorkouts, ({ one }) => ({
-  workout: one(workout, {
-    fields: [liftsToWorkouts.workout_id],
-    references: [workout.id]
-  }),
-  lift: one(lift, {
-    fields: [liftsToWorkouts.lift_id],
-    references: [lift.id]
-  })
+  exercise: many(exercise)
 }))
 
 export const workout = mysqlTable('workout', {
   id: bigint('id', { mode: 'number' }).primaryKey().autoincrement(),
   name: varchar('name', { length: 255 }).notNull(),
-  day: varchar('day', { length: 255 }).notNull(),
   user_id: varchar('user_id', { length: 255 })
     .notNull()
     .references(() => users.id),
@@ -172,5 +145,32 @@ export const workout = mysqlTable('workout', {
 
 export const workoutRelations = relations(workout, ({ one, many }) => ({
   user: one(users, { fields: [workout.user_id], references: [users.id] }),
-  lifts: many(liftsToWorkouts)
+  exercises: many(exercise)
+}))
+
+export const dayEnum = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as const
+
+export const exercise = mysqlTable('exercise', {
+  id: bigint('id', { mode: 'number' }).primaryKey().autoincrement(),
+  user_id: varchar('user_id', { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  sets: bigint('sets', { mode: 'number' }).notNull(),
+  reps: bigint('reps', { mode: 'number' }).notNull(),
+  percentage: bigint('percentage', { mode: 'number' }).notNull(),
+  day: mysqlEnum('day', dayEnum).notNull().default('Monday'),
+  created_at: timestamp('created_at', { mode: 'date', fsp: 3 })
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP(3)`),
+  updated_at: timestamp('updated_at', { mode: 'date', fsp: 3 })
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP(3)`),
+  workout_id: bigint('workout_id', { mode: 'number' }).references(() => workout.id),
+  lift_id: bigint('lift_id', { mode: 'number' }).references(() => lift.id)
+})
+
+export const exerciseRelations = relations(exercise, ({ many, one }) => ({
+  user: one(users, { fields: [exercise.user_id], references: [users.id] }),
+  workout: one(workout, { fields: [exercise.workout_id], references: [workout.id] }),
+  lift: one(lift, { fields: [exercise.lift_id], references: [lift.id] })
 }))

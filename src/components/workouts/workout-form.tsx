@@ -9,6 +9,11 @@ import { Input } from '~/components/shared/input'
 import { useDialogStore } from '~/state/use-dialog-store'
 import { api } from '~/trpc/react'
 import { RouterOutputs, type RouterInputs } from '~/trpc/shared'
+import { Select } from '../shared/select'
+import { useRouter } from 'next/navigation'
+import { dayEnum } from '~/server/db/schema'
+import { useState } from 'react'
+import { PlusIcon, XMarkIcon } from '@heroicons/react/24/solid'
 
 type NewWorkoutValues = RouterInputs['workouts']['createNew']
 
@@ -17,20 +22,19 @@ export const WorkoutForm = () => {
   const { register, handleSubmit, reset, control } = useForm<NewWorkoutValues>({
     defaultValues: {
       name: '',
-      lift_ids: [],
-      day: 'Saturday'
+      days: []
     }
   })
 
   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
     control,
-    name: 'lift_ids' as never
+    name: 'days'
   })
 
   const utils = api.useUtils()
 
   const submit = api.workouts.createNew.useMutation({
-    onMutate: async (data) => {
+    onMutate: async () => {
       reset()
     },
     onSuccess: async () => {
@@ -42,7 +46,6 @@ export const WorkoutForm = () => {
   })
 
   const onSubmit = async (values: NewWorkoutValues) => {
-    console.log(values)
     await submit.mutateAsync(values)
   }
 
@@ -53,28 +56,55 @@ export const WorkoutForm = () => {
     >
       <Input placeholder='Name' required {...register('name')} />
 
-      {fields.map((field, index) => (
-        <input key={field.id} {...register(`lift_ids.${index}` as const)} />
-      ))}
+      {dayEnum.map((day) => (
+        <>
+          <div className='flex items-center justify-between pb-4'>
+            <h1 className='text-md'>{day}</h1>
+            <button type='button' onClick={() => append({ day, lifts: [] })}>
+              <PlusIcon className='h-4 w-4' />
+            </button>
+          </div>
 
-      {lifts.data?.map((lift) => (
-        <div key={lift.id} className='flex items-center gap-4'>
-          <input
-            type='checkbox'
-            value={lift.id}
-            onChange={(e) => {
-              if (e.target.checked) {
-                append(lift.id)
-              } else {
-                remove(lift.id)
-              }
-            }}
-          />
-          <label htmlFor={lift.id.toString()}>{lift.name}</label>
-        </div>
-      ))}
+          {fields
+            .filter((field) => field.day === day)
+            .map((field, index) => (
+              <>
+                <div className='flex justify-between gap-2' key={field.id}>
+                  <Select {...register(`days.${index}.lifts.${index}.id` as const)}>
+                    <option disabled>Lift</option>
+                    {lifts.data?.map((lift) => (
+                      <option key={lift.id} value={lift.id}>
+                        {lift.name}
+                      </option>
+                    ))}
+                  </Select>
+                  <Input
+                    placeholder='Sets'
+                    type='number'
+                    step={1}
+                    {...register(`days.${index}.lifts.${index}.sets` as const)}
+                  />
+                  <Input
+                    placeholder='Reps'
+                    type='number'
+                    step={1}
+                    {...register(`days.${index}.lifts.${index}.reps` as const)}
+                  />
+                  <Input
+                    placeholder='Percentage'
+                    type='number'
+                    step={1}
+                    {...register(`days.${index}.lifts.${index}.percentage` as const)}
+                  />
 
-      <div className='flex overflow-hidden rounded-sm transition-all focus-within:ring-1 focus-within:ring-blue-400'></div>
+                  <button type='button' onClick={() => remove(index)}>
+                    <XMarkIcon className='h-4 w-4' />
+                  </button>
+                </div>
+              </>
+            ))}
+        </>
+      ))}
 
       <Button type='submit' disabled={submit.isLoading}>
         Create workout

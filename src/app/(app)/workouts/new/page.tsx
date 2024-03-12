@@ -1,7 +1,7 @@
 import { NewLiftAction } from '~/components/lifts/lifts-table'
 import { Button } from '~/components/shared/button'
 import { WorkoutForm } from '~/components/workouts/workout-form'
-import { WorkoutTable } from '~/components/workouts/workout-table'
+import { WorkoutsTable } from '~/components/workouts/workouts-table'
 
 export default async function Home() {
   return (
