@@ -11,7 +11,7 @@ import { api } from '~/trpc/react'
 import { RouterOutputs, type RouterInputs } from '~/trpc/shared'
 import { Select } from '../shared/select'
 import { useRouter } from 'next/navigation'
-import { dayEnum } from '~/server/db/schema'
+import { days } from '~/server/db/schema'
 import { useState } from 'react'
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/solid'
 
@@ -56,7 +56,7 @@ export const WorkoutForm = () => {
     >
       <Input placeholder='Name' required {...register('name')} />
 
-      {dayEnum.map((day) => (
+      {days.map((day) => (
         <>
           <div className='flex items-center justify-between pb-4'>
             <h1 className='text-md'>{day}</h1>

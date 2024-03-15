@@ -1,7 +1,7 @@
 import { createTRPCRouter, protectedProcedure } from '../trpc'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
-import { lift, unitEnum } from '~/server/db/schema'
+import { lift, units } from '~/server/db/schema'
 
 export const liftsRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
@@ -14,7 +14,7 @@ export const liftsRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         personal_record: z.string(),
-        unit: z.enum(unitEnum)
+        unit: z.enum(units)
       })
     )
     .mutation(async ({ ctx, input }) => {

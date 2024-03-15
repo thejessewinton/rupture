@@ -1,26 +1,26 @@
 import { relations, sql } from 'drizzle-orm'
 import {
   index,
-  int,
-  mysqlEnum,
-  mysqlTable,
+  pgEnum,
+  pgTable,
   primaryKey,
   text,
   timestamp,
   varchar,
   bigint,
-  boolean
-} from 'drizzle-orm/mysql-core'
+  serial,
+  integer
+} from 'drizzle-orm/pg-core'
 import type { AdapterAccount } from '@auth/core/adapters'
 
 // Necessary for Next Auth
-export const users = mysqlTable('user', {
+export const users = pgTable('user', {
   id: varchar('id', { length: 255 }).notNull().primaryKey(),
   name: varchar('name', { length: 255 }),
   email: varchar('email', { length: 255 }).notNull(),
   emailVerified: timestamp('emailVerified', {
     mode: 'date',
-    fsp: 3
+    precision: 3
   }).default(sql`CURRENT_TIMESTAMP(3)`),
   image: varchar('image', { length: 255 })
 })
@@ -32,7 +32,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   lifts: many(lift)
 }))
 
-export const accounts = mysqlTable(
+export const accounts = pgTable(
   'account',
   {
     userId: varchar('userId', { length: 255 })
@@ -43,7 +43,7 @@ export const accounts = mysqlTable(
     providerAccountId: varchar('providerAccountId', { length: 255 }).notNull(),
     refresh_token: text('refresh_token'),
     access_token: text('access_token'),
-    expires_at: int('expires_at'),
+    expires_at: integer('expires_at'),
     token_type: varchar('token_type', { length: 255 }),
     scope: varchar('scope', { length: 255 }),
     id_token: text('id_token'),
@@ -61,7 +61,7 @@ export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, { fields: [accounts.userId], references: [users.id] })
 }))
 
-export const sessions = mysqlTable(
+export const sessions = pgTable(
   'session',
   {
     sessionToken: varchar('sessionToken', { length: 255 }).notNull().primaryKey(),
@@ -79,7 +79,7 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, { fields: [sessions.userId], references: [users.id] })
 }))
 
-export const verificationTokens = mysqlTable(
+export const verificationTokens = pgTable(
   'verificationToken',
   {
     identifier: varchar('identifier', { length: 255 }).notNull(),
@@ -92,34 +92,35 @@ export const verificationTokens = mysqlTable(
 )
 
 // Units, Lifts, Workouts, and Sets
-export const unitEnum = ['kgs', 'lbs'] as const
+export const units = ['kgs', 'lbs'] as const
+const unitEmum = pgEnum('value', units)
 
-export const unit = mysqlTable('unit', {
-  id: bigint('id', { mode: 'number' }).primaryKey().autoincrement(),
-  value: mysqlEnum('value', unitEnum).notNull().default('lbs'),
+export const unit = pgTable('unit', {
+  id: serial('id').unique(),
+  //value: unitEmum('value').notNull().default('lbs'),
   user_id: varchar('user_id', { length: 255 })
     .notNull()
     .references(() => users.id),
-  created_at: timestamp('created_at', { mode: 'date', fsp: 3 })
+  created_at: timestamp('created_at', { mode: 'date', precision: 3 })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP(3)`),
-  updated_at: timestamp('updated_at', { mode: 'date', fsp: 3 })
+  updated_at: timestamp('updated_at', { mode: 'date', precision: 3 })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP(3)`)
 })
 
-export const lift = mysqlTable('lift', {
-  id: bigint('id', { mode: 'number' }).primaryKey().autoincrement(),
+export const lift = pgTable('lift', {
+  id: serial('id').unique(),
   name: varchar('name', { length: 255 }).notNull(),
   personal_record: bigint('personal_record', { mode: 'number' }).notNull(),
-  unit: mysqlEnum('value', unitEnum).notNull().default('lbs'),
+  //unit: unitEmum('value').notNull().default('lbs'),
   user_id: varchar('user_id', { length: 255 })
     .notNull()
     .references(() => users.id),
-  created_at: timestamp('created_at', { mode: 'date', fsp: 3 })
+  created_at: timestamp('created_at', { mode: 'date', precision: 3 })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP(3)`),
-  updated_at: timestamp('updated_at', { mode: 'date', fsp: 3 })
+  updated_at: timestamp('updated_at', { mode: 'date', precision: 3 })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP(3)`)
 })
@@ -129,16 +130,16 @@ export const liftRelations = relations(lift, ({ one, many }) => ({
   exercise: many(exercise)
 }))
 
-export const workout = mysqlTable('workout', {
-  id: bigint('id', { mode: 'number' }).primaryKey().autoincrement(),
+export const workout = pgTable('workout', {
+  id: serial('id').unique(),
   name: varchar('name', { length: 255 }).notNull(),
   user_id: varchar('user_id', { length: 255 })
     .notNull()
     .references(() => users.id),
-  created_at: timestamp('created_at', { mode: 'date', fsp: 3 })
+  created_at: timestamp('created_at', { mode: 'date', precision: 3 })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP(3)`),
-  updated_at: timestamp('updated_at', { mode: 'date', fsp: 3 })
+  updated_at: timestamp('updated_at', { mode: 'date', precision: 3 })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP(3)`)
 })
@@ -148,21 +149,22 @@ export const workoutRelations = relations(workout, ({ one, many }) => ({
   exercises: many(exercise)
 }))
 
-export const dayEnum = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as const
+export const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as const
+const dayEnum = pgEnum('day', days)
 
-export const exercise = mysqlTable('exercise', {
-  id: bigint('id', { mode: 'number' }).primaryKey().autoincrement(),
+export const exercise = pgTable('exercise', {
+  id: serial('id').unique(),
   user_id: varchar('user_id', { length: 255 })
     .notNull()
     .references(() => users.id),
   sets: bigint('sets', { mode: 'number' }).notNull(),
   reps: bigint('reps', { mode: 'number' }).notNull(),
   percentage: bigint('percentage', { mode: 'number' }).notNull(),
-  day: mysqlEnum('day', dayEnum).notNull().default('Monday'),
-  created_at: timestamp('created_at', { mode: 'date', fsp: 3 })
+  //day: dayEnum('day').notNull().default('Monday'),
+  created_at: timestamp('created_at', { mode: 'date', precision: 3 })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP(3)`),
-  updated_at: timestamp('updated_at', { mode: 'date', fsp: 3 })
+  updated_at: timestamp('updated_at', { mode: 'date', precision: 3 })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP(3)`),
   workout_id: bigint('workout_id', { mode: 'number' }).references(() => workout.id),

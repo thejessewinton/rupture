@@ -4,8 +4,8 @@ import { env } from '~/env'
 
 export default {
   schema: './src/server/db/schema.ts',
-  driver: 'mysql2',
+  driver: 'pg',
   dbCredentials: {
-    uri: env.DATABASE_URL
+    connectionString: env.POSTGRES_URL
   }
 } satisfies Config

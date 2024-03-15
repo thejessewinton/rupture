@@ -1,4 +1,4 @@
-import { lift, workout, exercise, dayEnum } from '~/server/db/schema'
+import { lift, workout, exercise, days } from '~/server/db/schema'
 import { createTRPCRouter, protectedProcedure } from '../trpc'
 import { z } from 'zod'
 import { eq } from 'drizzle-orm'
@@ -17,7 +17,7 @@ export const workoutsRouter = createTRPCRouter({
         name: z.string(),
         days: z.array(
           z.object({
-            day: z.enum(dayEnum),
+            day: z.enum(days),
             lifts: z.array(
               z.object({
                 id: z.string(),
