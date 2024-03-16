@@ -1,7 +1,7 @@
 'use client'
 
 import { type Session } from 'next-auth'
-import { Dropdown } from '~/components/shared/dropdown'
+import { Dropdown, Item } from '~/components/shared/dropdown'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ThemeSwitcher } from '~/components/shared/theme-switcher'
@@ -25,16 +25,16 @@ export const Actions = ({ session, signOut }: ActionsProps) => {
               }
               align='end'
             >
-              <Dropdown.Item>
+              <Item>
                 <Link href='/profile' className='w-full'>
                   Profile
                 </Link>
-              </Dropdown.Item>
-              <Dropdown.Item>
+              </Item>
+              <Item>
                 <button formAction={signOut} className='w-full text-left'>
                   Log out
                 </button>
-              </Dropdown.Item>
+              </Item>
               <ThemeSwitcher />
             </Dropdown>
           </div>

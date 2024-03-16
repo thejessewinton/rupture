@@ -5,7 +5,7 @@ import { eachMonthOfInterval, endOfMonth, format, isSameMonth, parseISO, startOf
 import useMeasure from 'react-use-measure'
 import { motion } from 'framer-motion'
 import { estimatedMax } from '~/utils/core'
-import { RouterOutputs } from '~/trpc/shared'
+import { type RouterOutputs } from '~/trpc/shared'
 import { sortBy } from 'remeda'
 import * as Tooltip from '@radix-ui/react-tooltip'
 
@@ -135,11 +135,10 @@ const ChartInner = ({
 
         {/* Circles */}
         {data.map((d, i) => (
-          <Tooltip.Provider>
+          <Tooltip.Provider key={i}>
             <Tooltip.Root delayDuration={0}>
               <Tooltip.Trigger asChild>
                 <motion.circle
-                  key={i}
                   r='5'
                   cx={xScale(d.date)}
                   cy={yScale(d.estimatedMax)}

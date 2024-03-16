@@ -1,7 +1,7 @@
 import { useDialogStore } from '~/state/use-dialog-store'
 import { api } from '~/trpc/react'
-import { RouterOutputs } from '~/trpc/shared'
-import { Dropdown } from '../shared/dropdown'
+import { type RouterOutputs } from '~/trpc/shared'
+import { Dropdown, Item } from '../shared/dropdown'
 import SvgEllipsis from '../svg/ellipsis'
 import { DeleteConfirm } from '../actions/delete-confirm'
 
@@ -40,7 +40,7 @@ export const SetActions = ({ set }: SetActionsProps) => {
       }
       align='end'
     >
-      <Dropdown.Item>
+      <Item>
         <button
           className='text-red-900 dark:text-red-500'
           onClick={() => {
@@ -57,7 +57,7 @@ export const SetActions = ({ set }: SetActionsProps) => {
         >
           Delete set
         </button>
-      </Dropdown.Item>
+      </Item>
     </Dropdown>
   )
 }

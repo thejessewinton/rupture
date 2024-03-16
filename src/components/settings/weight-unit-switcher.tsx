@@ -2,7 +2,7 @@
 
 import { api } from '~/trpc/react'
 import { LabelSelect } from '../shared/label-select'
-import { units } from '~/server/db/schema'
+import { type units } from '~/server/db/schema'
 
 export const WeightUnitSwitcher = ({ className }: { className?: string }) => {
   const utils = api.useUtils()

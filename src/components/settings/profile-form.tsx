@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form'
 import { api } from '~/trpc/react'
-import { type RouterOutputs, type RouterInputs } from '~/trpc/shared'
+import { type RouterInputs } from '~/trpc/shared'
 import { Button } from '~/components/shared/button'
 import { Input } from '~/components/shared/input'
 import { useEffect } from 'react'
@@ -15,8 +15,8 @@ export const ProfileForm = () => {
 
   const { register, handleSubmit, reset } = useForm<ProfileValues>({
     defaultValues: {
-      name: data?.name!,
-      email: data?.email!
+      name: `${data?.name}`,
+      email: data?.email
     }
   })
 
@@ -37,6 +37,7 @@ export const ProfileForm = () => {
         email: data.email
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   if (isLoading) return

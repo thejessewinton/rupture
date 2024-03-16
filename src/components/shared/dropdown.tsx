@@ -34,7 +34,7 @@ export const Dropdown = ({ trigger, children, align }: DropdownProps) => {
 
 type DropdownItemProps = DropdownPrimitive.DropdownMenuItemProps
 
-Dropdown.Item = ({ className, ...props }: DropdownItemProps) => {
+export const Item = ({ className, ...props }: DropdownItemProps) => {
   return (
     <DropdownPrimitive.Item
       className={classNames(
@@ -45,3 +45,5 @@ Dropdown.Item = ({ className, ...props }: DropdownItemProps) => {
     />
   )
 }
+
+Item.displayName = 'Dropdown.Item'

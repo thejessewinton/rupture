@@ -1,6 +1,5 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '~/components/shared/button'

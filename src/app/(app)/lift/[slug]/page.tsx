@@ -2,7 +2,6 @@
 
 import { format } from 'date-fns'
 import { sortBy } from 'remeda'
-import { LiftActions } from '~/components/lifts/lift-card'
 import { LiftProgressChart } from '~/components/lifts/lift-progress-chart'
 import { SetActions } from '~/components/sets/set-actions'
 import { NewSetAction } from '~/components/sets/set-form'

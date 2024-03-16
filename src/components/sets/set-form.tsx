@@ -8,7 +8,7 @@ import { Input } from '~/components/shared/input'
 import { useDialogStore } from '~/state/use-dialog-store'
 
 import { api } from '~/trpc/react'
-import { RouterOutputs, type RouterInputs } from '~/trpc/shared'
+import { type RouterOutputs, type RouterInputs } from '~/trpc/shared'
 
 type SetValues = RouterInputs['sets']['createNew']
 type Lift = RouterOutputs['lifts']['getBySlug']
@@ -30,13 +30,13 @@ export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
   const submit = api.sets.createNew.useMutation({
     onMutate: (data) => {
       const previousSets = utils.lifts.getBySlug.getData({
-        slug: lift!.slug!
+        slug: lift!.slug
       })
 
       if (previousSets) {
         utils.lifts.getBySlug.setData(
           {
-            slug: lift!.slug!
+            slug: lift!.slug
           },
           {
             ...previousSets,
@@ -47,11 +47,11 @@ export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
                 reps: data.reps,
                 weight: data.weight,
                 id: data.lift_id,
-                lift_id: lift?.id!,
+                lift_id: lift!.id,
                 created_at: new Date(),
                 updated_at: new Date(),
                 unit: 'lbs',
-                user_id: session?.user.id!,
+                user_id: session!.user.id,
                 lift: lift!
               }
             ]

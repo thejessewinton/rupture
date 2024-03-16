@@ -16,7 +16,7 @@ export const LiftsGrid = () => {
     <>
       {!lifts.data.length ? (
         <EmptyState>
-          <p className='text-gray-400'>You don't have any lifts yet.</p>
+          <p className='text-gray-400'>{`You don't have any lifts yet.`}</p>
         </EmptyState>
       ) : (
         <div className='grid gap-2 md:grid-cols-3'>

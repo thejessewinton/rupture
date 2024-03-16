@@ -1,25 +1,18 @@
 import { api } from '~/trpc/react'
-import { RouterOutputs } from '~/trpc/shared'
-import { Dropdown } from '~/components/shared/dropdown'
+import { type RouterOutputs } from '~/trpc/shared'
+import { Dropdown, Item } from '~/components/shared/dropdown'
 import SvgEllipsis from '~/components/svg/ellipsis'
-import { LiftForm } from '~/components/lifts/lift-form'
 import { DeleteConfirm } from '~/components/actions/delete-confirm'
 import { useDialogStore } from '~/state/use-dialog-store'
 import Link from 'next/link'
-import useMeasure from 'react-use-measure'
 
 type LiftCardProps = {
   lift: RouterOutputs['lifts']['getAll'][number]
 }
 
 export const LiftCard = ({ lift }: LiftCardProps) => {
-  const [ref, bounds] = useMeasure()
   return (
-    <Link
-      href={`/lift/${lift.slug}`}
-      ref={ref}
-      className='rounded border border-neutral-200 p-4 dark:border-neutral-800'
-    >
+    <Link href={`/lift/${lift.slug}`} className='rounded border border-neutral-200 p-4 dark:border-neutral-800'>
       <div className='flex justify-between'>{lift.name}</div>
     </Link>
   )
@@ -55,7 +48,7 @@ export const LiftActions = ({ lift }: LiftActionsProps) => {
       }
       align='end'
     >
-      <Dropdown.Item>
+      <Item>
         <button
           className='text-red-900 dark:text-red-500'
           onClick={() => {
@@ -72,7 +65,7 @@ export const LiftActions = ({ lift }: LiftActionsProps) => {
         >
           Delete lift
         </button>
-      </Dropdown.Item>
+      </Item>
     </Dropdown>
   )
 }

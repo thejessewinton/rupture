@@ -32,7 +32,7 @@ export const ThemeSwitcher = () => {
       onChange={(e: ChangeEvent<HTMLSelectElement>) => {
         setTheme(e.target.value)
       }}
-      value={theme || 'system'}
+      value={theme ?? 'system'}
     >
       <option value='system'>System</option>
       <option value='light'>Light</option>
