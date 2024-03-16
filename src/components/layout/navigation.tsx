@@ -12,11 +12,11 @@ export const Navigation = () => {
     label: string
     href: Route<string>
   }> = [
-    { label: 'Workouts', href: '/' },
     {
       label: 'Lifts',
-      href: '/lifts'
-    }
+      href: '/'
+    },
+    { label: 'Profile', href: '/profile' }
   ]
 
   return (

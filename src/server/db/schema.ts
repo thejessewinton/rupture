@@ -53,10 +53,9 @@ export const accounts = pgTable(
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId]
     }),
-    userIdIdx: index('accounts_userId_idx').on(account.userId)
+    userIdIdx: index('account_userId_idx').on(account.userId)
   })
 )
-
 export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, { fields: [accounts.userId], references: [users.id] })
 }))
@@ -95,84 +94,75 @@ export const verificationTokens = pgTable(
 export const units = ['kgs', 'lbs'] as const
 export const unitEmum = pgEnum('value', units)
 
-export const unit = pgTable('unit', {
-  id: serial('id').unique(),
-  value: unitEmum('value').notNull().default('lbs'),
-  user_id: varchar('user_id', { length: 255 })
-    .notNull()
-    .references(() => users.id),
-  created_at: timestamp('created_at', { mode: 'date', precision: 3 })
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP(3)`),
-  updated_at: timestamp('updated_at', { mode: 'date', precision: 3 })
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP(3)`)
-})
+export const unit = pgTable(
+  'unit',
+  {
+    id: serial('id').unique().primaryKey(),
+    value: unitEmum('value').notNull().default('lbs'),
+    user_id: varchar('user_id', { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    created_at: timestamp('created_at', { mode: 'date', precision: 3 }).notNull().defaultNow(),
+    updated_at: timestamp('updated_at', { mode: 'date', precision: 3 }).notNull().defaultNow()
+  },
+  (unit) => ({
+    userIdIdx: index('unit_userId_idx').on(unit.user_id)
+  })
+)
 
-export const lift = pgTable('lift', {
-  id: serial('id').unique(),
-  name: varchar('name', { length: 255 }).notNull(),
-  personal_record: bigint('personal_record', { mode: 'number' }).notNull(),
-  unit: unitEmum('value').notNull().default('lbs'),
-  user_id: varchar('user_id', { length: 255 })
-    .notNull()
-    .references(() => users.id),
-  created_at: timestamp('created_at', { mode: 'date', precision: 3 })
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP(3)`),
-  updated_at: timestamp('updated_at', { mode: 'date', precision: 3 })
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP(3)`)
-})
+export const unitRelations = relations(unit, ({ one }) => ({
+  user: one(users, { fields: [unit.user_id], references: [users.id] })
+}))
+
+export const lift = pgTable(
+  'lift',
+  {
+    id: serial('id').unique().primaryKey(),
+    name: varchar('name', { length: 255 }).notNull(),
+    personal_record: bigint('personal_record', { mode: 'number' }).notNull(),
+    unit: unitEmum('value').notNull().default('lbs'),
+    slug: varchar('slug', { length: 255 }).notNull(),
+    user_id: varchar('user_id', { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    created_at: timestamp('created_at', { mode: 'date', precision: 3 }).notNull().defaultNow(),
+    updated_at: timestamp('updated_at', { mode: 'date', precision: 3 }).notNull().defaultNow()
+  },
+  (lift) => ({
+    userIdIdx: index('lift_userId_idx').on(lift.user_id)
+  })
+)
 
 export const liftRelations = relations(lift, ({ one, many }) => ({
   user: one(users, { fields: [lift.user_id], references: [users.id] }),
-  exercise: many(exercise)
-}))
-
-export const workout = pgTable('workout', {
-  id: serial('id').unique(),
-  name: varchar('name', { length: 255 }).notNull(),
-  user_id: varchar('user_id', { length: 255 })
-    .notNull()
-    .references(() => users.id),
-  created_at: timestamp('created_at', { mode: 'date', precision: 3 })
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP(3)`),
-  updated_at: timestamp('updated_at', { mode: 'date', precision: 3 })
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP(3)`)
-})
-
-export const workoutRelations = relations(workout, ({ one, many }) => ({
-  user: one(users, { fields: [workout.user_id], references: [users.id] }),
-  exercises: many(exercise)
+  sets: many(set)
 }))
 
 export const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as const
 export const dayEnum = pgEnum('day', days)
 
-export const exercise = pgTable('exercise', {
-  id: serial('id').unique(),
-  user_id: varchar('user_id', { length: 255 })
-    .notNull()
-    .references(() => users.id),
-  sets: bigint('sets', { mode: 'number' }).notNull(),
-  reps: bigint('reps', { mode: 'number' }).notNull(),
-  percentage: bigint('percentage', { mode: 'number' }).notNull(),
-  day: dayEnum('day').notNull().default('Monday'),
-  created_at: timestamp('created_at', { mode: 'date', precision: 3 })
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP(3)`),
-  updated_at: timestamp('updated_at', { mode: 'date', precision: 3 })
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP(3)`),
-  workout_id: bigint('workout_id', { mode: 'number' }).references(() => workout.id),
-  lift_id: bigint('lift_id', { mode: 'number' }).references(() => lift.id)
-})
+export const set = pgTable(
+  'set',
+  {
+    id: serial('id').unique().primaryKey(),
+    user_id: varchar('user_id', { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    reps: bigint('reps', { mode: 'number' }).notNull(),
+    weight: bigint('weight', { mode: 'number' }).notNull(),
+    unit: unitEmum('value').notNull().default('lbs'),
+    date: timestamp('date').notNull().defaultNow(),
+    created_at: timestamp('created_at', { mode: 'date', precision: 3 }).notNull().defaultNow(),
+    updated_at: timestamp('updated_at', { mode: 'date', precision: 3 }).notNull().defaultNow(),
+    lift_id: bigint('lift_id', { mode: 'number' }).references(() => lift.id)
+  },
+  (set) => ({
+    userIdIdx: index('set_userId_idx').on(set.user_id),
+    liftIdIdx: index('set_liftId_idx').on(set.lift_id)
+  })
+)
 
-export const exerciseRelations = relations(exercise, ({ many, one }) => ({
-  user: one(users, { fields: [exercise.user_id], references: [users.id] }),
-  workout: one(workout, { fields: [exercise.workout_id], references: [workout.id] }),
-  lift: one(lift, { fields: [exercise.lift_id], references: [lift.id] })
+export const setRelations = relations(set, ({ one }) => ({
+  user: one(users, { fields: [set.user_id], references: [users.id] }),
+  lift: one(lift, { fields: [set.lift_id], references: [lift.id] })
 }))

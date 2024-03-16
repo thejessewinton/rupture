@@ -1,6 +1,6 @@
 import { auth, signOut } from '~/server/auth'
-import { Actions } from './actions'
-import { Navigation } from './navigation'
+import { Actions } from '~/components/layout/actions'
+import { Navigation } from '~/components/layout/navigation'
 import Link from 'next/link'
 
 export const Header = async () => {
@@ -17,9 +17,7 @@ export const Header = async () => {
               session={session!}
               signOut={async () => {
                 'use server'
-                return await signOut({
-                  redirectTo: '/login'
-                })
+                await signOut()
               }}
             />
           </div>

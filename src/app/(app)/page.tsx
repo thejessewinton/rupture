@@ -1,14 +1,13 @@
-import { Button } from '~/components/shared/button'
-import { WorkoutsTable } from '~/components/workouts/workouts-table'
+import { LiftsGrid, NewLiftAction } from '~/components/lifts/lifts-grid'
 
-export default function Home() {
+export default async function LiftsPage() {
   return (
     <>
       <div className='flex items-center justify-between pb-4'>
-        <h1 className='text-xl'>Workouts</h1>
-        <Button href='/workouts/new'>Add workout</Button>
+        <h1 className='text-xl'>Lifts</h1>
+        <NewLiftAction />
       </div>
-      <WorkoutsTable />
+      <LiftsGrid />
     </>
   )
 }

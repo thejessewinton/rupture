@@ -7,9 +7,9 @@ type LabelSelectProps = SelectProps & {
 }
 
 export const LabelSelect = forwardRef(
-  ({ children, className, label, name, ...props }: LabelSelectProps, ref: Ref<HTMLFormElement>) => {
+  ({ children, className, label, name, ...props }: LabelSelectProps, ref: Ref<HTMLDivElement>) => {
     return (
-      <form
+      <div
         className={classNames(
           'rounded-xs text-primary flex items-stretch rounded-sm border border-neutral-200 text-xs shadow-sm transition-all focus-within:ring-1 dark:border-neutral-700',
           className
@@ -30,7 +30,7 @@ export const LabelSelect = forwardRef(
         >
           {children}
         </Select>
-      </form>
+      </div>
     )
   }
 )

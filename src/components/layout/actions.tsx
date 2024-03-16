@@ -31,7 +31,7 @@ export const Actions = ({ session, signOut }: ActionsProps) => {
                 </Link>
               </Dropdown.Item>
               <Dropdown.Item>
-                <button type='submit' className='w-full text-left' formAction={() => signOut}>
+                <button formAction={signOut} className='w-full text-left'>
                   Log out
                 </button>
               </Dropdown.Item>

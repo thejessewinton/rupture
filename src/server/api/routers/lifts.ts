@@ -1,12 +1,16 @@
 import { createTRPCRouter, protectedProcedure } from '../trpc'
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import { z } from 'zod'
 import { lift, units } from '~/server/db/schema'
+import { slugify } from '~/utils/core'
 
 export const liftsRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.query.lift.findMany({
-      where: eq(lift.user_id, ctx.session.user.id)
+      where: eq(lift.user_id, ctx.session.user.id),
+      with: {
+        sets: true
+      }
     })
   }),
   createNew: protectedProcedure
@@ -21,9 +25,26 @@ export const liftsRouter = createTRPCRouter({
       return await ctx.db.insert(lift).values({
         name: input.name,
         user_id: ctx.session.user.id,
-        personal_record: input.personal_record
+        personal_record: input.personal_record,
+        slug: slugify(input.name)
       })
     }),
+  getBySlug: protectedProcedure.input(z.object({ slug: z.string() })).query(async ({ ctx, input }) => {
+    return await ctx.db.query.lift.findFirst({
+      where: and(eq(lift.slug, input.slug), eq(lift.user_id, ctx.session.user.id)),
+      with: {
+        sets: {
+          with: {
+            lift: {
+              columns: {
+                slug: true
+              }
+            }
+          }
+        }
+      }
+    })
+  }),
   updatePersonalRecord: protectedProcedure
     .input(
       z.object({

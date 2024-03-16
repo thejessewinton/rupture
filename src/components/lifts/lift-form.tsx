@@ -8,14 +8,14 @@ import { Input } from '~/components/shared/input'
 
 import { useDialogStore } from '~/state/use-dialog-store'
 import { api } from '~/trpc/react'
-import { RouterOutputs, type RouterInputs } from '~/trpc/shared'
+import { type RouterInputs } from '~/trpc/shared'
 import { Select } from '~/components/shared/select'
 
 type NewLiftValues = RouterInputs['lifts']['createNew']
 
-export const LiftForm = () => {
+export const LiftForm = ({ lift }: { lift?: NewLiftValues }) => {
   const { register, handleSubmit, reset } = useForm<NewLiftValues>({
-    defaultValues: {
+    defaultValues: lift ?? {
       name: '',
       personal_record: 0,
       unit: 'lbs'
@@ -24,25 +24,9 @@ export const LiftForm = () => {
 
   const { handleDialogClose } = useDialogStore()
   const utils = api.useUtils()
-  const session = useSession()
 
   const submit = api.lifts.createNew.useMutation({
-    onMutate: async (data) => {
-      const previousLifts = utils.lifts.getAll.getData()
-
-      if (previousLifts) {
-        utils.lifts.getAll.setData(undefined, [
-          ...previousLifts,
-          {
-            ...data,
-            personal_record: Number(data.personal_record),
-            user_id: session.data?.user.id!,
-            id: Math.random(),
-            updated_at: new Date(),
-            created_at: new Date()
-          }
-        ])
-      }
+    onMutate: async () => {
       reset()
       handleDialogClose()
     },
@@ -65,7 +49,7 @@ export const LiftForm = () => {
     >
       <Input placeholder='Name' required {...register('name')} />
 
-      <div className='flex overflow-hidden rounded-sm transition-all focus-within:ring-1 focus-within:ring-blue-400'>
+      <div className='flex flex-col overflow-hidden rounded-sm transition-all focus-within:ring-1 focus-within:ring-blue-400'>
         <Input
           placeholder='PR'
           {...register('personal_record', {
@@ -87,65 +71,6 @@ export const LiftForm = () => {
 
       <Button type='submit' disabled={submit.isLoading}>
         Create lift
-      </Button>
-    </form>
-  )
-}
-
-type EditLiftValues = RouterInputs['lifts']['updatePersonalRecord']
-
-export const EditLiftForm = ({ lift }: { lift: RouterOutputs['lifts']['getAll'][number] }) => {
-  const { register, handleSubmit, reset } = useForm<RouterInputs['lifts']['updatePersonalRecord']>({
-    defaultValues: {
-      id: lift.id,
-      personal_record: lift.personal_record
-    }
-  })
-
-  const { handleDialogClose } = useDialogStore()
-  const utils = api.useUtils()
-
-  const submit = api.lifts.updatePersonalRecord.useMutation({
-    onMutate: async (data) => {
-      const previousLifts = utils.lifts.getAll.getData()
-
-      if (previousLifts) {
-        utils.lifts.getAll.setData(undefined, [
-          ...previousLifts.map((l) => {
-            if (l.id === lift.id) {
-              return {
-                ...l,
-                personal_record: Number(data.personal_record)
-              }
-            }
-            return l
-          })
-        ])
-      }
-      reset()
-      handleDialogClose()
-    },
-    onSuccess: async () => {
-      await utils.lifts.getAll.invalidate()
-    },
-    onError: (error) => {
-      console.error(error)
-    }
-  })
-
-  const onSubmit = async (values: EditLiftValues) => {
-    await submit.mutateAsync({
-      id: values.id,
-      personal_record: values.personal_record
-    })
-  }
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 pt-8'>
-      <Input placeholder='PR' {...register('personal_record')} required type='number' step={2.5} />
-
-      <Button type='submit' disabled={submit.isLoading}>
-        Update lift
       </Button>
     </form>
   )
