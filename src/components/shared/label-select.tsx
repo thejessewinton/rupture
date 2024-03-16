@@ -11,7 +11,7 @@ export const LabelSelect = forwardRef(
     return (
       <form
         className={classNames(
-          'focus-within-ring rounded-xs text-primary flex items-stretch rounded-sm border border-neutral-200 text-xs shadow-sm ring-1 dark:border-neutral-700',
+          'rounded-xs text-primary flex items-stretch rounded-sm border border-neutral-200 text-xs shadow-sm transition-all focus-within:ring-1 dark:border-neutral-700',
           className
         )}
         ref={ref}

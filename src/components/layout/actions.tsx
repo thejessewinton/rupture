@@ -4,7 +4,7 @@ import { type Session } from 'next-auth'
 import { Dropdown } from '~/components/shared/dropdown'
 import Image from 'next/image'
 import Link from 'next/link'
-import { WeightUnitSwitcher } from '~/components/settings/weight-unit-switcher'
+import { ThemeSwitcher } from '~/components/shared/theme-switcher'
 
 type ActionsProps = {
   session: Session
@@ -33,7 +33,7 @@ export const Actions = ({ session, signOut }: ActionsProps) => {
                   <button type='submit'>Log out</button>
                 </form>
               </Dropdown.Item>
-              <WeightUnitSwitcher />
+              <ThemeSwitcher />
             </Dropdown>
           </div>
         </div>

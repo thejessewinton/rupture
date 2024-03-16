@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 export const env = createEnv({
   server: {
-    POSTGRES_URL: z.string().url(),
+    DATABASE_URL: z.string().url(),
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
     AUTH_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),
@@ -13,7 +13,7 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_URL: z.string().url()
   },
   runtimeEnv: {
-    POSTGRES_URL: process.env.POSTGRES_URL,
+    DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     AUTH_SECRET: process.env.AUTH_SECRET,
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,

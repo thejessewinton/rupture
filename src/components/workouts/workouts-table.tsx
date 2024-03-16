@@ -29,7 +29,7 @@ export const WorkoutsTable = () => {
       <tbody>
         {workouts.data.map((lift) => (
           <tr key={lift.id}>
-            <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm'>
+            <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm dark:border-neutral-600'>
               <Link href={`/workouts/${lift.id}`} className='flex items-center gap-1'>
                 {lift.name}
               </Link>

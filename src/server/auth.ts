@@ -15,7 +15,6 @@ declare module 'next-auth' {
 
 export const config = {
   callbacks: {
-    // @ts-expect-error types are bad
     session: ({ session, user }) => ({
       ...session,
       user: {

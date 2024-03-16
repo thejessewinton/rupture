@@ -39,7 +39,7 @@ export const WorkoutTable = ({ id }: { id: string }) => {
             <tbody>
               {exercises.map((exercise) => (
                 <tr key={exercise.id}>
-                  <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm'>
+                  <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm dark:border-neutral-600'>
                     <div className='flex items-center gap-1'>{exercise.lift?.name}</div>
                   </td>
                   <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm dark:border-neutral-600'>

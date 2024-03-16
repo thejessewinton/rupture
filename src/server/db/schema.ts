@@ -93,11 +93,11 @@ export const verificationTokens = pgTable(
 
 // Units, Lifts, Workouts, and Sets
 export const units = ['kgs', 'lbs'] as const
-const unitEmum = pgEnum('value', units)
+export const unitEmum = pgEnum('value', units)
 
 export const unit = pgTable('unit', {
   id: serial('id').unique(),
-  //value: unitEmum('value').notNull().default('lbs'),
+  value: unitEmum('value').notNull().default('lbs'),
   user_id: varchar('user_id', { length: 255 })
     .notNull()
     .references(() => users.id),
@@ -113,7 +113,7 @@ export const lift = pgTable('lift', {
   id: serial('id').unique(),
   name: varchar('name', { length: 255 }).notNull(),
   personal_record: bigint('personal_record', { mode: 'number' }).notNull(),
-  //unit: unitEmum('value').notNull().default('lbs'),
+  unit: unitEmum('value').notNull().default('lbs'),
   user_id: varchar('user_id', { length: 255 })
     .notNull()
     .references(() => users.id),
@@ -150,7 +150,7 @@ export const workoutRelations = relations(workout, ({ one, many }) => ({
 }))
 
 export const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as const
-const dayEnum = pgEnum('day', days)
+export const dayEnum = pgEnum('day', days)
 
 export const exercise = pgTable('exercise', {
   id: serial('id').unique(),
@@ -160,7 +160,7 @@ export const exercise = pgTable('exercise', {
   sets: bigint('sets', { mode: 'number' }).notNull(),
   reps: bigint('reps', { mode: 'number' }).notNull(),
   percentage: bigint('percentage', { mode: 'number' }).notNull(),
-  //day: dayEnum('day').notNull().default('Monday'),
+  day: dayEnum('day').notNull().default('Monday'),
   created_at: timestamp('created_at', { mode: 'date', precision: 3 })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP(3)`),

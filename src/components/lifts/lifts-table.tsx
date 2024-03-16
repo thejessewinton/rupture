@@ -40,7 +40,7 @@ export const LiftsTable = () => {
       <tbody>
         {lifts.data.map((lift) => (
           <tr key={lift.id}>
-            <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm'>
+            <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm dark:border-neutral-600'>
               <div className='flex items-center gap-1'>{lift.name}</div>
             </td>
             <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm dark:border-neutral-600'>

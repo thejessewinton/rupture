@@ -32,15 +32,18 @@ export const workoutsRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       return await ctx.db.transaction(async (db) => {
-        const newWorkout = await db.insert(workout).values({
-          name: input.name,
-          user_id: ctx.session.user.id
-        })
+        const [newWorkout] = await db
+          .insert(workout)
+          .values({
+            name: input.name,
+            user_id: ctx.session.user.id
+          })
+          .returning()
 
         for (const day of input.days) {
           for (const lift of day.lifts) {
             await db.insert(exercise).values({
-              workout_id: Number(newWorkout.insertId),
+              workout_id: newWorkout!.id,
               sets: Number(lift.sets),
               day: day.day,
               percentage: Number(lift.percentage),
@@ -51,7 +54,7 @@ export const workoutsRouter = createTRPCRouter({
           }
         }
 
-        return newWorkout.insertId
+        return newWorkout
       })
     }),
   getById: protectedProcedure

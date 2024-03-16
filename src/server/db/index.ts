@@ -1,6 +1,10 @@
-import { sql } from '@vercel/postgres'
-import { drizzle } from 'drizzle-orm/vercel-postgres'
+import { NeonQueryFunction, neon, Pool } from '@neondatabase/serverless'
+import { drizzle } from 'drizzle-orm/neon-serverless'
+
+import { env } from '~/env'
 
 import * as schema from '~/server/db/schema'
 
-export const db = drizzle(sql, { schema })
+const pool = new Pool({ connectionString: env.DATABASE_URL })
+
+export const db = drizzle(pool, { schema })
