@@ -46,6 +46,11 @@ export const userRouter = createTRPCRouter({
       return await ctx.db
         .insert(unit)
         .values({ value: input.value, user_id: ctx.session.user.id })
-        .onDuplicateKeyUpdate({ set: { value: input.value, user_id: ctx.session.user.id } })
+        .onConflictDoUpdate({
+          target: unit.id,
+          set: {
+            value: input.value
+          }
+        })
     })
 })
