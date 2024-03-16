@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react'
 import { Header } from '~/components/layout/header'
 
-export default async function IndexLayout({ children }: { children: ReactNode }) {
+export default function IndexLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <div className='relative mx-auto flex-1'>

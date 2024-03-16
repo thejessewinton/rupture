@@ -52,7 +52,7 @@ export const WorkoutForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className='flex flex-col gap-4 border-t border-neutral-200 pt-8 dark:border-neutral-800'
+      className='flex animate-fade-in flex-col gap-4 border-t border-neutral-200 pt-8 dark:border-neutral-800'
     >
       <Input placeholder='Name' required {...register('name')} />
 
@@ -70,7 +70,7 @@ export const WorkoutForm = () => {
             .map((field, index) => (
               <>
                 <div className='flex justify-between gap-2' key={field.id}>
-                  <Select {...register(`days.${index}.lifts.${index}.id` as const)}>
+                  <Select {...register(`days.${index}.lifts.${index}.id`)}>
                     <option disabled>Lift</option>
                     {lifts.data?.map((lift) => (
                       <option key={lift.id} value={lift.id}>
@@ -82,19 +82,25 @@ export const WorkoutForm = () => {
                     placeholder='Sets'
                     type='number'
                     step={1}
-                    {...register(`days.${index}.lifts.${index}.sets` as const)}
+                    {...register(`days.${index}.lifts.${index}.sets`, {
+                      valueAsNumber: true
+                    })}
                   />
                   <Input
                     placeholder='Reps'
                     type='number'
                     step={1}
-                    {...register(`days.${index}.lifts.${index}.reps` as const)}
+                    {...register(`days.${index}.lifts.${index}.reps`, {
+                      valueAsNumber: true
+                    })}
                   />
                   <Input
                     placeholder='Percentage'
                     type='number'
                     step={1}
-                    {...register(`days.${index}.lifts.${index}.percentage` as const)}
+                    {...register(`days.${index}.lifts.${index}.percentage`, {
+                      valueAsNumber: true
+                    })}
                   />
 
                   <button type='button' onClick={() => remove(index)}>
@@ -108,65 +114,6 @@ export const WorkoutForm = () => {
 
       <Button type='submit' disabled={submit.isLoading}>
         Create workout
-      </Button>
-    </form>
-  )
-}
-
-type EditLiftValues = RouterInputs['lifts']['updatePersonalRecord']
-
-export const EditLiftForm = ({ lift }: { lift: RouterOutputs['lifts']['getAll'][number] }) => {
-  const { register, handleSubmit, reset } = useForm<RouterInputs['lifts']['updatePersonalRecord']>({
-    defaultValues: {
-      id: lift.id,
-      personal_record: lift.personal_record.toString()
-    }
-  })
-
-  const { handleDialogClose } = useDialogStore()
-  const utils = api.useUtils()
-
-  const submit = api.lifts.updatePersonalRecord.useMutation({
-    onMutate: async (data) => {
-      const previousLifts = utils.lifts.getAll.getData()
-
-      if (previousLifts) {
-        utils.lifts.getAll.setData(undefined, [
-          ...previousLifts.map((l) => {
-            if (l.id === lift.id) {
-              return {
-                ...l,
-                personal_record: Number(data.personal_record)
-              }
-            }
-            return l
-          })
-        ])
-      }
-      reset()
-      handleDialogClose()
-    },
-    onSuccess: async () => {
-      await utils.lifts.getAll.invalidate()
-    },
-    onError: (error) => {
-      console.error(error)
-    }
-  })
-
-  const onSubmit = async (values: EditLiftValues) => {
-    await submit.mutateAsync({
-      id: values.id,
-      personal_record: values.personal_record.toString()
-    })
-  }
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 pt-8'>
-      <Input placeholder='PR' {...register('personal_record')} required type='number' step={2.5} />
-
-      <Button type='submit' disabled={submit.isLoading}>
-        Update lift
       </Button>
     </form>
   )

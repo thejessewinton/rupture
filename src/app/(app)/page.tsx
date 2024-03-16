@@ -1,7 +1,7 @@
 import { Button } from '~/components/shared/button'
 import { WorkoutsTable } from '~/components/workouts/workouts-table'
 
-export default async function Home() {
+export default function Home() {
   return (
     <>
       <div className='flex items-center justify-between pb-4'>

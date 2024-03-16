@@ -1,3 +1,5 @@
+'use client'
+
 import * as DropdownPrimitive from '@radix-ui/react-dropdown-menu'
 import { type ReactNode } from 'react'
 import { classNames } from '~/utils/core'

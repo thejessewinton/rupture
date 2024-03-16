@@ -5,17 +5,18 @@ import { api } from '~/trpc/react'
 import { type RouterOutputs, type RouterInputs } from '~/trpc/shared'
 import { Button } from '~/components/shared/button'
 import { Input } from '~/components/shared/input'
+import { useEffect } from 'react'
 
 type ProfileValues = RouterInputs['user']['updateUser']
 
-export const ProfileForm = ({ initialUserData }: { initialUserData: RouterOutputs['user']['getCurrent'] }) => {
+export const ProfileForm = () => {
   const utils = api.useUtils()
-  const { data } = api.user.getCurrent.useQuery(undefined, { initialData: initialUserData })
+  const { data, isLoading } = api.user.getCurrent.useQuery()
 
-  const { register, handleSubmit } = useForm<ProfileValues>({
+  const { register, handleSubmit, reset } = useForm<ProfileValues>({
     defaultValues: {
-      name: data!.name!,
-      email: data!.email!
+      name: data?.name!,
+      email: data?.email!
     }
   })
 
@@ -29,8 +30,19 @@ export const ProfileForm = ({ initialUserData }: { initialUserData: RouterOutput
     await submit.mutateAsync(values)
   }
 
+  useEffect(() => {
+    if (data) {
+      reset({
+        name: data.name!,
+        email: data.email
+      })
+    }
+  }, [data])
+
+  if (isLoading) return
+
   return (
-    <div className='w-full space-y-8'>
+    <div className='w-full animate-fade-in space-y-8'>
       <div className='space-y-1'>
         <h3 className='text-lg'>Profile</h3>
         <p className='text-sm text-neutral-500'>Manage your Rupture profile</p>

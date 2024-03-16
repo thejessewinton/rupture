@@ -11,7 +11,7 @@ export const WorkoutsTable = () => {
   const tableHeadings = ['Name', 'Day']
 
   return (
-    <table className='min-w-full border-separate border-spacing-0 border-none text-left'>
+    <table className='min-w-full border-separate border-spacing-0 animate-fade-in border-none text-left'>
       <thead className='h-8 rounded-md bg-neutral-50 dark:bg-neutral-800'>
         <tr>
           {tableHeadings.map((heading) => (

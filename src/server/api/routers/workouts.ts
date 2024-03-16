@@ -20,10 +20,10 @@ export const workoutsRouter = createTRPCRouter({
             day: z.enum(days),
             lifts: z.array(
               z.object({
-                id: z.string(),
-                sets: z.string(),
-                reps: z.string(),
-                percentage: z.string()
+                id: z.number(),
+                sets: z.number(),
+                reps: z.number(),
+                percentage: z.number()
               })
             )
           })
@@ -44,11 +44,11 @@ export const workoutsRouter = createTRPCRouter({
           for (const lift of day.lifts) {
             await db.insert(exercise).values({
               workout_id: newWorkout!.id,
-              sets: Number(lift.sets),
+              sets: lift.sets,
               day: day.day,
-              percentage: Number(lift.percentage),
-              lift_id: Number(lift.id),
-              reps: Number(lift.reps),
+              percentage: lift.percentage,
+              lift_id: lift.id,
+              reps: lift.reps,
               user_id: ctx.session.user.id
             })
           }

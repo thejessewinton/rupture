@@ -17,7 +17,9 @@ export const Header = async () => {
               session={session!}
               signOut={async () => {
                 'use server'
-                return await signOut()
+                return await signOut({
+                  redirectTo: '/login'
+                })
               }}
             />
           </div>

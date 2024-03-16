@@ -8,7 +8,7 @@ import { ThemeSwitcher } from '~/components/shared/theme-switcher'
 
 type ActionsProps = {
   session: Session
-  signOut: () => void
+  signOut: () => Promise<void>
 }
 
 export const Actions = ({ session, signOut }: ActionsProps) => {
@@ -26,12 +26,14 @@ export const Actions = ({ session, signOut }: ActionsProps) => {
               align='end'
             >
               <Dropdown.Item>
-                <Link href='/profile'>Profile</Link>
+                <Link href='/profile' className='w-full'>
+                  Profile
+                </Link>
               </Dropdown.Item>
               <Dropdown.Item>
-                <form action={signOut}>
-                  <button type='submit'>Log out</button>
-                </form>
+                <button type='submit' className='w-full text-left' formAction={() => signOut}>
+                  Log out
+                </button>
               </Dropdown.Item>
               <ThemeSwitcher />
             </Dropdown>

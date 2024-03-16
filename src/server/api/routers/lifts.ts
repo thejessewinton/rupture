@@ -13,7 +13,7 @@ export const liftsRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
-        personal_record: z.string(),
+        personal_record: z.number(),
         unit: z.enum(units)
       })
     )
@@ -21,21 +21,21 @@ export const liftsRouter = createTRPCRouter({
       return await ctx.db.insert(lift).values({
         name: input.name,
         user_id: ctx.session.user.id,
-        personal_record: Number(input.personal_record)
+        personal_record: input.personal_record
       })
     }),
   updatePersonalRecord: protectedProcedure
     .input(
       z.object({
         id: z.number(),
-        personal_record: z.string()
+        personal_record: z.number()
       })
     )
     .mutation(async ({ ctx, input }) => {
       return await ctx.db
         .update(lift)
         .set({
-          personal_record: Number(input.personal_record)
+          personal_record: input.personal_record
         })
         .where(eq(lift.id, input.id))
     }),

@@ -15,7 +15,7 @@ export const WorkoutTable = ({ id }: { id: string }) => {
   const tableHeadings = ['Lift', 'Sets', 'Reps', 'Weight']
 
   return (
-    <div className='space-y-8'>
+    <div className='animate-fade-in space-y-8'>
       {Object.entries(exercisesByDay).map(([day, exercises]) => (
         <div>
           <div className='flex items-center justify-between pb-4'>

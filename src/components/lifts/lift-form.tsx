@@ -9,7 +9,7 @@ import { Input } from '~/components/shared/input'
 import { useDialogStore } from '~/state/use-dialog-store'
 import { api } from '~/trpc/react'
 import { RouterOutputs, type RouterInputs } from '~/trpc/shared'
-import { Select } from '../shared/select'
+import { Select } from '~/components/shared/select'
 
 type NewLiftValues = RouterInputs['lifts']['createNew']
 
@@ -17,7 +17,7 @@ export const LiftForm = () => {
   const { register, handleSubmit, reset } = useForm<NewLiftValues>({
     defaultValues: {
       name: '',
-      personal_record: '',
+      personal_record: 0,
       unit: 'lbs'
     }
   })
@@ -68,7 +68,9 @@ export const LiftForm = () => {
       <div className='flex overflow-hidden rounded-sm transition-all focus-within:ring-1 focus-within:ring-blue-400'>
         <Input
           placeholder='PR'
-          {...register('personal_record')}
+          {...register('personal_record', {
+            valueAsNumber: true
+          })}
           required
           type='number'
           step={2.5}
@@ -96,7 +98,7 @@ export const EditLiftForm = ({ lift }: { lift: RouterOutputs['lifts']['getAll'][
   const { register, handleSubmit, reset } = useForm<RouterInputs['lifts']['updatePersonalRecord']>({
     defaultValues: {
       id: lift.id,
-      personal_record: lift.personal_record.toString()
+      personal_record: lift.personal_record
     }
   })
 
@@ -134,7 +136,7 @@ export const EditLiftForm = ({ lift }: { lift: RouterOutputs['lifts']['getAll'][
   const onSubmit = async (values: EditLiftValues) => {
     await submit.mutateAsync({
       id: values.id,
-      personal_record: values.personal_record.toString()
+      personal_record: values.personal_record
     })
   }
 

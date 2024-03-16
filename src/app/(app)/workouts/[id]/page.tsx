@@ -6,6 +6,6 @@ type WorkoutPageParams = {
   }
 }
 
-export default async function WorkoutPage({ params }: WorkoutPageParams) {
+export default function WorkoutPage({ params }: WorkoutPageParams) {
   return <WorkoutTable id={params.id} />
 }
