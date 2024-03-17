@@ -2,7 +2,7 @@ import { type ReactNode } from 'react'
 
 import { create } from 'zustand'
 
-interface DialogState {
+type DialogState = {
   isOpen: boolean
   onClose: () => void
   component: ReactNode

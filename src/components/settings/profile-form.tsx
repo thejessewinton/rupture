@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 
-import { format } from 'date-fns'
+import dayjs from 'dayjs'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '~/components/shared/button'
@@ -69,7 +69,7 @@ export const ProfileForm = () => {
         return (
           <div key={comp.id} className='flex justify-between'>
             <p>{comp.weight}</p>
-            <p>{format(comp.created_at, 'MM dd, yyyy')}</p>
+            <p>{dayjs(comp.created_at).format('MM dd, yyyy')}</p>
           </div>
         )
       })}

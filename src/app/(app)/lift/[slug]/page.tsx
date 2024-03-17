@@ -1,8 +1,8 @@
 'use client'
 
-import { format } from 'date-fns'
-import { notFound } from 'next/navigation'
+import dayjs from 'dayjs'
 import { sortBy } from 'remeda'
+
 import { LiftProgressChart } from '~/components/lifts/lift-progress-chart'
 import { SetActions } from '~/components/sets/set-actions'
 import { NewSetAction } from '~/components/sets/set-form'
@@ -37,8 +37,8 @@ export default function LiftPage({ params }: LiftPageParams) {
         </div>
         <NewSetAction lift={lift.data} />
       </div>
-      <div className='grid grid-cols-12 gap-2'>
-        <div className='col-span-8 min-h-60 overflow-hidden rounded-sm'>
+      <div className='grid gap-2'>
+        <div className='min-h-60 overflow-hidden rounded-sm'>
           <LiftProgressChart lift={lift.data} />
         </div>
         <div className='col-span-4 rounded-md bg-neutral-900 px-4 py-6'>
@@ -52,7 +52,7 @@ export default function LiftPage({ params }: LiftPageParams) {
                     <span>
                       {set.weight} {set.unit}
                     </span>
-                    <span className=' block text-xs text-neutral-500'>{format(set.date, 'MM/dd/yy')}</span>
+                    <span className=' block text-xs text-neutral-500'>{dayjs(set.date).format('MMM DD, YYYY')}</span>
                   </div>
 
                   <div>
