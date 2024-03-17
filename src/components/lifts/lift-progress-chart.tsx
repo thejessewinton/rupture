@@ -8,6 +8,7 @@ import { estimatedMax } from '~/utils/core'
 import { type RouterOutputs } from '~/trpc/shared'
 import { sortBy } from 'remeda'
 import * as Tooltip from '@radix-ui/react-tooltip'
+import { EmptyState } from '../actions/empty-state'
 
 type LiftProgressChartProps = {
   lift: RouterOutputs['lifts']['getAll'][number]
@@ -18,9 +19,9 @@ export const LiftProgressChart = ({ lift }: LiftProgressChartProps) => {
 
   if (!lift.sets.some((set) => set.reps > 0)) {
     return (
-      <div className='flex h-full w-full items-center justify-center'>
-        <p className='text-sm italic text-gray-400'>Add a tracked set to see a chart!</p>
-      </div>
+      <EmptyState>
+        <p className='text-neutral-500 dark:text-neutral-400'>No sets recorded</p>
+      </EmptyState>
     )
   }
 
@@ -88,7 +89,7 @@ const ChartInner = ({
   const d = line(data.map((d) => [d.date.getTime(), d.estimatedMax]))
 
   return (
-    <svg className='' viewBox={`0 0 ${width} ${height}`}>
+    <svg viewBox={`0 0 ${width} ${height}`}>
       {months.map((month, i) => {
         const computedHeight = height - margin.bottom < 0 ? 0 : height - margin.bottom
         return (
@@ -161,5 +162,83 @@ const ChartInner = ({
         </Tooltip.Provider>
       ))}
     </svg>
+  )
+}
+
+export const SimpleChart = ({ lift }: { lift: RouterOutputs['lifts']['getAll'][number] }) => {
+  const [ref, bounds] = useMeasure()
+
+  if (!lift.sets.some((set) => set.reps > 0)) {
+    return null
+  }
+
+  const liftsByDate = sortBy([...lift.sets], (s) => s.date)
+
+  const data = liftsByDate
+    .map((lift) => {
+      return {
+        weight: lift.weight,
+        date: parseISO(lift.date.toISOString()),
+        estimatedMax: estimatedMax({
+          reps: lift.reps,
+          weight: lift.weight
+        })
+      }
+    })
+    .filter((s) => s.estimatedMax)
+
+  return (
+    <div ref={ref}>
+      {bounds.width > 0 && <SimpleChartInner data={data} width={bounds.width} height={bounds.height} />}
+    </div>
+  )
+}
+
+const SimpleChartInner = ({
+  data,
+  width,
+  height
+}: {
+  data: {
+    date: Date
+    estimatedMax: number
+    weight: number
+  }[]
+  width: number
+  height: number
+}) => {
+  const margin = {
+    top: 10,
+    right: 10,
+    bottom: 20,
+    left: 24
+  }
+
+  const startDay = startOfMonth(data.at(0)!.date)
+  const endDay = endOfMonth(data.at(-1)!.date)
+
+  const xScale = d3
+    .scaleTime()
+    .domain([startDay, endDay])
+    .range([margin.left, width - margin.right])
+
+  const yScale = d3
+    .scaleLinear()
+    .domain([0, d3.max(data, (d) => d.estimatedMax)!])
+    .range([height - margin.bottom, margin.top])
+
+  const line = d3
+    .line()
+    .x((d) => xScale(d[0]))
+    .y((d) => yScale(d[1]))
+
+  const d = line(data.map((d) => [d.date.getTime(), d.estimatedMax]))
+
+  return (
+    <div className='flex items-center'>
+      <svg viewBox={`0 0 ${width} ${height}`}>
+        <path d={d!} fill='none' className='stroke-blue-300' strokeWidth='2' />
+      </svg>
+    </div>
   )
 }

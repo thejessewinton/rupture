@@ -2,19 +2,23 @@ import { TRPCError } from '@trpc/server'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
 import { protectedProcedure, createTRPCRouter } from '~/server/api/trpc'
-import { unit, units, users } from '~/server/db/schema'
+import { composition, unit, units, users } from '~/server/db/schema'
 
 export const userRouter = createTRPCRouter({
   getCurrent: protectedProcedure.query(({ ctx }) => {
     return ctx.db.query.users.findFirst({
-      where: eq(users.id, ctx.session.user.id)
+      where: eq(users.id, ctx.session.user.id),
+      with: {
+        composition: true
+      }
     })
   }),
   updateUser: protectedProcedure
     .input(
       z.object({
         name: z.string(),
-        email: z.string().email()
+        email: z.string().email(),
+        weight: z.number().optional()
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -29,7 +33,20 @@ export const userRouter = createTRPCRouter({
         })
       }
 
-      return await ctx.db.update(users).set(input).where(eq(users.id, ctx.session.user.id))
+      if (typeof input.weight !== 'undefined') {
+        await ctx.db.insert(composition).values({
+          weight: input.weight,
+          user_id: ctx.session.user.id
+        })
+      }
+
+      return await ctx.db
+        .update(users)
+        .set({
+          name: input.name,
+          email: input.email
+        })
+        .where(eq(users.id, ctx.session.user.id))
     }),
   getWeightUnit: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.query.unit.findFirst({

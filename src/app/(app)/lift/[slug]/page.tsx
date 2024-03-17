@@ -19,7 +19,6 @@ export default function LiftPage({ params }: LiftPageParams) {
 
   if (!lift.data || !lift.data) return
 
-  const tableHeadings = ['Date', 'Weight', 'Reps', 'Estimated Max']
   const [latestSet] = lift.data.sets
 
   return (
@@ -37,56 +36,32 @@ export default function LiftPage({ params }: LiftPageParams) {
         </div>
         <NewSetAction lift={lift.data} />
       </div>
-      <LiftProgressChart lift={lift.data} />
+      <div className='grid grid-cols-12 gap-2'>
+        <div className='col-span-8 min-h-60 overflow-hidden rounded-sm'>
+          <LiftProgressChart lift={lift.data} />
+        </div>
+        <div className='col-span-4 rounded-md bg-neutral-900 px-4 py-6'>
+          <h2 className='text-md text-neutral-500 dark:text-neutral-200'>Recent sets</h2>
+          <div className='divide-y divide-neutral-200 dark:divide-neutral-600'>
+            {sortBy(lift.data.sets, [(set) => set.date, 'desc'])
+              .slice(0, 5)
+              .map((set) => (
+                <div key={set.id} className='flex justify-between px-1 py-4 text-sm'>
+                  <div className='font-mono tracking-tighter'>
+                    <span>
+                      {set.weight} {set.unit}
+                    </span>
+                    <span className=' block text-xs text-neutral-500'>{format(set.date, 'MM/dd/yy')}</span>
+                  </div>
 
-      <table className='min-w-full border-separate border-spacing-0 border-none text-left'>
-        <thead className='h-8 rounded-md bg-neutral-50 dark:bg-neutral-800'>
-          <tr>
-            {tableHeadings.map((heading) => (
-              <th
-                className='h-8 w-[500px] border-b border-t border-neutral-200 px-3 text-xs text-neutral-800 first:rounded-l-md first:border-l last:rounded-r-md last:border-r dark:border-neutral-600 dark:text-neutral-300'
-                key={heading}
-              >
-                {heading}
-              </th>
-            ))}
-
-            <th className='h-8 w-[70px] border-b border-t border-neutral-200 px-3 text-xs text-neutral-300 first:rounded-l-md first:border-l last:rounded-r-md last:border-r dark:border-neutral-600' />
-          </tr>
-        </thead>
-        <tbody>
-          {sortBy(lift.data.sets, [(set) => set.date, 'desc']).map((set) => (
-            <tr key={set.id}>
-              <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm dark:border-neutral-600'>
-                <div className='flex items-center gap-1'>{format(set.date, 'MMMM dd, yyyy')}</div>
-              </td>
-              <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm dark:border-neutral-600'>
-                <div className='flex items-center gap-1'>
-                  {' '}
-                  {set.weight}
-                  {set.unit}.
+                  <div>
+                    <SetActions set={set} />
+                  </div>
                 </div>
-              </td>
-              <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm dark:border-neutral-600'>
-                <div className='flex items-center gap-1'>{set.reps}</div>
-              </td>
-
-              <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm dark:border-neutral-600'>
-                <div className='flex items-center gap-1'>
-                  {estimatedMax({
-                    weight: set.weight,
-                    reps: set.reps
-                  })}
-                </div>
-              </td>
-
-              <td className='h-10 truncate border-b border-neutral-200 px-3 py-3 text-sm dark:border-neutral-600'>
-                <SetActions set={set} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              ))}
+          </div>
+        </div>
+      </div>
     </>
   )
 }

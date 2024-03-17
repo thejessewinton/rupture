@@ -26,8 +26,10 @@ export const SetActions = ({ set }: SetActionsProps) => {
           }
         )
       }
-
       handleDialogClose()
+    },
+    onSuccess: async () => {
+      await utils.lifts.getBySlug.invalidate({ slug: set.lift!.slug })
     }
   })
 
@@ -48,7 +50,7 @@ export const SetActions = ({ set }: SetActionsProps) => {
               title: 'Delete set',
               component: (
                 <DeleteConfirm
-                  title={`Are you sure you want to delete this set?`}
+                  title={`Are you sure you want to delete this set? This action cannot be undone.`}
                   onDelete={() => deleteSet.mutate({ id: set.id })}
                 />
               )

@@ -43,7 +43,7 @@ export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
             sets: [
               ...(previousSets.sets ?? []),
               {
-                date: new Date(),
+                date: data.date,
                 reps: data.reps,
                 weight: data.weight,
                 id: data.lift_id,
@@ -59,7 +59,8 @@ export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
         )
       }
     },
-    onSuccess: () => {
+    onSuccess: async () => {
+      await utils.lifts.getBySlug.invalidate({ slug: lift!.slug })
       handleDialogClose()
     },
     onError: (error) => {
@@ -122,7 +123,7 @@ export const NewSetAction = ({ lift }: { lift: Lift }) => {
     <Button
       onClick={() => {
         handleDialog({
-          title: 'Add Set',
+          title: `Add Set to ${lift?.name}`,
           component: <SetForm lift={lift} />
         })
       }}

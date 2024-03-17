@@ -29,7 +29,24 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   accounts: many(accounts),
   sessions: many(sessions),
   unit: one(unit, { fields: [users.id], references: [unit.user_id] }),
-  lifts: many(lift)
+  lifts: many(lift),
+  composition: many(composition),
+  sets: many(set)
+}))
+
+export const composition = pgTable('composition', {
+  id: serial('id').unique().primaryKey(),
+  user_id: varchar('user_id', { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  weight: bigint('weight', { mode: 'number' }).notNull(),
+  date: timestamp('date').notNull().defaultNow(),
+  created_at: timestamp('created_at', { mode: 'date', precision: 3 }).notNull().defaultNow(),
+  updated_at: timestamp('updated_at', { mode: 'date', precision: 3 }).notNull().defaultNow()
+})
+
+export const compositionRelations = relations(composition, ({ one }) => ({
+  user: one(users, { fields: [composition.user_id], references: [users.id] })
 }))
 
 export const accounts = pgTable(

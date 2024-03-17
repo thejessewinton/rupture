@@ -5,6 +5,7 @@ import SvgEllipsis from '~/components/svg/ellipsis'
 import { DeleteConfirm } from '~/components/actions/delete-confirm'
 import { useDialogStore } from '~/state/use-dialog-store'
 import Link from 'next/link'
+import { SimpleChart } from './lift-progress-chart'
 
 type LiftCardProps = {
   lift: RouterOutputs['lifts']['getAll'][number]
