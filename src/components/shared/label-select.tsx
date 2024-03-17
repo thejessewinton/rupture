@@ -1,4 +1,5 @@
-import { type Ref, forwardRef } from 'react'
+import { forwardRef, type Ref } from 'react'
+
 import { Select, type SelectProps } from '~/components/shared/select'
 import { classNames } from '~/utils/core'
 

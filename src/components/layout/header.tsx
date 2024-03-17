@@ -1,7 +1,8 @@
-import { auth, signOut } from '~/server/auth'
+import Link from 'next/link'
+
 import { Actions } from '~/components/layout/actions'
 import { Navigation } from '~/components/layout/navigation'
-import Link from 'next/link'
+import { auth, signOut } from '~/server/auth'
 
 export const Header = async () => {
   const session = await auth()

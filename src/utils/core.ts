@@ -1,5 +1,6 @@
-import { type ClassValue, clsx } from 'clsx'
+import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+
 import { type RouterOutputs } from '~/trpc/shared'
 
 export const classNames = (...inputs: ClassValue[]) => {

@@ -1,11 +1,11 @@
-import { api } from '~/trpc/react'
-import { type RouterOutputs } from '~/trpc/shared'
+import Link from 'next/link'
+
+import { DeleteConfirm } from '~/components/actions/delete-confirm'
 import { Dropdown, Item } from '~/components/shared/dropdown'
 import SvgEllipsis from '~/components/svg/ellipsis'
-import { DeleteConfirm } from '~/components/actions/delete-confirm'
 import { useDialogStore } from '~/state/use-dialog-store'
-import Link from 'next/link'
-import { SimpleChart } from './lift-progress-chart'
+import { api } from '~/trpc/react'
+import { type RouterOutputs } from '~/trpc/shared'
 
 type LiftCardProps = {
   lift: RouterOutputs['lifts']['getAll'][number]

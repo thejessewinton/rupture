@@ -8,7 +8,19 @@ const config = {
   useTabs: false,
   jsxSingleQuote: true,
   bracketSpacing: true,
-  plugins: ['prettier-plugin-tailwindcss']
+  plugins: ['@ianvs/prettier-plugin-sort-imports', 'prettier-plugin-tailwindcss'],
+  importOrderTypeScriptVersion: '4.4.0',
+  importOrder: [
+    '<BUILTIN_MODULES>',
+    '',
+    '^(react/(.*)$)|^(react$)',
+    '^(next/(.*)$)|^(next$)',
+    '',
+    '<THIRD_PARTY_MODULES>',
+    '',
+    '^~/(.*)$',
+    '^[./]'
+  ]
 }
 
 module.exports = config

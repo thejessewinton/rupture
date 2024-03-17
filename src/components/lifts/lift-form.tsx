@@ -48,7 +48,7 @@ export const LiftForm = ({ lift }: { lift?: NewLiftValues }) => {
     >
       <Input placeholder='Name' required {...register('name')} />
 
-      <div className='flex flex-col overflow-hidden rounded-sm transition-all focus-within:ring-1 focus-within:ring-blue-400'>
+      <div className='flex overflow-hidden rounded-sm transition-all focus-within:ring-1 focus-within:ring-blue-400'>
         <Input
           placeholder='PR'
           {...register('personal_record', {

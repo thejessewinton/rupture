@@ -1,4 +1,5 @@
-import { type InputHTMLAttributes, forwardRef } from 'react'
+import { forwardRef, type InputHTMLAttributes } from 'react'
+
 import { classNames } from '~/utils/core'
 
 type InputProps = {

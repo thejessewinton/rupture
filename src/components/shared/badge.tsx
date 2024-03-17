@@ -1,5 +1,7 @@
-import { type ReactNode, type ComponentPropsWithoutRef } from 'react'
+import { type ComponentPropsWithoutRef, type ReactNode } from 'react'
+
 import { cva, type VariantProps } from 'cva'
+
 import { classNames } from '~/utils/core'
 
 const badge = cva(

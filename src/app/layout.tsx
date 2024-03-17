@@ -1,15 +1,15 @@
 import '~/styles/globals.css'
 
+import { type Metadata } from 'next'
 import { Inter, Roboto_Mono } from 'next/font/google'
 import { cookies } from 'next/headers'
 
-import { TRPCReactProvider } from '~/trpc/react'
-import { classNames } from '~/utils/core'
-import { ThemeProvider } from '~/providers/theme'
 import { Dialog } from '~/components/shared/dialog'
 import { SessionProvider } from '~/providers/session'
+import { ThemeProvider } from '~/providers/theme'
 import { auth } from '~/server/auth'
-import { type Metadata } from 'next'
+import { TRPCReactProvider } from '~/trpc/react'
+import { classNames } from '~/utils/core'
 
 export const metadata: Metadata = {
   title: {

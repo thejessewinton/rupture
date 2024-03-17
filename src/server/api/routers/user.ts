@@ -1,7 +1,8 @@
 import { TRPCError } from '@trpc/server'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
-import { protectedProcedure, createTRPCRouter } from '~/server/api/trpc'
+
+import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc'
 import { composition, unit, units, users } from '~/server/db/schema'
 
 export const userRouter = createTRPCRouter({
@@ -33,7 +34,7 @@ export const userRouter = createTRPCRouter({
         })
       }
 
-      if (typeof input.weight !== 'undefined') {
+      if (input.weight) {
         await ctx.db.insert(composition).values({
           weight: input.weight,
           user_id: ctx.session.user.id

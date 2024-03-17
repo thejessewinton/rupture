@@ -1,11 +1,11 @@
 'use client'
 
-import { api } from '~/trpc/react'
-import { LiftCard } from './lift-card'
 import { useDialogStore } from '~/state/use-dialog-store'
-import { LiftForm } from './lift-form'
-import { Button } from '../shared/button'
+import { api } from '~/trpc/react'
 import { EmptyState } from '../actions/empty-state'
+import { Button } from '../shared/button'
+import { LiftCard } from './lift-card'
+import { LiftForm } from './lift-form'
 
 export const LiftsGrid = () => {
   const lifts = api.lifts.getAll.useQuery()

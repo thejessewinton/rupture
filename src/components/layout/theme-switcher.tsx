@@ -1,8 +1,9 @@
 'use client'
 
-import { type ChangeEvent, useEffect, useState } from 'react'
+import { useEffect, useState, type ChangeEvent } from 'react'
 
 import { useTheme } from 'next-themes'
+
 import { LabelSelect } from '~/components/shared/label-select'
 
 export const ThemeSwitcher = () => {

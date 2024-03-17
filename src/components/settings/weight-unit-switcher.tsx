@@ -1,8 +1,8 @@
 'use client'
 
-import { api } from '~/trpc/react'
-import { LabelSelect } from '../shared/label-select'
+import { LabelSelect } from '~/components/shared/label-select'
 import { type units } from '~/server/db/schema'
+import { api } from '~/trpc/react'
 
 export const WeightUnitSwitcher = ({ className }: { className?: string }) => {
   const utils = api.useUtils()

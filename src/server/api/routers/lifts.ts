@@ -1,8 +1,9 @@
-import { createTRPCRouter, protectedProcedure } from '../trpc'
 import { and, eq } from 'drizzle-orm'
 import { z } from 'zod'
+
 import { lift, units } from '~/server/db/schema'
 import { slugify } from '~/utils/core'
+import { createTRPCRouter, protectedProcedure } from '../trpc'
 
 export const liftsRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {

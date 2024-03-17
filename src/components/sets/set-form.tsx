@@ -87,7 +87,6 @@ export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
         required
         type='number'
         step={1}
-        className='flex-1 rounded-r-none border-r-0 outline-none ring-0 focus:ring-0'
       />
       <Input
         {...register('weight', {
@@ -97,7 +96,6 @@ export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
         required
         type='number'
         step={1}
-        className='flex-1 rounded-r-none border-r-0 outline-none ring-0 focus:ring-0'
       />
       <Input
         {...register('date', {
@@ -107,7 +105,6 @@ export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
         required
         type='date'
         step={1}
-        className='flex-1 rounded-r-none border-r-0 outline-none ring-0 focus:ring-0'
       />
 
       <Button type='submit' disabled={submit.isLoading}>

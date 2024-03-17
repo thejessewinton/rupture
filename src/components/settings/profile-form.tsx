@@ -1,12 +1,14 @@
 'use client'
 
+import { useEffect } from 'react'
+
+import { format } from 'date-fns'
 import { useForm } from 'react-hook-form'
-import { api } from '~/trpc/react'
-import { type RouterInputs } from '~/trpc/shared'
+
 import { Button } from '~/components/shared/button'
 import { Input } from '~/components/shared/input'
-import { useEffect } from 'react'
-import { format } from 'date-fns'
+import { api } from '~/trpc/react'
+import { type RouterInputs } from '~/trpc/shared'
 
 type ProfileValues = RouterInputs['user']['updateUser']
 

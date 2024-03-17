@@ -1,7 +1,7 @@
-import { createTRPCRouter } from '~/server/api/trpc'
-import { userRouter } from '~/server/api/routers/user'
 import { liftsRouter } from '~/server/api/routers/lifts'
 import { setsRouter } from '~/server/api/routers/sets'
+import { userRouter } from '~/server/api/routers/user'
+import { createTRPCRouter } from '~/server/api/trpc'
 
 /**
  * This is the primary router for your server.

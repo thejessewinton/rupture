@@ -1,9 +1,9 @@
+import { DeleteConfirm } from '~/components/actions/delete-confirm'
+import { Dropdown, Item } from '~/components/shared/dropdown'
+import SvgEllipsis from '~/components/svg/ellipsis'
 import { useDialogStore } from '~/state/use-dialog-store'
 import { api } from '~/trpc/react'
 import { type RouterOutputs } from '~/trpc/shared'
-import { Dropdown, Item } from '../shared/dropdown'
-import SvgEllipsis from '../svg/ellipsis'
-import { DeleteConfirm } from '../actions/delete-confirm'
 
 type SetActionsProps = { set: NonNullable<RouterOutputs['lifts']['getBySlug']>['sets'][number] }
 

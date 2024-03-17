@@ -1,10 +1,10 @@
 'use client'
 
+import { XMarkIcon } from '@heroicons/react/24/solid'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 
 import { useDialogStore } from '~/state/use-dialog-store'
 import { classNames } from '~/utils/core'
-import { XMarkIcon } from '@heroicons/react/24/solid'
 
 export const Dialog = () => {
   const { isOpen, onClose, title, component } = useDialogStore()

@@ -1,21 +1,22 @@
 'use client'
 
+import * as Tooltip from '@radix-ui/react-tooltip'
 import * as d3 from 'd3'
 import { eachMonthOfInterval, endOfMonth, format, parseISO, startOfMonth } from 'date-fns'
-import useMeasure from 'react-use-measure'
 import { motion } from 'framer-motion'
-import { estimatedMax } from '~/utils/core'
-import { type RouterOutputs } from '~/trpc/shared'
+import { useResizeDetector } from 'react-resize-detector'
 import { sortBy } from 'remeda'
-import * as Tooltip from '@radix-ui/react-tooltip'
-import { EmptyState } from '../actions/empty-state'
+
+import { EmptyState } from '~/components/actions/empty-state'
+import { type RouterOutputs } from '~/trpc/shared'
+import { estimatedMax } from '~/utils/core'
 
 type LiftProgressChartProps = {
-  lift: RouterOutputs['lifts']['getAll'][number]
+  lift: NonNullable<RouterOutputs['lifts']['getBySlug']>
 }
 
 export const LiftProgressChart = ({ lift }: LiftProgressChartProps) => {
-  const [ref, bounds] = useMeasure()
+  const { ref, height, width } = useResizeDetector()
 
   if (!lift.sets.some((set) => set.reps > 0)) {
     return (
@@ -25,7 +26,7 @@ export const LiftProgressChart = ({ lift }: LiftProgressChartProps) => {
     )
   }
 
-  const liftsByDate = sortBy([...lift.sets], (s) => s.date)
+  const liftsByDate = sortBy([...lift.sets], [(s) => s.date, 'desc'])
 
   const data = liftsByDate
     .map((lift) => {
@@ -41,17 +42,13 @@ export const LiftProgressChart = ({ lift }: LiftProgressChartProps) => {
     .filter((s) => s.estimatedMax)
 
   return (
-    <div className='relative h-full w-full' ref={ref}>
-      {bounds.width > 0 && <ChartInner data={data} width={bounds.width} height={bounds.height} />}
+    <div className='relative h-72 w-full' ref={ref}>
+      {width && height && width > 0 && <ChartInner data={data} width={width} height={height} />}
     </div>
   )
 }
 
-const ChartInner = ({
-  data,
-  width,
-  height
-}: {
+type ChartInnerProps = {
   data: {
     date: Date
     estimatedMax: number
@@ -59,7 +56,9 @@ const ChartInner = ({
   }[]
   width: number
   height: number
-}) => {
+}
+
+const ChartInner = ({ data, width, height }: ChartInnerProps) => {
   const margin = {
     top: 10,
     right: 10,
@@ -89,7 +88,7 @@ const ChartInner = ({
   const d = line(data.map((d) => [d.date.getTime(), d.estimatedMax]))
 
   return (
-    <svg viewBox={`0 0 ${width} ${height}`}>
+    <svg viewBox={`0 0 ${width} 288`}>
       {months.map((month, i) => {
         const computedHeight = height - margin.bottom < 0 ? 0 : height - margin.bottom
         return (
@@ -162,83 +161,5 @@ const ChartInner = ({
         </Tooltip.Provider>
       ))}
     </svg>
-  )
-}
-
-export const SimpleChart = ({ lift }: { lift: RouterOutputs['lifts']['getAll'][number] }) => {
-  const [ref, bounds] = useMeasure()
-
-  if (!lift.sets.some((set) => set.reps > 0)) {
-    return null
-  }
-
-  const liftsByDate = sortBy([...lift.sets], (s) => s.date)
-
-  const data = liftsByDate
-    .map((lift) => {
-      return {
-        weight: lift.weight,
-        date: parseISO(lift.date.toISOString()),
-        estimatedMax: estimatedMax({
-          reps: lift.reps,
-          weight: lift.weight
-        })
-      }
-    })
-    .filter((s) => s.estimatedMax)
-
-  return (
-    <div ref={ref}>
-      {bounds.width > 0 && <SimpleChartInner data={data} width={bounds.width} height={bounds.height} />}
-    </div>
-  )
-}
-
-const SimpleChartInner = ({
-  data,
-  width,
-  height
-}: {
-  data: {
-    date: Date
-    estimatedMax: number
-    weight: number
-  }[]
-  width: number
-  height: number
-}) => {
-  const margin = {
-    top: 10,
-    right: 10,
-    bottom: 20,
-    left: 24
-  }
-
-  const startDay = startOfMonth(data.at(0)!.date)
-  const endDay = endOfMonth(data.at(-1)!.date)
-
-  const xScale = d3
-    .scaleTime()
-    .domain([startDay, endDay])
-    .range([margin.left, width - margin.right])
-
-  const yScale = d3
-    .scaleLinear()
-    .domain([0, d3.max(data, (d) => d.estimatedMax)!])
-    .range([height - margin.bottom, margin.top])
-
-  const line = d3
-    .line()
-    .x((d) => xScale(d[0]))
-    .y((d) => yScale(d[1]))
-
-  const d = line(data.map((d) => [d.date.getTime(), d.estimatedMax]))
-
-  return (
-    <div className='flex items-center'>
-      <svg viewBox={`0 0 ${width} ${height}`}>
-        <path d={d!} fill='none' className='stroke-blue-300' strokeWidth='2' />
-      </svg>
-    </div>
   )
 }

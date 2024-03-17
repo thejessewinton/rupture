@@ -1,17 +1,17 @@
+import type { AdapterAccount } from '@auth/core/adapters'
 import { relations, sql } from 'drizzle-orm'
 import {
+  bigint,
   index,
+  integer,
   pgEnum,
   pgTable,
   primaryKey,
+  serial,
   text,
   timestamp,
-  varchar,
-  bigint,
-  serial,
-  integer
+  varchar
 } from 'drizzle-orm/pg-core'
-import type { AdapterAccount } from '@auth/core/adapters'
 
 // Necessary for Next Auth
 export const users = pgTable('user', {

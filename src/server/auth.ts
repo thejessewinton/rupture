@@ -1,8 +1,8 @@
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
-
 import NextAuth, { type DefaultSession, type NextAuthConfig } from 'next-auth'
-import Google from 'next-auth/providers/google'
 import Discord from 'next-auth/providers/discord'
+import Google from 'next-auth/providers/google'
+
 import { db } from '~/server/db'
 
 declare module 'next-auth' {

@@ -1,9 +1,11 @@
 'use client'
 
-import { type Session } from 'next-auth'
-import { Dropdown, Item } from '~/components/shared/dropdown'
 import Image from 'next/image'
 import Link from 'next/link'
+
+import { type Session } from 'next-auth'
+
+import { Dropdown, Item } from '~/components/shared/dropdown'
 import { ThemeSwitcher } from '~/components/shared/theme-switcher'
 
 type ActionsProps = {

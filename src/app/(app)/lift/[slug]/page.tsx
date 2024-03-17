@@ -1,6 +1,7 @@
 'use client'
 
 import { format } from 'date-fns'
+import { notFound } from 'next/navigation'
 import { sortBy } from 'remeda'
 import { LiftProgressChart } from '~/components/lifts/lift-progress-chart'
 import { SetActions } from '~/components/sets/set-actions'
@@ -17,7 +18,7 @@ type LiftPageParams = {
 export default function LiftPage({ params }: LiftPageParams) {
   const lift = api.lifts.getBySlug.useQuery({ slug: params.slug })
 
-  if (!lift.data || !lift.data) return
+  if (!lift.data) return null
 
   const [latestSet] = lift.data.sets
 
