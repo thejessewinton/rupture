@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { type RouterOutputs } from '~/trpc/shared'
 
 export const classNames = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
@@ -30,12 +31,15 @@ export const calculateWeight = ({
 }
 
 export const estimatedMax = (set: { reps: number; weight: number }) => {
-  if (+set.reps <= 0) {
+  if (set.reps <= 0) {
     return 0
   }
 
-  // Jim Wendler formula
-  const estimatedMax = +set.weight * +set.reps * 0.0333 + +set.weight
+  const estimatedMax = set.weight * set.reps * 0.0333 + set.weight
 
   return Math.round(estimatedMax)
+}
+
+export const getHeaviestSet = (sets: RouterOutputs['lifts']['getAll'][number]['sets']) => {
+  return sets.reduce((prev, current) => (prev.weight > current.weight ? prev : current)).weight
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import * as d3 from 'd3'
-import { eachMonthOfInterval, endOfMonth, format, isSameMonth, parseISO, startOfMonth } from 'date-fns'
+import { eachMonthOfInterval, endOfMonth, format, parseISO, startOfMonth } from 'date-fns'
 import useMeasure from 'react-use-measure'
 import { motion } from 'framer-motion'
 import { estimatedMax } from '~/utils/core'
@@ -88,16 +88,16 @@ const ChartInner = ({
   const d = line(data.map((d) => [d.date.getTime(), d.estimatedMax]))
 
   return (
-    <>
-      <svg className='' viewBox={`0 0 ${width} ${height}`}>
-        {/* X axis */}
-        {months.map((month, i) => (
-          <g key={month.toISOString()} className='text-gray-400' transform={`translate(${xScale(month)},0)`}>
+    <svg className='' viewBox={`0 0 ${width} ${height}`}>
+      {months.map((month, i) => {
+        const computedHeight = height - margin.bottom < 0 ? 0 : height - margin.bottom
+        return (
+          <g key={i} className='text-gray-400' transform={`translate(${xScale(month)},0)`}>
             {i % 2 === 1 && (
               <rect
                 width={xScale(endOfMonth(month)) - xScale(month)}
-                height={height - margin.bottom}
-                className='fill-neutral-800 text-gray-100'
+                height={computedHeight}
+                className='fill-neutral-100 text-gray-100 dark:fill-neutral-900'
               />
             )}
             <text
@@ -110,60 +110,56 @@ const ChartInner = ({
               {format(month, 'MMM')}
             </text>
           </g>
-        ))}
+        )
+      })}
 
-        {/* Y axis */}
-        {yScale.ticks(5).map((max) => (
-          <g transform={`translate(0,${yScale(max)})`} className='text-gray-400' key={max}>
-            <line x1={margin.left} x2={width - margin.right} stroke='currentColor' strokeDasharray='1,3' />
-            <text alignmentBaseline='middle' className='text-[10px]' fill='currentColor'>
-              {max}
-            </text>
-          </g>
-        ))}
+      {yScale.ticks(5).map((max) => (
+        <g transform={`translate(0,${yScale(max)})`} className='text-gray-400' key={max}>
+          <line x1={margin.left} x2={width - margin.right} stroke='currentColor' strokeDasharray='1,3' />
+          <text alignmentBaseline='middle' className='text-[10px]' fill='currentColor'>
+            {max}
+          </text>
+        </g>
+      ))}
 
-        {/* Line */}
-        <motion.path
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 1.5, type: 'spring' }}
-          d={d!}
-          fill='none'
-          stroke='currentColor'
-          strokeWidth='2'
-        />
+      <motion.path
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 1.5, type: 'spring' }}
+        d={d!}
+        fill='none'
+        className='stroke-blue-300'
+        strokeWidth='2'
+      />
 
-        {/* Circles */}
-        {data.map((d, i) => (
-          <Tooltip.Provider key={i}>
-            <Tooltip.Root delayDuration={0}>
-              <Tooltip.Trigger asChild>
-                <motion.circle
-                  r='5'
-                  cx={xScale(d.date)}
-                  cy={yScale(d.estimatedMax)}
-                  fill='currentColor'
-                  strokeWidth={2}
-                  stroke={months.findIndex((m) => isSameMonth(m, d.date)) % 2 === 1 ? '#f5f5f4' : 'white'}
-                />
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content
-                  side='bottom'
-                  className='radix-state-closed:animate-scale-out-content radix-state-delayed-open:animate-scale-in-content'
-                >
-                  <Tooltip.Arrow className='fill-white' />
-                  <div className='rounded bg-white p-2 shadow-lg'>
-                    <p className='text-xs text-gray-500'>{format(d.date, 'MMM d, yyyy')}</p>
-                    <p className='text-sm text-gray-500'>{d.weight}</p>
-                    <p className='text-sm text-gray-500'>{d.estimatedMax}</p>
-                  </div>
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
-          </Tooltip.Provider>
-        ))}
-      </svg>
-    </>
+      {data.map((d, i) => (
+        <Tooltip.Provider key={i}>
+          <Tooltip.Root delayDuration={0}>
+            <Tooltip.Trigger asChild>
+              <circle
+                r='5'
+                cx={xScale(d.date)}
+                cy={yScale(d.estimatedMax)}
+                className='cursor-pointer fill-blue-300'
+                strokeWidth={2}
+              />
+            </Tooltip.Trigger>
+            <Tooltip.Portal>
+              <Tooltip.Content
+                side='bottom'
+                className='radix-state-closed:animate-scale-out-content radix-state-delayed-open:animate-scale-in-content'
+              >
+                <Tooltip.Arrow className='fill-white' />
+                <div className='rounded bg-white p-2 shadow-lg'>
+                  <p className='text-xs text-gray-500'>{format(d.date, 'MMM d, yyyy')}</p>
+                  <p className='text-sm text-gray-500'>{d.weight}</p>
+                  <p className='text-sm text-gray-500'>{d.estimatedMax}</p>
+                </div>
+              </Tooltip.Content>
+            </Tooltip.Portal>
+          </Tooltip.Root>
+        </Tooltip.Provider>
+      ))}
+    </svg>
   )
 }
