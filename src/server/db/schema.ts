@@ -35,7 +35,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
 }))
 
 export const composition = pgTable('composition', {
-  id: serial('id').unique().primaryKey(),
+  id: serial('id').primaryKey(),
   user_id: varchar('user_id', { length: 255 })
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
@@ -117,7 +117,7 @@ export const unitEmum = pgEnum('value', units)
 export const unit = pgTable(
   'unit',
   {
-    id: serial('id').unique().primaryKey(),
+    id: serial('id').primaryKey(),
     value: unitEmum('value').notNull().default('lbs'),
     user_id: varchar('user_id', { length: 255 })
       .notNull()
@@ -137,7 +137,7 @@ export const unitRelations = relations(unit, ({ one }) => ({
 export const lift = pgTable(
   'lift',
   {
-    id: serial('id').unique().primaryKey(),
+    id: serial('id').primaryKey(),
     name: varchar('name', { length: 255 }).notNull(),
     personal_record: bigint('personal_record', { mode: 'number' }).notNull(),
     unit: unitEmum('value').notNull().default('lbs'),
@@ -164,7 +164,7 @@ export const dayEnum = pgEnum('day', days)
 export const set = pgTable(
   'set',
   {
-    id: serial('id').unique().primaryKey(),
+    id: serial('id').primaryKey(),
     user_id: varchar('user_id', { length: 255 })
       .notNull()
       .references(() => users.id),
