@@ -2,12 +2,15 @@
 
 import { useRouter } from 'next/navigation'
 
+import * as Tooltip from '@radix-ui/react-tooltip'
+
 import { DeleteConfirm } from '~/components/actions/delete-confirm'
 import { LiftProgressChart } from '~/components/lifts/lift-progress-chart'
 import { NewSetAction } from '~/components/sets/set-form'
 import { Dropdown, Item } from '~/components/shared/dropdown'
 import { Spinner } from '~/components/shared/spinner'
 import SvgEllipsis from '~/components/svg/ellipsis'
+import SvgInformation from '~/components/svg/information'
 import { useDialogStore } from '~/state/use-dialog-store'
 import { api } from '~/trpc/react'
 import { type RouterOutputs } from '~/trpc/shared'
@@ -32,13 +35,34 @@ export default function LiftPage({ params }: LiftPageParams) {
       <div className='flex items-center justify-between pb-4'>
         <div>
           <h1 className='text-xl'>{lift.data.name}</h1>
-          <span className='text-xs text-neutral-800 dark:text-neutral-200'>
+          <div className='flex items-center gap-3 text-xs text-neutral-800 dark:text-neutral-200'>
             Current 1RM:{' '}
             {estimatedMax({
               weight: latestSet?.weight ?? 0,
               reps: latestSet?.reps ?? 0
             })}
-          </span>
+            <Tooltip.Provider>
+              <Tooltip.Root delayDuration={100}>
+                <Tooltip.Trigger>
+                  <SvgInformation className='h-4 w-4' />
+                </Tooltip.Trigger>
+                <Tooltip.Portal>
+                  <Tooltip.Content
+                    sideOffset={5}
+                    side='bottom'
+                    align='center'
+                    className='radix-state-closed:animate-scale-out-content radix-state-delayed-open:animate-scale-in-content'
+                  >
+                    <div className='rounded bg-neutral-100 p-2 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200'>
+                      <p className='text-xs'>
+                        Based on your latest set of {latestSet?.weight}x{latestSet?.reps}
+                      </p>
+                    </div>
+                  </Tooltip.Content>
+                </Tooltip.Portal>
+              </Tooltip.Root>
+            </Tooltip.Provider>
+          </div>
         </div>
         <div className='flex items-center gap-2'>
           <NewSetAction lift={lift.data} />
