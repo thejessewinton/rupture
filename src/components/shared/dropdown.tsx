@@ -1,6 +1,6 @@
 'use client'
 
-import { type ReactNode } from 'react'
+import { forwardRef, type ReactNode, type Ref } from 'react'
 
 import * as DropdownPrimitive from '@radix-ui/react-dropdown-menu'
 
@@ -36,16 +36,23 @@ export const Dropdown = ({ trigger, children, align }: DropdownProps) => {
 
 type DropdownItemProps = DropdownPrimitive.DropdownMenuItemProps
 
-export const Item = ({ className, ...props }: DropdownItemProps) => {
-  return (
-    <DropdownPrimitive.Item
-      className={classNames(
-        'flex cursor-pointer rounded px-3 py-1 text-xs text-neutral-800 transition-colors focus:bg-neutral-50 focus:outline-none dark:text-neutral-400 focus:dark:bg-neutral-800',
-        className
-      )}
-      {...props}
-    />
-  )
-}
+export const DropdownItem = forwardRef(
+  ({ className, onSelect, ...props }: DropdownItemProps, ref: Ref<HTMLDivElement>) => {
+    return (
+      <DropdownPrimitive.Item
+        ref={ref}
+        className={classNames(
+          'flex cursor-pointer rounded px-3 py-1 text-xs text-neutral-800 transition-colors focus:bg-neutral-50 focus:outline-none dark:text-neutral-400 focus:dark:bg-neutral-800',
+          className
+        )}
+        onSelect={(event) => {
+          event.preventDefault()
+          onSelect?.(event)
+        }}
+        {...props}
+      />
+    )
+  }
+)
 
-Item.displayName = 'Dropdown.Item'
+DropdownItem.displayName = 'DropdownItem'

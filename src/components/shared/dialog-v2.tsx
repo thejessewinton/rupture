@@ -1,18 +1,19 @@
-'use client'
-
 import { type ReactNode } from 'react'
 
 import { XMarkIcon } from '@heroicons/react/24/solid'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 
-import { useDialogStore } from '~/state/use-dialog-store'
 import { classNames } from '~/utils/core'
 
-export const Dialog = () => {
-  const { isOpen, onClose, title, component, trigger } = useDialogStore()
+type DialogProps = {
+  trigger: ReactNode
+  component: ReactNode
+  title: string
+}
 
+export const Dialog = ({ trigger, title, component }: DialogProps) => {
   return (
-    <DialogPrimitive.Root open={isOpen} onOpenChange={onClose}>
+    <DialogPrimitive.Root>
       <DialogPrimitive.Trigger asChild>{trigger}</DialogPrimitive.Trigger>
       <DialogPrimitive.Overlay className='fixed inset-0 z-50 bg-black/50 backdrop-blur-sm radix-state-closed:animate-fade-out radix-state-open:animate-fade-in' />
       <DialogPrimitive.Portal>

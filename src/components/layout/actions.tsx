@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 import { type Session } from 'next-auth'
 
-import { Dropdown, Item } from '~/components/shared/dropdown'
+import { Dropdown, DropdownItem } from '~/components/shared/dropdown'
 import { ThemeSwitcher } from '~/components/shared/theme-switcher'
 import { getFirstInitial } from '~/utils/core'
 
@@ -27,16 +27,16 @@ export const Actions = ({ session, signOut }: ActionsProps) => {
               }
               align='end'
             >
-              <Item>
+              <DropdownItem>
                 <Link href='/profile' className='w-full'>
                   Profile
                 </Link>
-              </Item>
-              <Item>
+              </DropdownItem>
+              <DropdownItem>
                 <button formAction={signOut} className='w-full text-left'>
                   Log out
                 </button>
-              </Item>
+              </DropdownItem>
               <ThemeSwitcher />
             </Dropdown>
           </div>

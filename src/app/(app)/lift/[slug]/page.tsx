@@ -7,7 +7,7 @@ import * as Tooltip from '@radix-ui/react-tooltip'
 import { DeleteConfirm } from '~/components/actions/delete-confirm'
 import { LiftProgressChart } from '~/components/lifts/lift-progress-chart'
 import { NewSetAction } from '~/components/sets/set-form'
-import { Dropdown, Item } from '~/components/shared/dropdown'
+import { Dropdown, DropdownItem } from '~/components/shared/dropdown'
 import { Spinner } from '~/components/shared/spinner'
 import SvgEllipsis from '~/components/svg/ellipsis'
 import SvgInformation from '~/components/svg/information'
@@ -107,7 +107,7 @@ const LiftActions = ({ lift }: LiftActionsProps) => {
       }
       align='end'
     >
-      <Item>
+      <DropdownItem>
         <button
           className='text-red-900 dark:text-red-500'
           onClick={() => {
@@ -124,7 +124,7 @@ const LiftActions = ({ lift }: LiftActionsProps) => {
         >
           Delete lift
         </button>
-      </Item>
+      </DropdownItem>
     </Dropdown>
   )
 }
