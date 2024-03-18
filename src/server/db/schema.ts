@@ -34,12 +34,36 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   sets: many(set)
 }))
 
+export const units = ['kgs', 'lbs'] as const
+export const unitEmum = pgEnum('value', units)
+
+export const unit = pgTable(
+  'unit',
+  {
+    id: serial('id').primaryKey(),
+    value: unitEmum('value').notNull().default('lbs'),
+    user_id: varchar('user_id', { length: 255 })
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    created_at: timestamp('created_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`)
+  },
+  (unit) => ({
+    userIdIdx: index('unit_userId_idx').on(unit.user_id)
+  })
+)
+
+export const unitRelations = relations(unit, ({ one }) => ({
+  user: one(users, { fields: [unit.user_id], references: [users.id] })
+}))
+
 export const composition = pgTable('composition', {
   id: serial('id').primaryKey(),
   user_id: varchar('user_id', { length: 255 })
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   weight: bigint('weight', { mode: 'number' }).notNull(),
+  unit: unitEmum('value').notNull().default('lbs'),
   created_at: timestamp('created_at', {
     mode: 'date'
   }).default(sql`CURRENT_TIMESTAMP`),
@@ -110,30 +134,7 @@ export const verificationTokens = pgTable(
   })
 )
 
-// Units, Lifts, Workouts, and Sets
-export const units = ['kgs', 'lbs'] as const
-export const unitEmum = pgEnum('value', units)
-
-export const unit = pgTable(
-  'unit',
-  {
-    id: serial('id').primaryKey(),
-    value: unitEmum('value').notNull().default('lbs'),
-    user_id: varchar('user_id', { length: 255 })
-      .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
-    created_at: timestamp('created_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`),
-    updated_at: timestamp('updated_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`)
-  },
-  (unit) => ({
-    userIdIdx: index('unit_userId_idx').on(unit.user_id)
-  })
-)
-
-export const unitRelations = relations(unit, ({ one }) => ({
-  user: one(users, { fields: [unit.user_id], references: [users.id] })
-}))
-
+// Lifts, Workouts, and Sets
 export const lift = pgTable(
   'lift',
   {
@@ -177,17 +178,21 @@ export const set = pgTable(
     })
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),
+    notes: text('notes'),
     created_at: timestamp('created_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp('updated_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`),
-    lift_id: bigint('lift_id', { mode: 'number' }).references(() => lift.id, { onDelete: 'cascade' })
+    lift_id: bigint('lift_id', { mode: 'number' }).references(() => lift.id, { onDelete: 'cascade' }),
+    composition_id: bigint('composition_id', { mode: 'number' }).references(() => composition.id)
   },
   (set) => ({
     userIdIdx: index('set_userId_idx').on(set.user_id),
-    liftIdIdx: index('set_liftId_idx').on(set.lift_id)
+    liftIdIdx: index('set_liftId_idx').on(set.lift_id),
+    compositionIdIdx: index('lift_compositionId_idx').on(set.composition_id)
   })
 )
 
 export const setRelations = relations(set, ({ one }) => ({
   user: one(users, { fields: [set.user_id], references: [users.id] }),
-  lift: one(lift, { fields: [set.lift_id], references: [lift.id] })
+  lift: one(lift, { fields: [set.lift_id], references: [lift.id] }),
+  composition: one(composition, { fields: [set.composition_id], references: [composition.id] })
 }))
