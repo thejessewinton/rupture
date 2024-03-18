@@ -3,7 +3,6 @@
 import dayjs from 'dayjs'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, type TooltipProps } from 'recharts'
 import { type NameType, type ValueType } from 'recharts/types/component/DefaultTooltipContent'
-import { sortBy } from 'remeda'
 
 import { IntervalSwitcher } from '~/components/lifts/interval-switcher'
 import { useDateIntervalStore } from '~/state/use-date-interval-store'
@@ -22,16 +21,16 @@ export const LiftProgressChart = ({ lift }: LiftProgressChartProps) => {
 
   const data = dates.map((date) => {
     const sets = lift.sets.filter((set) => dayjs(set.date).isSame(dayjs(date), 'day') && set.tracked)
-    const [setWithHighestWeight] = sortBy(sets, [(s) => s.weight, 'desc'])
+    const [latestSet] = sets
 
-    if (!setWithHighestWeight) return { day: dayjs(date).format('MMM, DD'), weight: undefined, estimatedMax: undefined }
+    if (!latestSet) return { day: dayjs(date).format('MMM, DD'), weight: undefined, estimatedMax: undefined }
 
-    const { weight } = setWithHighestWeight
+    const { weight, reps } = latestSet
 
     return {
       day: dayjs(date).format('MMM, DD'),
       weight,
-      estimatedMax: estimatedMax({ weight, reps: 5 })
+      estimatedMax: estimatedMax({ weight, reps })
     }
   })
 
@@ -50,7 +49,7 @@ export const LiftProgressChart = ({ lift }: LiftProgressChartProps) => {
       <ResponsiveContainer className='relative h-full min-h-80'>
         <BarChart data={data} className='text-xs'>
           <XAxis tickLine={false} dataKey='day' />
-          <YAxis tickLine={false} dataKey='weight' orientation='right' />
+          <YAxis tickLine={false} orientation='right' />
           <Tooltip cursor={false} content={<CustomTooltip />} />
           <Bar barSize={4} dataKey='weight' className='fill-slate-500' width={4} />
           <Bar barSize={4} dataKey='estimatedMax' className='fill-green-700' width={4} />

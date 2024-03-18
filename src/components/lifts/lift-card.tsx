@@ -29,8 +29,12 @@ export const LiftCard = ({ lift }: LiftCardProps) => {
   })
 
   return (
-    <Link href={`/lift/${lift.slug}`} className='block rounded border border-neutral-200 p-8 dark:border-neutral-800'>
-      <div className='mb-10 flex items-center justify-between'>
+    <Link
+      href={`/lift/${lift.slug}`}
+      className='relative block rounded border border-neutral-200 p-8 dark:border-neutral-800'
+    >
+      <div className='absolute right-0 top-0 h-[1px] w-80 bg-gradient-to-r from-transparent via-neutral-700 to-transparent' />
+      <div className='mb-10'>
         <h2>{lift.name}</h2>
       </div>
 
