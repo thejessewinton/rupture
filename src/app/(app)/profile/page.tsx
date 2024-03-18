@@ -102,7 +102,7 @@ const CompositionForm = () => {
   )
 }
 
-export const CompositionAction = () => {
+const CompositionAction = () => {
   const { handleDialog } = useDialogStore()
 
   return (
