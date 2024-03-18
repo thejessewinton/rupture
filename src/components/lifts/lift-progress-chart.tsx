@@ -36,11 +36,11 @@ export const LiftProgressChart = ({ lift }: LiftProgressChartProps) => {
 
   return (
     <div className='relative w-full rounded-md border border-neutral-200 p-8 dark:border-neutral-800'>
-      <div className='absolute right-0 top-0 h-[1px] w-80 bg-gradient-to-r from-transparent via-neutral-700 to-transparent' />
+      <div className='absolute right-0 top-0 h-[1px] w-80 bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700' />
       <div className='mb-20 flex justify-between'>
         <div>
           <h2 className='text-neutral-800 dark:text-neutral-500'>Total sets</h2>
-          <span className='text-4xl text-white'>{lift.sets.length}</span>
+          <span className='text-4xl dark:text-white'>{lift.sets.length}</span>
         </div>
         <div>
           <IntervalSwitcher />
@@ -67,7 +67,7 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (!active) return null
 
   return (
-    <div className='flex flex-col gap-1 rounded border border-neutral-200 bg-neutral-900 px-4 py-2 dark:border-neutral-800'>
+    <div className='flex flex-col gap-1 rounded border border-neutral-200 bg-white px-4 py-2 dark:border-neutral-800 dark:bg-neutral-900'>
       {payload?.map((p) => (
         <div key={p.name}>
           {p.name === 'estimatedMax' ? 'Estimated max' : 'Weight'}: {p.value}

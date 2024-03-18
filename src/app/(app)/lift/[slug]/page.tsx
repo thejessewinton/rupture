@@ -30,7 +30,7 @@ export default function LiftPage({ params }: LiftPageParams) {
       <div className='flex items-center justify-between pb-4'>
         <div>
           <h1 className='text-xl'>{lift.data.name}</h1>
-          <span className='text-xs text-neutral-200 dark:text-neutral-500'>
+          <span className='text-xs text-neutral-800 dark:text-neutral-200'>
             Current 1RM:{' '}
             {estimatedMax({
               weight: latestSet?.weight ?? 0,
@@ -73,7 +73,7 @@ const LiftActions = ({ lift }: LiftActionsProps) => {
   return (
     <Dropdown
       trigger={
-        <button className='flex h-8 w-8 justify-center rounded border border-neutral-800 p-1 outline-none transition-all hover:bg-neutral-50 focus:ring-2 focus:ring-blue-400 dark:hover:bg-neutral-900'>
+        <button className='flex h-8 w-8 justify-center rounded border border-neutral-200 p-1 outline-none transition-all hover:bg-neutral-50 focus:ring-2 focus:ring-blue-400 dark:border-neutral-800 dark:hover:bg-neutral-900'>
           <SvgEllipsis className='h-4 w-4' />
         </button>
       }
@@ -87,7 +87,7 @@ const LiftActions = ({ lift }: LiftActionsProps) => {
               title: 'Delete lift',
               component: (
                 <DeleteConfirm
-                  title={`Are you sure you want to delete ${lift.name}?`}
+                  title={`Are you sure you want to delete ${lift.name} and all sets?`}
                   onDelete={() => deleteLift.mutate({ id: lift.id })}
                 />
               )

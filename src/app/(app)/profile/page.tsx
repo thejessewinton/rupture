@@ -2,10 +2,12 @@
 
 import { useEffect } from 'react'
 
+import dayjs from 'dayjs'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '~/components/shared/button'
 import { Input } from '~/components/shared/input'
+import { useDialogStore } from '~/state/use-dialog-store'
 import { api } from '~/trpc/react'
 import { type RouterInputs } from '~/trpc/shared'
 
@@ -39,21 +41,80 @@ export default function SettingsPage() {
   if (isLoading) return
 
   return (
-    <div className='w-full space-y-8'>
-      <div className='space-y-1'>
+    <div className='w-full gap-4 space-y-8'>
+      <div className='space-y-1 '>
         <h3 className='text-lg'>Profile</h3>
-        <p className='text-sm text-neutral-500'>Manage your Rupture profile</p>
+        <p className='text-sm text-neutral-500'>Manage your Rupture profile and progress</p>
       </div>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className='flex flex-col gap-4 border-t border-neutral-200 pt-8 dark:border-neutral-800'
-      >
-        <Input type='text' {...register('name')} label='Name' />
-        <Input type='text' {...register('email')} label='Email' />
-        <Button type='submit' disabled={submit.isLoading}>
-          {submit.isLoading ? 'Loading' : 'Update'}
-        </Button>
-      </form>
+      <div className='grid gap-4 border-t border-neutral-200 pt-8 dark:border-neutral-800 md:grid-cols-12'>
+        <form onSubmit={handleSubmit(onSubmit)} className='col-span-8 flex flex-col gap-4'>
+          <Input type='text' {...register('name')} label='Name' />
+          <Input type='text' {...register('email')} label='Email' />
+          <Button type='submit' disabled={submit.isLoading}>
+            {submit.isLoading ? 'Loading' : 'Update'}
+          </Button>
+        </form>
+        <div className='col-span-4 flex flex-col gap-4'>
+          {data?.composition.map((composition) => (
+            <>
+              {composition.weight} - {dayjs(composition.created_at).format('MMM, DD')}
+            </>
+          ))}
+          <CompositionAction />
+        </div>
+      </div>
     </div>
+  )
+}
+
+type CompositionValues = RouterInputs['user']['createComposition']
+
+const CompositionForm = () => {
+  const { register, handleSubmit, reset } = useForm<CompositionValues>()
+  const { handleDialogClose } = useDialogStore()
+
+  const utils = api.useUtils()
+  const submit = api.user.createComposition.useMutation({
+    onSuccess: async () => {
+      reset()
+      handleDialogClose()
+      await utils.user.getCurrent.invalidate()
+    }
+  })
+
+  const onSubmit = async (values: CompositionValues) => {
+    await submit.mutateAsync(values)
+  }
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className='col-span-4'>
+      <Input
+        type='number'
+        {...register('weight', {
+          valueAsNumber: true
+        })}
+        label='Weight'
+      />
+      <Button type='submit' disabled={submit.isLoading}>
+        {submit.isLoading ? 'Loading' : 'Add'}
+      </Button>
+    </form>
+  )
+}
+
+export const CompositionAction = () => {
+  const { handleDialog } = useDialogStore()
+
+  return (
+    <Button
+      onClick={() => {
+        handleDialog({
+          title: 'Track body composition',
+          component: <CompositionForm />
+        })
+      }}
+    >
+      Add composition
+    </Button>
   )
 }

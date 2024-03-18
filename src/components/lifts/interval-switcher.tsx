@@ -18,7 +18,7 @@ export const IntervalSwitcher = () => {
         <ToggleGroup.Item
           key={interval.label}
           value={interval.label}
-          className='rounded px-3 py-1 outline-none transition-all hover:bg-neutral-800 focus:bg-neutral-800 radix-state-on:bg-neutral-800'
+          className='rounded px-3 py-1 outline-none transition-all hover:bg-neutral-200 focus:bg-neutral-200 radix-state-on:bg-neutral-200 hover:dark:bg-neutral-800 focus:dark:bg-neutral-800 radix-state-on:dark:bg-neutral-800'
         >
           {interval.label}
         </ToggleGroup.Item>

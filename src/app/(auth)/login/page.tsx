@@ -43,7 +43,7 @@ export default async function SignIn() {
         {providers.map((provider) => (
           <form action={provider.action} className='w-full' key={provider.name}>
             <Button
-              className='w-full bg-neutral-50 py-3 text-neutral-800 dark:bg-neutral-800 dark:text-white'
+              className='w-full bg-neutral-50 py-6 text-neutral-800 dark:bg-neutral-800 dark:text-white'
               icon={provider.icon}
             >
               Continue with {provider.name}

@@ -16,8 +16,7 @@ export const ThemeSwitcher = () => {
 
   if (!mounted) {
     return (
-      <LabelSelect className='inline-flex' label='Theme' name='theme' defaultValue='system'>
-        <option value='system'>System</option>
+      <LabelSelect className='inline-flex' label='Theme' name='theme' defaultValue='dark'>
         <option value='light'>Light</option>
         <option value='dark'>Dark</option>
       </LabelSelect>
@@ -32,9 +31,8 @@ export const ThemeSwitcher = () => {
       onChange={(e: ChangeEvent<HTMLSelectElement>) => {
         setTheme(e.target.value)
       }}
-      value={theme ?? 'system'}
+      value={theme ?? 'dark'}
     >
-      <option value='system'>System</option>
       <option value='light'>Light</option>
       <option value='dark'>Dark</option>
     </LabelSelect>

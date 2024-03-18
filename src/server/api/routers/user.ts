@@ -33,14 +33,6 @@ export const userRouter = createTRPCRouter({
           message: 'Email already in use'
         })
       }
-
-      if (input.weight) {
-        await ctx.db.insert(composition).values({
-          weight: input.weight,
-          user_id: ctx.session.user.id
-        })
-      }
-
       return await ctx.db
         .update(users)
         .set({
@@ -49,6 +41,9 @@ export const userRouter = createTRPCRouter({
         })
         .where(eq(users.id, ctx.session.user.id))
     }),
+  createComposition: protectedProcedure.input(z.object({ weight: z.number() })).mutation(async ({ input, ctx }) => {
+    return await ctx.db.insert(composition).values({ weight: input.weight, user_id: ctx.session.user.id })
+  }),
   getWeightUnit: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.query.unit.findFirst({
       where: eq(unit.user_id, ctx.session.user.id)
