@@ -46,7 +46,7 @@ export default function SettingsPage() {
         <h3 className='text-lg'>Profile</h3>
         <p className='text-sm text-neutral-500'>Manage your Rupture profile and progress</p>
       </div>
-      <div className='grid gap-4 border-t border-neutral-200 pt-8 dark:border-neutral-800 md:grid-cols-12'>
+      <div className='grid gap-8 border-t border-neutral-200 pt-8 dark:border-neutral-800 md:grid-cols-12'>
         <form onSubmit={handleSubmit(onSubmit)} className='col-span-8 flex flex-col gap-4'>
           <Input type='text' {...register('name')} label='Name' />
           <Input type='text' {...register('email')} label='Email' />
@@ -55,11 +55,17 @@ export default function SettingsPage() {
           </Button>
         </form>
         <div className='col-span-4 flex flex-col gap-4'>
-          {data?.composition.map((composition) => (
-            <>
-              {composition.weight} - {dayjs(composition.created_at).format('MMM, DD')}
-            </>
-          ))}
+          <span className='text-xs'>Composition</span>
+          <ul className='w-full divide-y divide-neutral-200 dark:divide-neutral-800'>
+            {data?.composition.map((composition) => (
+              <li className='flex justify-between px-2 py-4 text-xs' key={composition.id}>
+                <span>
+                  {composition.weight} {composition.unit}.
+                </span>
+                <span>{dayjs(composition.created_at).format('MM/DD/YY')}</span>
+              </li>
+            ))}
+          </ul>
           <CompositionAction />
         </div>
       </div>

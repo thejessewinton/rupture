@@ -1,7 +1,7 @@
-import { eq } from 'drizzle-orm'
+import { desc, eq } from 'drizzle-orm'
 import { z } from 'zod'
 
-import { lift, set } from '~/server/db/schema'
+import { composition, lift, set } from '~/server/db/schema'
 import { createTRPCRouter, protectedProcedure } from '../trpc'
 
 export const setsRouter = createTRPCRouter({
@@ -20,17 +20,26 @@ export const setsRouter = createTRPCRouter({
         weight: z.number(),
         lift_id: z.number(),
         date: z.date(),
-        tracked: z.boolean().default(false)
+        tracked: z.boolean().default(false),
+        notes: z.string().max(255).optional()
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.insert(set).values({
-        user_id: ctx.session.user.id,
-        reps: input.reps,
-        weight: input.weight,
-        lift_id: input.lift_id,
-        date: input.date,
-        tracked: input.tracked
+      await ctx.db.transaction(async (db) => {
+        const [latestComposition] = await db.query.composition.findMany({
+          where: eq(composition.user_id, ctx.session.user.id),
+          orderBy: [desc(composition.created_at)]
+        })
+
+        return await db.insert(set).values({
+          user_id: ctx.session.user.id,
+          reps: input.reps,
+          weight: input.weight,
+          lift_id: input.lift_id,
+          date: input.date,
+          tracked: input.tracked,
+          composition_id: latestComposition?.id
+        })
       })
     }),
   deleteSet: protectedProcedure

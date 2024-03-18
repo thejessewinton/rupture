@@ -1,3 +1,5 @@
+'use client'
+
 import { forwardRef, type Ref } from 'react'
 
 import Highlight from '@tiptap/extension-highlight'
@@ -35,7 +37,7 @@ export const MarkdownEditor = forwardRef(
       editorProps: {
         attributes: {
           class: classNames(
-            'dark:bg-neutral-900 h-full pb-6 font-light w-full grow max-w-none prose prose-dark text-neutral-500 focus:outline-none',
+            'dark:bg-neutral-800 h-full border border-neutral-200 text-sm dark:border-neutral-700 pt-2 px-2 rounded pb-6 font-light w-full grow max-w-none prose prose-dark text-white focus:outline-none',
             className
           )
         }
@@ -53,7 +55,7 @@ export const MarkdownEditor = forwardRef(
         {...rest}
         ref={ref}
         editor={editor}
-        className='h-fit w-full resize-none bg-transparent py-2 text-sm text-neutral-500 outline-none transition-all placeholder:text-neutral-500 focus:outline-none'
+        className='h-fit w-full resize-none bg-transparent py-2 text-sm text-white outline-none transition-all focus:outline-none'
       />
     )
   }

@@ -1,5 +1,7 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
+
 import { DeleteConfirm } from '~/components/actions/delete-confirm'
 import { LiftProgressChart } from '~/components/lifts/lift-progress-chart'
 import { NewSetAction } from '~/components/sets/set-form'
@@ -53,12 +55,14 @@ type LiftActionsProps = { lift: RouterOutputs['lifts']['getAll'][number] }
 
 const LiftActions = ({ lift }: LiftActionsProps) => {
   const { handleDialog, handleDialogClose } = useDialogStore()
+  const router = useRouter()
 
   const utils = api.useUtils()
 
   const deleteLift = api.lifts.deleteLift.useMutation({
     onMutate: (data) => {
       handleDialogClose()
+      router.push('/')
       const previousLifts = utils.lifts.getAll.getData()
 
       if (previousLifts) {
