@@ -19,6 +19,10 @@ export const getInitials = (name: string) => {
   return `${firstName![0]}${lastName![0]}`
 }
 
+export const getFirstInitial = (name: string) => {
+  return name[0]
+}
+
 export const calculateWeight = ({
   weight,
   unit,

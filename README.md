@@ -7,3 +7,4 @@ Built with:
 - [Drizzle](https://orm.drizzle.team)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
+- [Neon Postgres](https://neon.tech)

@@ -2,6 +2,7 @@ import type { AdapterAccount } from '@auth/core/adapters'
 import { relations, sql } from 'drizzle-orm'
 import {
   bigint,
+  boolean,
   index,
   integer,
   pgEnum,
@@ -19,8 +20,7 @@ export const users = pgTable('user', {
   name: varchar('name', { length: 255 }),
   email: varchar('email', { length: 255 }).notNull(),
   emailVerified: timestamp('emailVerified', {
-    mode: 'date',
-    precision: 3
+    mode: 'date'
   }).default(sql`CURRENT_TIMESTAMP(3)`),
   image: varchar('image', { length: 255 })
 })
@@ -38,9 +38,14 @@ export const composition = pgTable('composition', {
   id: serial('id').unique().primaryKey(),
   user_id: varchar('user_id', { length: 255 })
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: 'cascade' }),
   weight: bigint('weight', { mode: 'number' }).notNull(),
-  date: timestamp('date').notNull().defaultNow(),
+  date: timestamp('date', {
+    mode: 'date',
+    precision: 3
+  })
+    .notNull()
+    .defaultNow(),
   created_at: timestamp('created_at', { mode: 'date', precision: 3 }).notNull().defaultNow(),
   updated_at: timestamp('updated_at', { mode: 'date', precision: 3 }).notNull().defaultNow()
 })
@@ -83,7 +88,7 @@ export const sessions = pgTable(
     sessionToken: varchar('sessionToken', { length: 255 }).notNull().primaryKey(),
     userId: varchar('userId', { length: 255 })
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: 'cascade' }),
     expires: timestamp('expires', { mode: 'date' }).notNull()
   },
   (session) => ({
@@ -118,7 +123,7 @@ export const unit = pgTable(
     value: unitEmum('value').notNull().default('lbs'),
     user_id: varchar('user_id', { length: 255 })
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: 'cascade' }),
     created_at: timestamp('created_at', { mode: 'date', precision: 3 }).notNull().defaultNow(),
     updated_at: timestamp('updated_at', { mode: 'date', precision: 3 }).notNull().defaultNow()
   },
@@ -165,13 +170,19 @@ export const set = pgTable(
     user_id: varchar('user_id', { length: 255 })
       .notNull()
       .references(() => users.id),
+    tracked: boolean('tracked').notNull().default(false),
     reps: bigint('reps', { mode: 'number' }).notNull(),
     weight: bigint('weight', { mode: 'number' }).notNull(),
     unit: unitEmum('value').notNull().default('lbs'),
-    date: timestamp('date').notNull().defaultNow(),
+    date: timestamp('date', {
+      mode: 'date',
+      precision: 3
+    })
+      .notNull()
+      .defaultNow(),
     created_at: timestamp('created_at', { mode: 'date', precision: 3 }).notNull().defaultNow(),
     updated_at: timestamp('updated_at', { mode: 'date', precision: 3 }).notNull().defaultNow(),
-    lift_id: bigint('lift_id', { mode: 'number' }).references(() => lift.id)
+    lift_id: bigint('lift_id', { mode: 'number' }).references(() => lift.id, { onDelete: 'cascade' })
   },
   (set) => ({
     userIdIdx: index('set_userId_idx').on(set.user_id),

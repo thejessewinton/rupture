@@ -1,12 +1,12 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 
 import { type Session } from 'next-auth'
 
 import { Dropdown, Item } from '~/components/shared/dropdown'
 import { ThemeSwitcher } from '~/components/shared/theme-switcher'
+import { getFirstInitial } from '~/utils/core'
 
 type ActionsProps = {
   session: Session
@@ -21,8 +21,8 @@ export const Actions = ({ session, signOut }: ActionsProps) => {
           <div>
             <Dropdown
               trigger={
-                <button className='rounded-full outline-none transition-all focus:ring-2 focus:ring-blue-400'>
-                  <Image src={session.user.image!} width={32} height={32} alt='Avatar' className='rounded-full' />
+                <button className='relative flex h-8 w-8 items-center justify-center rounded-full border border-neutral-200 outline-none transition-all focus:ring-2 focus:ring-blue-400 dark:border-neutral-800'>
+                  {getFirstInitial(session.user?.name ?? '')}
                 </button>
               }
               align='end'

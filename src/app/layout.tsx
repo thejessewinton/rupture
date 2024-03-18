@@ -36,7 +36,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={classNames('font-sans tracking-wide', sansFont.variable, monoFont.variable)}>
+      <body className={classNames('font-sans', sansFont.variable, monoFont.variable)}>
         <SessionProvider session={session}>
           <ThemeProvider attribute='class'>
             <TRPCReactProvider cookies={cookies().toString()}>

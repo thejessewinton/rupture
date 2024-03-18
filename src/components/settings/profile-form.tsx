@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react'
 
-import dayjs from 'dayjs'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '~/components/shared/button'
@@ -25,7 +24,6 @@ export const ProfileForm = () => {
   })
 
   const onSubmit = async (values: ProfileValues) => {
-    console.log(values)
     await submit.mutateAsync(values)
   }
 
@@ -33,17 +31,15 @@ export const ProfileForm = () => {
     if (data) {
       reset({
         name: data.name!,
-        email: data.email,
-        weight: data.composition[0]?.weight
+        email: data.email
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+  }, [data, reset])
 
   if (isLoading) return
 
   return (
-    <div className='w-full animate-fade-in space-y-8'>
+    <div className='w-full space-y-8'>
       <div className='space-y-1'>
         <h3 className='text-lg'>Profile</h3>
         <p className='text-sm text-neutral-500'>Manage your Rupture profile</p>
@@ -54,25 +50,10 @@ export const ProfileForm = () => {
       >
         <Input type='text' {...register('name')} label='Name' />
         <Input type='text' {...register('email')} label='Email' />
-        <Input
-          type='number'
-          {...register('weight', {
-            valueAsNumber: true
-          })}
-          label='Weight'
-        />
         <Button type='submit' disabled={submit.isLoading}>
           {submit.isLoading ? 'Loading' : 'Update'}
         </Button>
       </form>
-      {data?.composition.map((comp) => {
-        return (
-          <div key={comp.id} className='flex justify-between'>
-            <p>{comp.weight}</p>
-            <p>{dayjs(comp.created_at).format('MM dd, yyyy')}</p>
-          </div>
-        )
-      })}
     </div>
   )
 }

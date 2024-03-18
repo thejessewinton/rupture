@@ -1,5 +1,5 @@
 {
-  "name": "rupture-2",
+  "name": "rupture",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -14,8 +14,8 @@
     "start": "next start"
   },
   "dependencies": {
-    "@auth/core": "^0.25.1",
-    "@auth/drizzle-adapter": "^0.5.1",
+    "@auth/core": "latest",
+    "@auth/drizzle-adapter": "latest",
     "@heroicons/react": "^2.1.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
     "@neondatabase/serverless": "^0.9.0",
@@ -24,7 +24,7 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-toggle-group": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
-    "@t3-oss/env-nextjs": "^0.8.0",
+    "@t3-oss/env-nextjs": "latest",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.10",
     "@tanstack/react-query": "^4.36.1",
@@ -33,7 +33,7 @@
     "@tiptap/extension-typography": "^2.2.1",
     "@tiptap/react": "^2.2.1",
     "@tiptap/starter-kit": "^2.2.1",
-    "@trpc/client": "^10.45.0",
+    "@trpc/client": "latest",
     "@trpc/next": "latest",
     "@trpc/react-query": "latest",
     "@trpc/server": "latest",
@@ -53,7 +53,7 @@
     "react-hotkeys-hook": "^4.5.0",
     "react-use-measure": "^2.1.1",
     "recharts": "^2.12.3",
-    "remeda": "^1.47.2",
+    "remeda": "latest",
     "server-only": "^0.0.1",
     "sonner": "^1.4.3",
     "string-ts": "^2.0.0",
@@ -65,19 +65,17 @@
     "zustand": "^4.5.0"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^14.1.0",
-    "@svgr/cli": "^8.1.0",
+    "@next/eslint-plugin-next": "latest",
     "@svgr/core": "^8.1.0",
     "@svgr/plugin-jsx": "^8.1.0",
     "@svgr/plugin-prettier": "^8.1.0",
     "@svgr/plugin-svgo": "^8.1.0",
-    "@types/d3": "^7.4.3",
     "@types/eslint": "^8.56.2",
-    "@types/node": "^20.11.16",
-    "@types/react": "^18.2.52",
-    "@types/react-dom": "^18.2.18",
-    "@typescript-eslint/eslint-plugin": "^6.20.0",
-    "@typescript-eslint/parser": "^6.20.0",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "latest",
     "autoprefixer": "^10.4.17",
     "drizzle-kit": "latest",
     "eslint": "^8.57.0",
@@ -85,12 +83,15 @@
     "eslint-plugin-import": "^2.29.1",
     "postcss": "^8.4.33",
     "prettier": "^3.2.4",
-    "prettier-plugin-tailwindcss": "^0.5.11",
+    "prettier-plugin-tailwindcss": "latest",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3"
+    "typescript": "latest"
   },
   "ct3aMetadata": {
     "initVersion": "7.25.0"
   },
-  "packageManager": "npm@10.0.0"
+  "packageManager": "bun@1.0.31",
+  "trustedDependencies": [
+    "@svgr/cli"
+  ]
 }

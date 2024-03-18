@@ -6,11 +6,11 @@ import { cva, type VariantProps } from 'cva'
 import { classNames } from '~/utils/core'
 
 const button = cva(
-  'flex h-fit w-fit cursor-pointer items-center justify-center gap-3 rounded px-6 py-2 text-xs font-medium shadow-sm shadow-black/25 outline-none transition-all focus:ring-1 focus:ring-sky-600/75 disabled:cursor-not-allowed disabled:opacity-70',
+  'flex h-fit w-fit relative overflow-hidden cursor-pointer items-center justify-center gap-3 rounded px-6 py-2 text-xs bg-neutral-900 outline-none transition-all focus:ring-1 focus:ring-sky-600/75 disabled:cursor-not-allowed disabled:opacity-70',
   {
     variants: {
       variant: {
-        default: 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900',
+        default: 'dark:text-white text-neutral-900 border border-neutral-200 dark:border-neutral-800',
         danger: 'bg-red-500/25 text-red-500'
       }
     },
