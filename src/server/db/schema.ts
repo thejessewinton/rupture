@@ -40,9 +40,6 @@ export const composition = pgTable('composition', {
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   weight: bigint('weight', { mode: 'number' }).notNull(),
-  date: timestamp('date', {
-    mode: 'date'
-  }).notNull(),
   created_at: timestamp('created_at', {
     mode: 'date'
   }).default(sql`CURRENT_TIMESTAMP`),

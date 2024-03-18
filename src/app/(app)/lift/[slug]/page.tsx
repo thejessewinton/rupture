@@ -51,7 +51,7 @@ export default function LiftPage({ params }: LiftPageParams) {
 
 type LiftActionsProps = { lift: RouterOutputs['lifts']['getAll'][number] }
 
-export const LiftActions = ({ lift }: LiftActionsProps) => {
+const LiftActions = ({ lift }: LiftActionsProps) => {
   const { handleDialog, handleDialogClose } = useDialogStore()
 
   const utils = api.useUtils()
