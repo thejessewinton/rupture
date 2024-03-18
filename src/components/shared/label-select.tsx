@@ -12,7 +12,7 @@ export const LabelSelect = forwardRef(
     return (
       <div
         className={classNames(
-          'rounded-xs text-primary flex items-stretch rounded-sm border border-neutral-200 text-xs shadow-sm transition-all focus-within:ring-1 dark:border-neutral-700',
+          'rounded-xs text-primary flex items-stretch rounded border border-neutral-200 text-xs shadow-sm transition-all focus-within:ring-1 dark:border-neutral-700',
           className
         )}
         ref={ref}

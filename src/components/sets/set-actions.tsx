@@ -36,7 +36,7 @@ export const SetActions = ({ set }: SetActionsProps) => {
   return (
     <Dropdown
       trigger={
-        <button className='rounded-sm p-1 outline-none transition-all hover:bg-neutral-50 focus:ring-2 focus:ring-blue-400 hover:dark:bg-neutral-800'>
+        <button className='rounded p-1 outline-none transition-all hover:bg-neutral-50 focus:ring-2 focus:ring-blue-400 hover:dark:bg-neutral-800'>
           <SvgEllipsis className='h-4 w-4' />
         </button>
       }

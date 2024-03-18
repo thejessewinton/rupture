@@ -1,7 +1,7 @@
-import { and, eq } from 'drizzle-orm'
+import { and, desc, eq } from 'drizzle-orm'
 import { z } from 'zod'
 
-import { lift, units } from '~/server/db/schema'
+import { lift, set, units } from '~/server/db/schema'
 import { slugify } from '~/utils/core'
 import { createTRPCRouter, protectedProcedure } from '../trpc'
 
@@ -10,7 +10,9 @@ export const liftsRouter = createTRPCRouter({
     return await ctx.db.query.lift.findMany({
       where: eq(lift.user_id, ctx.session.user.id),
       with: {
-        sets: true
+        sets: {
+          orderBy: [desc(set.date)]
+        }
       }
     })
   }),

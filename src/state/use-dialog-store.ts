@@ -17,5 +17,5 @@ export const useDialogStore = create<DialogState>((set) => ({
   component: null,
   title: null,
   handleDialog: ({ component, title }) => set({ component, title, isOpen: true }),
-  handleDialogClose: () => set({ component: null, isOpen: false })
+  handleDialogClose: () => set({ isOpen: false })
 }))

@@ -8,7 +8,7 @@ export const Select = forwardRef(({ children, className, ...props }: SelectProps
   return (
     <select
       className={classNames(
-        'inline-block rounded-sm border border-neutral-200 bg-transparent py-1 pr-4 text-xs font-normal transition autofill:bg-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-transparent hover:focus:border-blue-500/50 dark:border-neutral-800',
+        'inline-block rounded border border-neutral-200 bg-transparent py-1 pr-4 text-xs font-normal transition autofill:bg-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-transparent hover:focus:border-blue-500/50 dark:border-neutral-800',
         className
       )}
       ref={ref}

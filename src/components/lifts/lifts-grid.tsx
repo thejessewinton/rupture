@@ -16,7 +16,7 @@ export const LiftsGrid = () => {
     <>
       {!lifts.data.length ? (
         <EmptyState>
-          <p className='text-gray-400'>{`You don't have any lifts yet.`}</p>
+          <p className='text-sm font-light text-gray-400'>{`You don't have any lifts yet.`}</p>
         </EmptyState>
       ) : (
         <div className='grid space-y-8'>

@@ -21,7 +21,7 @@ export const users = pgTable('user', {
   email: varchar('email', { length: 255 }).notNull(),
   emailVerified: timestamp('emailVerified', {
     mode: 'date'
-  }).default(sql`CURRENT_TIMESTAMP(3)`),
+  }).default(sql`CURRENT_TIMESTAMP`),
   image: varchar('image', { length: 255 })
 })
 
@@ -41,13 +41,14 @@ export const composition = pgTable('composition', {
     .references(() => users.id, { onDelete: 'cascade' }),
   weight: bigint('weight', { mode: 'number' }).notNull(),
   date: timestamp('date', {
-    mode: 'date',
-    precision: 3
-  })
-    .notNull()
-    .defaultNow(),
-  created_at: timestamp('created_at', { mode: 'date', precision: 3 }).notNull().defaultNow(),
-  updated_at: timestamp('updated_at', { mode: 'date', precision: 3 }).notNull().defaultNow()
+    mode: 'date'
+  }).notNull(),
+  created_at: timestamp('created_at', {
+    mode: 'date'
+  }).default(sql`CURRENT_TIMESTAMP`),
+  updated_at: timestamp('updated_at', {
+    mode: 'date'
+  }).default(sql`CURRENT_TIMESTAMP`)
 })
 
 export const compositionRelations = relations(composition, ({ one }) => ({
@@ -124,8 +125,8 @@ export const unit = pgTable(
     user_id: varchar('user_id', { length: 255 })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-    created_at: timestamp('created_at', { mode: 'date', precision: 3 }).notNull().defaultNow(),
-    updated_at: timestamp('updated_at', { mode: 'date', precision: 3 }).notNull().defaultNow()
+    created_at: timestamp('created_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`)
   },
   (unit) => ({
     userIdIdx: index('unit_userId_idx').on(unit.user_id)
@@ -147,8 +148,8 @@ export const lift = pgTable(
     user_id: varchar('user_id', { length: 255 })
       .notNull()
       .references(() => users.id),
-    created_at: timestamp('created_at', { mode: 'date', precision: 3 }).notNull().defaultNow(),
-    updated_at: timestamp('updated_at', { mode: 'date', precision: 3 }).notNull().defaultNow()
+    created_at: timestamp('created_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`)
   },
   (lift) => ({
     userIdIdx: index('lift_userId_idx').on(lift.user_id)
@@ -175,13 +176,12 @@ export const set = pgTable(
     weight: bigint('weight', { mode: 'number' }).notNull(),
     unit: unitEmum('value').notNull().default('lbs'),
     date: timestamp('date', {
-      mode: 'date',
-      precision: 3
+      mode: 'date'
     })
       .notNull()
-      .defaultNow(),
-    created_at: timestamp('created_at', { mode: 'date', precision: 3 }).notNull().defaultNow(),
-    updated_at: timestamp('updated_at', { mode: 'date', precision: 3 }).notNull().defaultNow(),
+      .default(sql`CURRENT_TIMESTAMP`),
+    created_at: timestamp('created_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp('updated_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`),
     lift_id: bigint('lift_id', { mode: 'number' }).references(() => lift.id, { onDelete: 'cascade' })
   },
   (set) => ({

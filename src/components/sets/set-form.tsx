@@ -6,9 +6,9 @@ import { useForm } from 'react-hook-form'
 import { Button } from '~/components/shared/button'
 import { Input } from '~/components/shared/input'
 import { useDialogStore } from '~/state/use-dialog-store'
-
 import { api } from '~/trpc/react'
-import { type RouterOutputs, type RouterInputs } from '~/trpc/shared'
+import { type RouterInputs, type RouterOutputs } from '~/trpc/shared'
+import { Checkbox } from '../shared/checkbox'
 
 type SetValues = RouterInputs['sets']['createNew']
 type Lift = RouterOutputs['lifts']['getBySlug']
@@ -21,7 +21,8 @@ export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
       date: new Date(),
       reps: 0,
       weight: 0,
-      lift_id: lift?.id
+      lift_id: lift?.id,
+      tracked: false
     }
   })
 
@@ -52,7 +53,8 @@ export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
                 updated_at: new Date(),
                 unit: 'lbs',
                 user_id: session!.user.id,
-                lift: lift!
+                lift: lift!,
+                tracked: Boolean(data.tracked)
               }
             ]
           }
@@ -106,6 +108,7 @@ export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
         type='date'
         step={1}
       />
+      <Checkbox label='Track set' {...register('tracked')} />
 
       <Button type='submit' disabled={submit.isLoading}>
         Add set

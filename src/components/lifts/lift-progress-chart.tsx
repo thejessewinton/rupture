@@ -15,28 +15,16 @@ type LiftProgressChartProps = {
   lift: NonNullable<RouterOutputs['lifts']['getBySlug']>
 }
 
-const CustomTooltip = ({ active }: TooltipProps<ValueType, NameType>) => {
-  if (!active) return null
-
-  return (
-    <div className='rounded border border-neutral-200 bg-neutral-900 px-4 py-2 dark:border-neutral-800'>
-      <p className='label'>Weight</p>
-    </div>
-  )
-}
-
 export const LiftProgressChart = ({ lift }: LiftProgressChartProps) => {
   const { interval } = useDateIntervalStore()
-
-  const liftsByDate = sortBy([...lift.sets], [(s) => s.date, 'desc'])
 
   const dates = getDaysBetween(dayjs().subtract(interval.days, 'days'), dayjs())
 
   const data = dates.map((date) => {
-    const sets = liftsByDate.filter((set) => dayjs(set.date).isSame(dayjs(date), 'day'))
+    const sets = lift.sets.filter((set) => dayjs(set.date).isSame(dayjs(date), 'day') && set.tracked)
     const [setWithHighestWeight] = sortBy(sets, [(s) => s.weight, 'desc'])
 
-    if (!setWithHighestWeight) return { day: dayjs(date).format('MMM, DD'), weight: 0, estimatedMax: 0 }
+    if (!setWithHighestWeight) return { day: dayjs(date).format('MMM, DD'), weight: undefined, estimatedMax: undefined }
 
     const { weight } = setWithHighestWeight
 
@@ -68,6 +56,24 @@ export const LiftProgressChart = ({ lift }: LiftProgressChartProps) => {
           <Bar barSize={4} dataKey='estimatedMax' className='fill-green-700' width={4} />
         </BarChart>
       </ResponsiveContainer>
+    </div>
+  )
+}
+
+type CustomTooltipProps = TooltipProps<ValueType, NameType> & {
+  payload?: Array<{ name: string; value: number }>
+}
+
+const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
+  if (!active) return null
+
+  return (
+    <div className='flex flex-col gap-1 rounded border border-neutral-200 bg-neutral-900 px-4 py-2 dark:border-neutral-800'>
+      {payload?.map((p) => (
+        <div key={p.name}>
+          {p.name === 'estimatedMax' ? 'Estimated max' : 'Weight'}: {p.value}
+        </div>
+      ))}
     </div>
   )
 }

@@ -19,7 +19,8 @@ export const setsRouter = createTRPCRouter({
         reps: z.number(),
         weight: z.number(),
         lift_id: z.number(),
-        date: z.date()
+        date: z.date(),
+        tracked: z.boolean().default(false)
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -28,7 +29,8 @@ export const setsRouter = createTRPCRouter({
         reps: input.reps,
         weight: input.weight,
         lift_id: input.lift_id,
-        date: input.date
+        date: input.date,
+        tracked: input.tracked
       })
     }),
   deleteSet: protectedProcedure

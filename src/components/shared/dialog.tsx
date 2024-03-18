@@ -11,7 +11,7 @@ export const Dialog = () => {
 
   return (
     <DialogPrimitive.Root open={isOpen} onOpenChange={onClose}>
-      <DialogPrimitive.Overlay className='fixed inset-0 bg-black/50 backdrop-blur-sm radix-state-closed:animate-fade-out radix-state-open:animate-fade-in' />
+      <DialogPrimitive.Overlay className='fixed inset-0 z-50 bg-black/50 backdrop-blur-sm radix-state-closed:animate-fade-out radix-state-open:animate-fade-in' />
       <DialogPrimitive.Portal>
         <DialogPrimitive.Content
           className={classNames(
