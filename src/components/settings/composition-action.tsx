@@ -11,13 +11,13 @@ type CompositionValues = RouterInputs['user']['createComposition']
 
 export const CompositionForm = () => {
   const { register, handleSubmit, reset } = useForm<CompositionValues>()
-  const { setDialogOpen } = useDialogStore()
+  const { setIsOpen } = useDialogStore()
 
   const utils = api.useUtils()
   const submit = api.user.createComposition.useMutation({
     onSuccess: async () => {
       reset()
-      setDialogOpen(false)
+      setIsOpen(false)
       await utils.user.getCurrent.invalidate()
     }
   })
@@ -50,14 +50,14 @@ export const CompositionForm = () => {
             <option value='kgs'>kgs</option>
           </Select>
         </div>
-        <Input
-          {...register('body_fat_percentage', { valueAsNumber: true })}
-          label='Body fat percentage'
-          required
-          type='number'
-          step={0.1}
-        />
       </div>
+      <Input
+        {...register('body_fat_percentage', { valueAsNumber: true })}
+        label='Body fat percentage'
+        required
+        type='number'
+        step={0.1}
+      />
       <Button type='submit' disabled={submit.isLoading}>
         {submit.isLoading ? 'Loading' : 'Add'}
       </Button>

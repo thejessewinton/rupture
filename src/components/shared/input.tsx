@@ -1,4 +1,4 @@
-import { forwardRef, type InputHTMLAttributes } from 'react'
+import { forwardRef, type InputHTMLAttributes, type Ref } from 'react'
 
 import { classNames } from '~/utils/core'
 
@@ -8,7 +8,7 @@ type InputProps = {
 } & InputHTMLAttributes<HTMLInputElement>
 
 export const Input = forwardRef(
-  ({ name, className, label, onChange, secondaryLabel, ...rest }: InputProps, ref: React.Ref<HTMLInputElement>) => {
+  ({ name, className, label, onChange, secondaryLabel, ...rest }: InputProps, ref: Ref<HTMLInputElement>) => {
     return (
       <div className={classNames('relative flex flex-col gap-2', className)}>
         {label && (

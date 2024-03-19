@@ -7,14 +7,15 @@ import { useForm } from 'react-hook-form'
 
 import { CompositionForm } from '~/components/settings/composition-action'
 import { Button } from '~/components/shared/button'
-import { Dialog } from '~/components/shared/dialog'
 import { Input } from '~/components/shared/input'
+import { useDialogStore } from '~/state/use-dialog-store'
 import { api } from '~/trpc/react'
 import { type RouterInputs } from '~/trpc/shared'
 
 type ProfileValues = RouterInputs['user']['updateUser']
 
 export default function SettingsPage() {
+  const { handleDialog } = useDialogStore()
   const utils = api.useUtils()
   const { data, isLoading } = api.user.getCurrent.useQuery()
 
@@ -68,11 +69,13 @@ export default function SettingsPage() {
               </li>
             ))}
           </ul>
-          <Dialog
-            title='Add new body composition'
-            trigger={<Button>Add composition</Button>}
-            component={<CompositionForm />}
-          />
+          <Button
+            onClick={() => {
+              handleDialog({ component: <CompositionForm />, title: 'Add composition' })
+            }}
+          >
+            Add composition
+          </Button>
         </div>
       </div>
     </div>

@@ -8,8 +8,7 @@ import { DeleteConfirm } from '~/components/actions/delete-confirm'
 import { LiftProgressChart } from '~/components/lifts/lift-progress-chart'
 import { SetForm } from '~/components/sets/set-form'
 import { Button } from '~/components/shared/button'
-import { Dialog } from '~/components/shared/dialog'
-import { Dropdown, DropdownDialogItem } from '~/components/shared/dropdown'
+import { Dropdown, DropdownItem } from '~/components/shared/dropdown'
 import { Spinner } from '~/components/shared/spinner'
 import SvgEllipsis from '~/components/svg/ellipsis'
 import SvgInformation from '~/components/svg/information'
@@ -26,6 +25,7 @@ type LiftPageParams = {
 
 export default function LiftPage({ params }: LiftPageParams) {
   const lift = api.lifts.getBySlug.useQuery({ slug: params.slug })
+  const { handleDialog } = useDialogStore()
 
   if (lift.isLoading) return <Spinner />
   if (!lift.data) return null
@@ -67,11 +67,14 @@ export default function LiftPage({ params }: LiftPageParams) {
           </div>
         </div>
         <div className='flex items-center gap-2'>
-          <Dialog
-            title={`Add Set to ${lift?.data.name}`}
-            trigger={<Button>Add set</Button>}
-            component={<SetForm lift={lift.data} />}
-          />
+          <Button
+            onClick={() => {
+              handleDialog({ component: <SetForm lift={lift.data} />, title: 'Add lift' })
+            }}
+          >
+            Add set
+          </Button>
+
           <LiftActions lift={lift.data} />
         </div>
       </div>
@@ -84,14 +87,14 @@ export default function LiftPage({ params }: LiftPageParams) {
 type LiftActionsProps = { lift: RouterOutputs['lifts']['getAll'][number] }
 
 const LiftActions = ({ lift }: LiftActionsProps) => {
-  const { setDialogOpen } = useDialogStore()
+  const { handleDialog, setIsOpen } = useDialogStore()
   const router = useRouter()
 
   const utils = api.useUtils()
 
   const deleteLift = api.lifts.deleteLift.useMutation({
     onMutate: (data) => {
-      setDialogOpen(false)
+      setIsOpen(false)
       router.push('/')
       const previousLifts = utils.lifts.getAll.getData()
 
@@ -113,17 +116,24 @@ const LiftActions = ({ lift }: LiftActionsProps) => {
       }
       align='end'
     >
-      <DropdownDialogItem
-        title='Delete lift?'
-        label='Delete lift'
-        className='text-red-900 dark:text-red-500'
-        component={
-          <DeleteConfirm
-            title={`Are you sure you want to delete ${lift.name} and all sets?`}
-            onDelete={() => deleteLift.mutate({ id: lift.id })}
-          />
-        }
-      />
+      <DropdownItem>
+        <button
+          className='text-red-900 dark:text-red-500'
+          onClick={() => {
+            handleDialog({
+              title: 'Delete lift',
+              component: (
+                <DeleteConfirm
+                  title={`Are you sure you want to delete ${lift.name} and all sets?`}
+                  onDelete={() => deleteLift.mutate({ id: lift.id })}
+                />
+              )
+            })
+          }}
+        >
+          Delete lift
+        </button>
+      </DropdownItem>
     </Dropdown>
   )
 }
