@@ -45,9 +45,11 @@ export const userRouter = createTRPCRouter({
         .where(eq(users.id, ctx.session.user.id))
     }),
   createComposition: protectedProcedure
-    .input(z.object({ weight: z.number(), unit: z.enum(units) }))
+    .input(z.object({ weight: z.number(), unit: z.enum(units), body_fat_percentage: z.number() }))
     .mutation(async ({ input, ctx }) => {
-      return await ctx.db.insert(composition).values({ weight: input.weight, user_id: ctx.session.user.id })
+      return await ctx.db
+        .insert(composition)
+        .values({ weight: input.weight, body_fat_percentage: input.body_fat_percentage, user_id: ctx.session.user.id })
     }),
   deleteComposition: protectedProcedure.input(z.object({ id: z.number() })).mutation(async ({ input, ctx }) => {
     return await ctx.db.delete(composition).where(eq(composition.id, input.id))

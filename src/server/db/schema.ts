@@ -64,6 +64,7 @@ export const composition = pgTable('composition', {
     .references(() => users.id, { onDelete: 'cascade' }),
   weight: bigint('weight', { mode: 'number' }).notNull(),
   unit: unitEmum('value').notNull().default('lbs'),
+  body_fat_percentage: bigint('body_fat_percentage', { mode: 'number' }).notNull(),
   created_at: timestamp('created_at', {
     mode: 'date'
   }).default(sql`CURRENT_TIMESTAMP`),

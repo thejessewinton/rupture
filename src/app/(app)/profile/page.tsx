@@ -63,6 +63,7 @@ export default function SettingsPage() {
                 <span>
                   {composition.weight} {composition.unit}.
                 </span>
+                <span>{composition.body_fat_percentage}</span>
                 <span>{dayjs(composition.created_at).format('MM/DD/YY')}</span>
               </li>
             ))}

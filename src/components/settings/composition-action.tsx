@@ -50,6 +50,13 @@ export const CompositionForm = () => {
             <option value='kgs'>kgs</option>
           </Select>
         </div>
+        <Input
+          {...register('body_fat_percentage', { valueAsNumber: true })}
+          label='Body fat percentage'
+          required
+          type='number'
+          step={0.1}
+        />
       </div>
       <Button type='submit' disabled={submit.isLoading}>
         {submit.isLoading ? 'Loading' : 'Add'}

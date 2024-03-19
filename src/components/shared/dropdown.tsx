@@ -62,12 +62,20 @@ type DropdownDialogItemProps = {
 } & DropdownPrimitive.DropdownMenuItemProps
 
 export const DropdownDialogItem = forwardRef(
-  ({ component, title, label, ...props }: DropdownDialogItemProps, ref: Ref<HTMLDivElement>) => {
+  ({ component, title, label, onSelect, ...props }: DropdownDialogItemProps, ref: Ref<HTMLDivElement>) => {
     return (
       <Dialog
         title={title}
         trigger={
-          <DropdownItem ref={ref} {...props} asChild={false}>
+          <DropdownItem
+            ref={ref}
+            onSelect={(event) => {
+              event.preventDefault()
+              onSelect?.(event)
+            }}
+            asChild={false}
+            {...props}
+          >
             {label}
           </DropdownItem>
         }
