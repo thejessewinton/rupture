@@ -1,10 +1,10 @@
 import { create } from 'zustand'
 
 export const intervals = [
-  { label: '7D', days: 6 },
-  { label: '15D', days: 14 },
-  { label: '30D', days: 29 },
-  { label: '1Y', days: 364 }
+  { label: '7D', days: 7 },
+  { label: '15D', days: 15 },
+  { label: '30D', days: 30 },
+  { label: '1Y', days: 365 }
 ] as const
 
 type DateInterval = (typeof intervals)[number]
@@ -17,7 +17,7 @@ interface DateIntervalState {
 export const useDateIntervalStore = create<DateIntervalState>((set) => ({
   interval: {
     label: '7D',
-    days: 6
+    days: 7
   },
   setInterval: (interval) => set({ interval: intervals.find((i) => i.label === interval) })
 }))
