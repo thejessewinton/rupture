@@ -8,7 +8,6 @@ import { Input } from '~/components/shared/input'
 import { useDialogStore } from '~/state/use-dialog-store'
 import { api } from '~/trpc/react'
 import { type RouterInputs, type RouterOutputs } from '~/trpc/shared'
-import { Dialog } from '../shared/dialog'
 
 type SetValues = RouterInputs['sets']['createNew']
 type Lift = RouterOutputs['lifts']['getBySlug']
@@ -85,11 +84,5 @@ export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
         <Checkbox label='Track set' {...register('tracked')} />
       </div>
     </form>
-  )
-}
-
-export const NewSetAction = ({ lift }: { lift: Lift }) => {
-  return (
-    <Dialog title={`Add Set to ${lift?.name}`} trigger={<Button>Add set</Button>} component={<SetForm lift={lift} />} />
   )
 }

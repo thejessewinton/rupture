@@ -62,25 +62,14 @@ type DropdownDialogItemProps = {
 } & DropdownPrimitive.DropdownMenuItemProps
 
 export const DropdownDialogItem = forwardRef(
-  ({ className, component, title, label, onSelect, ...props }: DropdownDialogItemProps, ref: Ref<HTMLDivElement>) => {
+  ({ component, title, label, ...props }: DropdownDialogItemProps, ref: Ref<HTMLDivElement>) => {
     return (
       <Dialog
         title={title}
         trigger={
-          <DropdownPrimitive.Item
-            ref={ref}
-            className={classNames(
-              'flex cursor-pointer rounded px-3 py-1 text-xs text-neutral-800 transition-colors focus:bg-neutral-50 focus:outline-none dark:text-neutral-400 focus:dark:bg-neutral-800',
-              className
-            )}
-            onSelect={(event) => {
-              event.preventDefault()
-              onSelect?.(event)
-            }}
-            {...props}
-          >
+          <DropdownItem ref={ref} {...props} asChild={false}>
             {label}
-          </DropdownPrimitive.Item>
+          </DropdownItem>
         }
         component={component}
       />
