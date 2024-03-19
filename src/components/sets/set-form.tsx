@@ -13,7 +13,7 @@ type SetValues = RouterInputs['sets']['createNew']
 type Lift = RouterOutputs['lifts']['getBySlug']
 
 export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
-  const { setDialogOpen } = useDialogStore()
+  const { setIsOpen } = useDialogStore()
   const { register, handleSubmit } = useForm<SetValues>({
     defaultValues: set ?? {
       date: new Date(),
@@ -29,7 +29,7 @@ export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
   const submit = api.sets.createNew.useMutation({
     onSuccess: async () => {
       await utils.lifts.getBySlug.invalidate({ slug: lift!.slug })
-      setDialogOpen(false)
+      setIsOpen(false)
     },
     onError: (error) => {
       console.error(error)

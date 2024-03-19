@@ -5,7 +5,6 @@ import { forwardRef, type ReactNode, type Ref } from 'react'
 import * as DropdownPrimitive from '@radix-ui/react-dropdown-menu'
 
 import { classNames } from '~/utils/core'
-import { Dialog } from './dialog'
 
 type DropdownProps = {
   trigger: ReactNode

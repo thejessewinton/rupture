@@ -1,5 +1,5 @@
 import { DeleteConfirm } from '~/components/actions/delete-confirm'
-import { Dropdown, DropdownDialogItem } from '~/components/shared/dropdown'
+import { Dropdown, DropdownItem } from '~/components/shared/dropdown'
 import SvgEllipsis from '~/components/svg/ellipsis'
 import { useDialogStore } from '~/state/use-dialog-store'
 import { api } from '~/trpc/react'
@@ -8,7 +8,7 @@ import { type RouterOutputs } from '~/trpc/shared'
 type SetActionsProps = { set: NonNullable<RouterOutputs['lifts']['getBySlug']>['sets'][number] }
 
 export const SetActions = ({ set }: SetActionsProps) => {
-  const { setDialogOpen } = useDialogStore()
+  const { setIsOpen, handleDialog } = useDialogStore()
   const utils = api.useUtils()
 
   const deleteSet = api.sets.deleteSet.useMutation({
@@ -26,7 +26,7 @@ export const SetActions = ({ set }: SetActionsProps) => {
           }
         )
       }
-      setDialogOpen(false)
+      setIsOpen(false)
     },
     onSuccess: async () => {
       await utils.lifts.getBySlug.invalidate({ slug: set.lift!.slug })
@@ -42,17 +42,24 @@ export const SetActions = ({ set }: SetActionsProps) => {
       }
       align='end'
     >
-      <DropdownDialogItem
-        title='Delete set'
-        label='Delete set'
-        className='text-red-900 dark:text-red-500'
-        component={
-          <DeleteConfirm
-            title={`Are you sure you want to delete this set? This action cannot be undone.`}
-            onDelete={() => deleteSet.mutate({ id: set.id })}
-          />
-        }
-      />
+      <DropdownItem>
+        <button
+          className='text-red-900 dark:text-red-500'
+          onClick={() => {
+            handleDialog({
+              title: 'Delete lift',
+              component: (
+                <DeleteConfirm
+                  title={`Are you sure you want to delete this set? This action cannot be undone.`}
+                  onDelete={() => deleteSet.mutate({ id: set.id })}
+                />
+              )
+            })
+          }}
+        >
+          Delete set
+        </button>
+      </DropdownItem>
     </Dropdown>
   )
 }

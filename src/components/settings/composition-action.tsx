@@ -10,13 +10,12 @@ import { type RouterInputs } from '~/trpc/shared'
 type CompositionValues = RouterInputs['user']['createComposition']
 
 export const CompositionForm = () => {
-  const { register, handleSubmit, reset } = useForm<CompositionValues>()
+  const { register, handleSubmit } = useForm<CompositionValues>()
   const { setIsOpen } = useDialogStore()
 
   const utils = api.useUtils()
   const submit = api.user.createComposition.useMutation({
     onSuccess: async () => {
-      reset()
       setIsOpen(false)
       await utils.user.getCurrent.invalidate()
     }

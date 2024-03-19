@@ -12,7 +12,7 @@ import { type RouterInputs } from '~/trpc/shared'
 type NewLiftValues = RouterInputs['lifts']['createNew']
 
 export const LiftForm = ({ lift }: { lift?: NewLiftValues }) => {
-  const { register, handleSubmit, reset } = useForm<NewLiftValues>({
+  const { register, handleSubmit } = useForm<NewLiftValues>({
     defaultValues: lift ?? {
       name: '',
       personal_record: 0,
@@ -20,13 +20,12 @@ export const LiftForm = ({ lift }: { lift?: NewLiftValues }) => {
     }
   })
 
-  const { setDialogOpen } = useDialogStore()
+  const { setIsOpen } = useDialogStore()
   const utils = api.useUtils()
 
   const submit = api.lifts.createNew.useMutation({
     onMutate: async () => {
-      reset()
-      setDialogOpen(false)
+      setIsOpen(false)
     },
     onSuccess: async () => {
       await utils.lifts.getAll.invalidate()
