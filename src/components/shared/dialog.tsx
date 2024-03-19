@@ -13,9 +13,9 @@ type DialogProps = {
 }
 
 export const Dialog = ({ trigger, title, component }: DialogProps) => {
-  const { isOpen, onClose } = useDialogStore()
+  const { isOpen, setDialogOpen } = useDialogStore()
   return (
-    <DialogPrimitive.Root open={isOpen} onOpenChange={onClose}>
+    <DialogPrimitive.Root open={isOpen} onOpenChange={setDialogOpen}>
       <DialogPrimitive.Trigger asChild>{trigger}</DialogPrimitive.Trigger>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className='fixed inset-0 z-50 bg-black/50 backdrop-blur-sm radix-state-closed:animate-fade-out radix-state-open:animate-fade-in' />

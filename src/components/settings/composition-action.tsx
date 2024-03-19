@@ -11,13 +11,13 @@ type CompositionValues = RouterInputs['user']['createComposition']
 
 export const CompositionForm = () => {
   const { register, handleSubmit, reset } = useForm<CompositionValues>()
-  const { handleDialogClose } = useDialogStore()
+  const { setDialogOpen } = useDialogStore()
 
   const utils = api.useUtils()
   const submit = api.user.createComposition.useMutation({
     onSuccess: async () => {
       reset()
-      handleDialogClose()
+      setDialogOpen(false)
       await utils.user.getCurrent.invalidate()
     }
   })

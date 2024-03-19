@@ -84,14 +84,14 @@ export default function LiftPage({ params }: LiftPageParams) {
 type LiftActionsProps = { lift: RouterOutputs['lifts']['getAll'][number] }
 
 const LiftActions = ({ lift }: LiftActionsProps) => {
-  const { handleDialogClose } = useDialogStore()
+  const { setDialogOpen } = useDialogStore()
   const router = useRouter()
 
   const utils = api.useUtils()
 
   const deleteLift = api.lifts.deleteLift.useMutation({
     onMutate: (data) => {
-      handleDialogClose()
+      setDialogOpen(false)
       router.push('/')
       const previousLifts = utils.lifts.getAll.getData()
 

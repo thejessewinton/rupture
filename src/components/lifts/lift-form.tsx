@@ -20,13 +20,13 @@ export const LiftForm = ({ lift }: { lift?: NewLiftValues }) => {
     }
   })
 
-  const { handleDialogClose } = useDialogStore()
+  const { setDialogOpen } = useDialogStore()
   const utils = api.useUtils()
 
   const submit = api.lifts.createNew.useMutation({
     onMutate: async () => {
       reset()
-      handleDialogClose()
+      setDialogOpen(false)
     },
     onSuccess: async () => {
       await utils.lifts.getAll.invalidate()
