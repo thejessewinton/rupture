@@ -72,8 +72,10 @@ export const composition = pgTable('composition', {
   }).default(sql`CURRENT_TIMESTAMP`)
 })
 
-export const compositionRelations = relations(composition, ({ one }) => ({
-  user: one(users, { fields: [composition.user_id], references: [users.id] })
+export const compositionRelations = relations(composition, ({ one, many }) => ({
+  user: one(users, { fields: [composition.user_id], references: [users.id] }),
+  sets: many(set),
+  lifts: many(lift)
 }))
 
 export const accounts = pgTable(
@@ -146,16 +148,19 @@ export const lift = pgTable(
     user_id: varchar('user_id', { length: 255 })
       .notNull()
       .references(() => users.id),
+    composition_id: bigint('composition_id', { mode: 'number' }).references(() => composition.id),
     created_at: timestamp('created_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp('updated_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`)
   },
   (lift) => ({
-    userIdIdx: index('lift_userId_idx').on(lift.user_id)
+    userIdIdx: index('lift_userId_idx').on(lift.user_id),
+    compositionIdIdx: index('lift_compositionId_idx').on(lift.composition_id)
   })
 )
 
 export const liftRelations = relations(lift, ({ one, many }) => ({
   user: one(users, { fields: [lift.user_id], references: [users.id] }),
+  composition: one(composition, { fields: [lift.composition_id], references: [composition.id] }),
   sets: many(set)
 }))
 
@@ -187,7 +192,7 @@ export const set = pgTable(
   (set) => ({
     userIdIdx: index('set_userId_idx').on(set.user_id),
     liftIdIdx: index('set_liftId_idx').on(set.lift_id),
-    compositionIdIdx: index('lift_compositionId_idx').on(set.composition_id)
+    compositionIdIdx: index('set_compositionId_idx').on(set.composition_id)
   })
 )
 
@@ -196,3 +201,9 @@ export const setRelations = relations(set, ({ one }) => ({
   lift: one(lift, { fields: [set.lift_id], references: [lift.id] }),
   composition: one(composition, { fields: [set.composition_id], references: [composition.id] })
 }))
+
+export const waitlist = pgTable('waitlist', {
+  id: serial('id').primaryKey(),
+  email: varchar('email', { length: 255 }).notNull(),
+  created_at: timestamp('created_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`)
+})
