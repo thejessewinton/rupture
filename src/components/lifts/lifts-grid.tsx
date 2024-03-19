@@ -1,11 +1,8 @@
 'use client'
 
-import { useDialogStore } from '~/state/use-dialog-store'
+import { EmptyState } from '~/components/actions/empty-state'
+import { LiftCard } from '~/components/lifts/lift-card'
 import { api } from '~/trpc/react'
-import { EmptyState } from '../actions/empty-state'
-import { Button } from '../shared/button'
-import { LiftCard } from './lift-card'
-import { LiftForm } from './lift-form'
 
 export const LiftsGrid = () => {
   const lifts = api.lifts.getAll.useQuery()
@@ -26,21 +23,5 @@ export const LiftsGrid = () => {
         </div>
       )}
     </>
-  )
-}
-
-export const NewLiftAction = () => {
-  const { handleDialog } = useDialogStore()
-  return (
-    <Button
-      onClick={() => {
-        handleDialog({
-          title: 'Add lift',
-          component: <LiftForm />
-        })
-      }}
-    >
-      Add lift
-    </Button>
   )
 }

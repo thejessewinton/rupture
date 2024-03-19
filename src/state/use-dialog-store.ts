@@ -4,7 +4,7 @@ import { create } from 'zustand'
 
 type DialogState = {
   isOpen: boolean
-  onClose: () => void
+  onClose: (value: boolean) => void
   trigger: ReactNode
   component: ReactNode
   title: string | null
@@ -14,7 +14,7 @@ type DialogState = {
 
 export const useDialogStore = create<DialogState>((set) => ({
   isOpen: false,
-  onClose: () => set(() => ({ isOpen: false })),
+  onClose: (value) => set(() => ({ isOpen: value })),
   trigger: null,
   component: null,
   title: null,

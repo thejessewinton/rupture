@@ -8,6 +8,7 @@ import { Input } from '~/components/shared/input'
 import { useDialogStore } from '~/state/use-dialog-store'
 import { api } from '~/trpc/react'
 import { type RouterInputs, type RouterOutputs } from '~/trpc/shared'
+import { Dialog } from '../shared/dialog-v2'
 
 type SetValues = RouterInputs['sets']['createNew']
 type Lift = RouterOutputs['lifts']['getBySlug']
@@ -88,17 +89,7 @@ export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
 }
 
 export const NewSetAction = ({ lift }: { lift: Lift }) => {
-  const { handleDialog } = useDialogStore()
   return (
-    <Button
-      onClick={() => {
-        handleDialog({
-          title: `Add Set to ${lift?.name}`,
-          component: <SetForm lift={lift} />
-        })
-      }}
-    >
-      Add set
-    </Button>
+    <Dialog title={`Add Set to ${lift?.name}`} trigger={<Button>Add set</Button>} component={<SetForm lift={lift} />} />
   )
 }
