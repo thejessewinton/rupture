@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import { Actions } from '~/components/layout/actions'
 import { Navigation } from '~/components/layout/navigation'
-import { auth, signOut } from '~/server/auth'
+import { auth } from '~/server/auth'
 
 export const Header = async () => {
   const session = await auth()
@@ -14,13 +14,7 @@ export const Header = async () => {
           <Link href='/'>Rupture</Link>
 
           <div className='flex items-center gap-2'>
-            <Actions
-              session={session!}
-              signOut={async () => {
-                'use server'
-                await signOut()
-              }}
-            />
+            <Actions session={session!} />
           </div>
         </div>
         <Navigation />

@@ -1,4 +1,4 @@
-import { type ComponentPropsWithRef, type ReactNode } from 'react'
+import { forwardRef, type ComponentPropsWithRef, type ReactNode, type Ref } from 'react'
 import Link, { type LinkProps } from 'next/link'
 
 import { cva, type VariantProps } from 'cva'
@@ -25,27 +25,32 @@ type ButtonProps =
   | ({ href?: never; icon?: ReactNode; disabled?: boolean } & ComponentPropsWithRef<'button'>)
   | ({ href: string; icon?: ReactNode; disabled?: boolean } & ComponentPropsWithRef<'a'> & LinkProps<string>)
 
-export const Button = ({
-  children,
-  icon,
-  className,
-  variant,
-  disabled,
-  ...props
-}: ButtonProps & VariantProps<typeof button>) => {
-  if (props.href === undefined) {
+export const Button = forwardRef(
+  (
+    { children, icon, className, variant, disabled, ...props }: ButtonProps & VariantProps<typeof button>,
+    ref: Ref<HTMLButtonElement | HTMLAnchorElement>
+  ) => {
+    if (props.href === undefined) {
+      return (
+        <button
+          className={classNames(button({ variant, className }))}
+          disabled={disabled}
+          ref={ref as Ref<HTMLButtonElement>}
+          {...props}
+        >
+          {icon ? icon : null}
+          {children}
+        </button>
+      )
+    }
+
     return (
-      <button className={classNames(button({ variant, className }))} disabled={disabled} {...props}>
+      <Link className={classNames(button({ variant, className }))} ref={ref as Ref<HTMLAnchorElement>} {...props}>
         {icon ? icon : null}
         {children}
-      </button>
+      </Link>
     )
   }
+)
 
-  return (
-    <Link className={classNames(button({ variant, className }))} {...props}>
-      {icon ? icon : null}
-      {children}
-    </Link>
-  )
-}
+Button.displayName = 'Button'

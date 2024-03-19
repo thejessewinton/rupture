@@ -3,17 +3,17 @@
 import Link from 'next/link'
 
 import { type Session } from 'next-auth'
+import { signOut } from 'next-auth/react'
 
-import { Dropdown, Item } from '~/components/shared/dropdown'
+import { Dropdown, DropdownItem } from '~/components/shared/dropdown'
 import { ThemeSwitcher } from '~/components/shared/theme-switcher'
 import { getFirstInitial } from '~/utils/core'
 
 type ActionsProps = {
   session: Session
-  signOut: () => Promise<void>
 }
 
-export const Actions = ({ session, signOut }: ActionsProps) => {
+export const Actions = ({ session }: ActionsProps) => {
   return (
     <div className='z-40 text-neutral-900 dark:text-white'>
       <div className='mx-auto'>
@@ -27,16 +27,16 @@ export const Actions = ({ session, signOut }: ActionsProps) => {
               }
               align='end'
             >
-              <Item>
+              <DropdownItem>
                 <Link href='/profile' className='w-full'>
                   Profile
                 </Link>
-              </Item>
-              <Item>
-                <button formAction={signOut} className='w-full text-left'>
+              </DropdownItem>
+              <DropdownItem>
+                <button onClick={() => signOut()} className='w-full text-left'>
                   Log out
                 </button>
-              </Item>
+              </DropdownItem>
               <ThemeSwitcher />
             </Dropdown>
           </div>

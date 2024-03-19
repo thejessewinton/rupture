@@ -1,5 +1,5 @@
 import { DeleteConfirm } from '~/components/actions/delete-confirm'
-import { Dropdown, Item } from '~/components/shared/dropdown'
+import { Dropdown, DropdownItem } from '~/components/shared/dropdown'
 import SvgEllipsis from '~/components/svg/ellipsis'
 import { useDialogStore } from '~/state/use-dialog-store'
 import { api } from '~/trpc/react'
@@ -42,7 +42,7 @@ export const SetActions = ({ set }: SetActionsProps) => {
       }
       align='end'
     >
-      <Item>
+      <DropdownItem>
         <button
           className='text-red-900 dark:text-red-500'
           onClick={() => {
@@ -59,7 +59,7 @@ export const SetActions = ({ set }: SetActionsProps) => {
         >
           Delete set
         </button>
-      </Item>
+      </DropdownItem>
     </Dropdown>
   )
 }

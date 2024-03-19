@@ -16,6 +16,8 @@ export default {
       animation: {
         'scale-in-content': 'scale-in-content 0.2s ease',
         'scale-out-content': 'scale-out-content 0.2s ease',
+        'scale-in-dialog': 'scale-in-dialog 0.2s ease',
+        'scale-out-dialog': 'scale-out-dialog 0.2s ease',
         'fade-in': 'fade-in 0.2s ease',
         'fade-out': 'fade-out 0.2s ease'
       },
@@ -26,7 +28,15 @@ export default {
         },
         'scale-out-content': {
           '0%': { transform: 'rotateX(0deg) scale(1)', opacity: '1' },
-          '100%': { transform: 'rotateX(-10deg) scale(0.95)', opacity: '0' }
+          '100%': { transform: 'rotateX(-10deg) scale(0.9)', opacity: '0' }
+        },
+        'scale-in-dialog': {
+          '0%': { transform: 'translate(-50%, -48%) scale(0.9)', opacity: '0' },
+          '100%': { transform: 'translate(-50%, -50%) scale(1)', opacity: '1' }
+        },
+        'scale-out-dialog': {
+          '0%': { transform: 'translate(-50%, -50%) scale(1)', opacity: '1' },
+          '100%': { transform: 'translate(-50%, -48%) scale(0.9)', opacity: '0' }
         },
         'fade-in': {
           '0%': { opacity: '0' },
