@@ -3,7 +3,7 @@
 import { LiftForm } from '~/components/lifts/lift-form'
 import { LiftsGrid } from '~/components/lifts/lifts-grid'
 import { Button } from '~/components/shared/button'
-import { Dialog } from '~/components/shared/dialog-v2'
+import { Dialog } from '~/components/shared/dialog'
 
 export default function LiftsPage() {
   return (

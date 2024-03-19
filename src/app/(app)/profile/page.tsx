@@ -5,8 +5,9 @@ import { useEffect } from 'react'
 import dayjs from 'dayjs'
 import { useForm } from 'react-hook-form'
 
-import { CompositionAction } from '~/components/settings/composition-action'
+import { CompositionForm } from '~/components/settings/composition-action'
 import { Button } from '~/components/shared/button'
+import { Dialog } from '~/components/shared/dialog'
 import { Input } from '~/components/shared/input'
 import { api } from '~/trpc/react'
 import { type RouterInputs } from '~/trpc/shared'
@@ -66,7 +67,11 @@ export default function SettingsPage() {
               </li>
             ))}
           </ul>
-          <CompositionAction />
+          <Dialog
+            title='Add new body composition'
+            trigger={<Button>Add composition</Button>}
+            component={<CompositionForm />}
+          />
         </div>
       </div>
     </div>

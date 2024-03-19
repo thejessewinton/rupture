@@ -9,7 +9,7 @@ import { type RouterInputs } from '~/trpc/shared'
 
 type CompositionValues = RouterInputs['user']['createComposition']
 
-const CompositionForm = () => {
+export const CompositionForm = () => {
   const { register, handleSubmit, reset } = useForm<CompositionValues>()
   const { handleDialogClose } = useDialogStore()
 
@@ -55,22 +55,5 @@ const CompositionForm = () => {
         {submit.isLoading ? 'Loading' : 'Add'}
       </Button>
     </form>
-  )
-}
-
-export const CompositionAction = () => {
-  const { handleDialog } = useDialogStore()
-
-  return (
-    <Button
-      onClick={() => {
-        handleDialog({
-          title: 'Add new body composition',
-          component: <CompositionForm />
-        })
-      }}
-    >
-      Add composition
-    </Button>
   )
 }
