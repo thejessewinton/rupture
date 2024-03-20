@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, ReactNode } from 'react'
+import type { InputHTMLAttributes, ReactNode, Ref } from 'react'
 import { forwardRef } from 'react'
 
 interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -6,7 +6,7 @@ interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ label, ...rest }: CheckboxProps, ref: React.Ref<HTMLInputElement>) => {
+  ({ label, ...rest }: CheckboxProps, ref: Ref<HTMLInputElement>) => {
     return (
       <label className='flex items-center space-x-2 text-2xs font-light'>
         <input

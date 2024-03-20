@@ -7,7 +7,7 @@ import { type NameType, type ValueType } from 'recharts/types/component/DefaultT
 import { IntervalSwitcher } from '~/components/lifts/interval-switcher'
 import { useDateIntervalStore } from '~/state/use-date-interval-store'
 import { type RouterOutputs } from '~/trpc/shared'
-import { estimatedMax } from '~/utils/core'
+import { getEstimatedMax } from '~/utils/core'
 import { getDaysBetween } from '~/utils/date'
 
 type LiftProgressChartProps = {
@@ -30,7 +30,7 @@ export const LiftProgressChart = ({ lift }: LiftProgressChartProps) => {
     return {
       day: dayjs(date).format('MMM, DD'),
       weight,
-      estimatedMax: estimatedMax({ weight, reps })
+      estimatedMax: getEstimatedMax({ weight, reps })
     }
   })
 

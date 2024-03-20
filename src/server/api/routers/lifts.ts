@@ -1,7 +1,7 @@
 import { and, desc, eq } from 'drizzle-orm'
 import { z } from 'zod'
 
-import { lift, set, units } from '~/server/db/schema'
+import { compositions, lift, set, units } from '~/server/db/schema'
 import { slugify } from '~/utils/core'
 import { createTRPCRouter, protectedProcedure } from '../trpc'
 
@@ -26,11 +26,19 @@ export const liftsRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.insert(lift).values({
-        name: input.name,
-        user_id: ctx.session.user.id,
-        personal_record: input.personal_record,
-        slug: slugify(input.name)
+      await ctx.db.transaction(async (db) => {
+        const [latestComposition] = await db.query.compositions.findMany({
+          where: eq(compositions.user_id, ctx.session.user.id),
+          orderBy: [desc(compositions.created_at)]
+        })
+
+        return await db.insert(lift).values({
+          name: input.name,
+          user_id: ctx.session.user.id,
+          personal_record: input.personal_record,
+          slug: slugify(input.name),
+          composition_id: latestComposition?.id
+        })
       })
     }),
   getBySlug: protectedProcedure.input(z.object({ slug: z.string() })).query(async ({ ctx, input }) => {
@@ -44,6 +52,11 @@ export const liftsRouter = createTRPCRouter({
                 slug: true
               }
             }
+          }
+        },
+        compositions: {
+          columns: {
+            weight: true
           }
         }
       }

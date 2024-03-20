@@ -1,9 +1,11 @@
 import '~/styles/globals.css'
 
+import { type ReactNode } from 'react'
 import { type Metadata } from 'next'
 import { Inter, Roboto_Mono } from 'next/font/google'
 import { cookies } from 'next/headers'
 
+import { Dialog } from '~/components/shared/dialog'
 import { HotkeysProvider } from '~/providers/hotkeys'
 import { SessionProvider } from '~/providers/session'
 import { ThemeProvider } from '~/providers/theme'
@@ -30,7 +32,7 @@ const monoFont = Roboto_Mono({
   subsets: ['latin']
 })
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={classNames('bg-white font-sans dark:bg-neutral-900', sansFont.variable, monoFont.variable)}>
@@ -39,6 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <TRPCReactProvider cookies={cookies().toString()}>
               <main className='flex min-h-screen w-full flex-row'>{children}</main>
               <HotkeysProvider />
+              <Dialog />
             </TRPCReactProvider>
           </ThemeProvider>
         </SessionProvider>

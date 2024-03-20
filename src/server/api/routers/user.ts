@@ -3,16 +3,16 @@ import { desc, eq } from 'drizzle-orm'
 import { z } from 'zod'
 
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc'
-import { composition, unit, units, users } from '~/server/db/schema'
+import { compositions, unit, units, users } from '~/server/db/schema'
 
 export const userRouter = createTRPCRouter({
   getCurrent: protectedProcedure.query(({ ctx }) => {
     return ctx.db.query.users.findFirst({
       where: eq(users.id, ctx.session.user.id),
       with: {
-        composition: {
+        compositions: {
           limit: 5,
-          orderBy: [desc(composition.created_at)]
+          orderBy: [desc(compositions.created_at)]
         }
       }
     })
@@ -45,12 +45,14 @@ export const userRouter = createTRPCRouter({
         .where(eq(users.id, ctx.session.user.id))
     }),
   createComposition: protectedProcedure
-    .input(z.object({ weight: z.number(), unit: z.enum(units) }))
+    .input(z.object({ weight: z.number(), unit: z.enum(units), body_fat_percentage: z.number() }))
     .mutation(async ({ input, ctx }) => {
-      return await ctx.db.insert(composition).values({ weight: input.weight, user_id: ctx.session.user.id })
+      return await ctx.db
+        .insert(compositions)
+        .values({ weight: input.weight, body_fat_percentage: input.body_fat_percentage, user_id: ctx.session.user.id })
     }),
   deleteComposition: protectedProcedure.input(z.object({ id: z.number() })).mutation(async ({ input, ctx }) => {
-    return await ctx.db.delete(composition).where(eq(composition.id, input.id))
+    return await ctx.db.delete(compositions).where(eq(compositions.id, input.id))
   }),
   getWeightUnit: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.query.unit.findFirst({

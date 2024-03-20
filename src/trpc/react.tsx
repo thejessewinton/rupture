@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { loggerLink, unstable_httpBatchStreamLink } from '@trpc/client'
@@ -11,7 +11,7 @@ import { getUrl, transformer } from '~/trpc/shared'
 
 export const api = createTRPCReact<AppRouter>()
 
-export function TRPCReactProvider(props: { children: React.ReactNode; cookies: string }) {
+export function TRPCReactProvider(props: { children: ReactNode; cookies: string }) {
   const [queryClient] = useState(() => new QueryClient())
 
   const [trpcClient] = useState(() =>

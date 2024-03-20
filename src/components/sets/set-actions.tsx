@@ -8,7 +8,7 @@ import { type RouterOutputs } from '~/trpc/shared'
 type SetActionsProps = { set: NonNullable<RouterOutputs['lifts']['getBySlug']>['sets'][number] }
 
 export const SetActions = ({ set }: SetActionsProps) => {
-  const { handleDialog, handleDialogClose } = useDialogStore()
+  const { setIsOpen, handleDialog } = useDialogStore()
   const utils = api.useUtils()
 
   const deleteSet = api.sets.deleteSet.useMutation({
@@ -26,7 +26,7 @@ export const SetActions = ({ set }: SetActionsProps) => {
           }
         )
       }
-      handleDialogClose()
+      setIsOpen(false)
     },
     onSuccess: async () => {
       await utils.lifts.getBySlug.invalidate({ slug: set.lift!.slug })
@@ -47,7 +47,7 @@ export const SetActions = ({ set }: SetActionsProps) => {
           className='text-red-900 dark:text-red-500'
           onClick={() => {
             handleDialog({
-              title: 'Delete set',
+              title: 'Delete lift',
               component: (
                 <DeleteConfirm
                   title={`Are you sure you want to delete this set? This action cannot be undone.`}

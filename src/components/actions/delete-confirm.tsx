@@ -7,7 +7,7 @@ type DeleteConfirmProps = {
 }
 
 export const DeleteConfirm = ({ title, onDelete }: DeleteConfirmProps) => {
-  const { handleDialogClose } = useDialogStore()
+  const { setIsOpen } = useDialogStore()
 
   return (
     <div className='mt-8 space-y-12'>
@@ -16,7 +16,7 @@ export const DeleteConfirm = ({ title, onDelete }: DeleteConfirmProps) => {
         <Button onClick={onDelete} variant='danger'>
           Delete
         </Button>
-        <Button onClick={handleDialogClose}>Cancel</Button>
+        <Button onClick={() => setIsOpen(false)}>Cancel</Button>
       </div>
     </div>
   )
