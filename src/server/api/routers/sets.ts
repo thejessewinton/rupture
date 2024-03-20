@@ -1,7 +1,7 @@
 import { desc, eq } from 'drizzle-orm'
 import { z } from 'zod'
 
-import { composition, lift, set } from '~/server/db/schema'
+import { compositions, lift, set } from '~/server/db/schema'
 import { createTRPCRouter, protectedProcedure } from '../trpc'
 
 export const setsRouter = createTRPCRouter({
@@ -27,8 +27,8 @@ export const setsRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       await ctx.db.transaction(async (db) => {
         const [latestComposition] = await db.query.composition.findMany({
-          where: eq(composition.user_id, ctx.session.user.id),
-          orderBy: [desc(composition.created_at)]
+          where: eq(compositions.user_id, ctx.session.user.id),
+          orderBy: [desc(compositions.created_at)]
         })
 
         return await db.insert(set).values({

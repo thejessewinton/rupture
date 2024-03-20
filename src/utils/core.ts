@@ -35,16 +35,14 @@ export const calculateWeight = ({
   return unit === convertTo ? weight : unit === 'lbs' ? weight * 0.453592 : weight / 0.453592
 }
 
-export const estimatedMax = (set: { reps: number; weight: number }) => {
+export const getEstimatedMax = (set: { reps: number; weight: number }) => {
   if (set.reps <= 0) {
     return 0
   }
 
-  const estimatedMax = set.weight * set.reps * 0.0333 + set.weight
-
-  return Math.round(estimatedMax)
+  return Math.round(set.weight * set.reps * 0.0333 + set.weight)
 }
 
-export const getHeaviestSet = (sets: RouterOutputs['lifts']['getAll'][number]['sets']) => {
-  return sets.reduce((prev, current) => (prev.weight > current.weight ? prev : current)).weight
+export const getLiftPercentageOfBodyWeight = ({ weight, lift }: { weight: number; lift: number }) => {
+  return Math.round((lift / weight) * 100)
 }

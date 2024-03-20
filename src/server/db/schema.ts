@@ -30,7 +30,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   sessions: many(sessions),
   unit: one(unit, { fields: [users.id], references: [unit.user_id] }),
   lifts: many(lift),
-  composition: many(composition),
+  compositions: many(compositions),
   sets: many(set)
 }))
 
@@ -57,7 +57,7 @@ export const unitRelations = relations(unit, ({ one }) => ({
   user: one(users, { fields: [unit.user_id], references: [users.id] })
 }))
 
-export const composition = pgTable('composition', {
+export const compositions = pgTable('compositions', {
   id: serial('id').primaryKey(),
   user_id: varchar('user_id', { length: 255 })
     .notNull()
@@ -73,8 +73,8 @@ export const composition = pgTable('composition', {
   }).default(sql`CURRENT_TIMESTAMP`)
 })
 
-export const compositionRelations = relations(composition, ({ one, many }) => ({
-  user: one(users, { fields: [composition.user_id], references: [users.id] }),
+export const compositionRelations = relations(compositions, ({ one, many }) => ({
+  user: one(users, { fields: [compositions.user_id], references: [users.id] }),
   sets: many(set),
   lifts: many(lift)
 }))
@@ -149,7 +149,7 @@ export const lift = pgTable(
     user_id: varchar('user_id', { length: 255 })
       .notNull()
       .references(() => users.id),
-    composition_id: bigint('composition_id', { mode: 'number' }).references(() => composition.id),
+    composition_id: bigint('composition_id', { mode: 'number' }).references(() => compositions.id),
     created_at: timestamp('created_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp('updated_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`)
   },
@@ -161,7 +161,7 @@ export const lift = pgTable(
 
 export const liftRelations = relations(lift, ({ one, many }) => ({
   user: one(users, { fields: [lift.user_id], references: [users.id] }),
-  composition: one(composition, { fields: [lift.composition_id], references: [composition.id] }),
+  compositions: one(compositions, { fields: [lift.composition_id], references: [compositions.id] }),
   sets: many(set)
 }))
 
@@ -188,7 +188,7 @@ export const set = pgTable(
     created_at: timestamp('created_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp('updated_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`),
     lift_id: bigint('lift_id', { mode: 'number' }).references(() => lift.id, { onDelete: 'cascade' }),
-    composition_id: bigint('composition_id', { mode: 'number' }).references(() => composition.id)
+    composition_id: bigint('composition_id', { mode: 'number' }).references(() => compositions.id)
   },
   (set) => ({
     userIdIdx: index('set_userId_idx').on(set.user_id),
@@ -200,7 +200,7 @@ export const set = pgTable(
 export const setRelations = relations(set, ({ one }) => ({
   user: one(users, { fields: [set.user_id], references: [users.id] }),
   lift: one(lift, { fields: [set.lift_id], references: [lift.id] }),
-  composition: one(composition, { fields: [set.composition_id], references: [composition.id] })
+  compositions: one(compositions, { fields: [set.composition_id], references: [compositions.id] })
 }))
 
 export const waitlist = pgTable('waitlist', {

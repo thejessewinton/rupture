@@ -15,7 +15,7 @@ import SvgInformation from '~/components/svg/information'
 import { useDialogStore } from '~/state/use-dialog-store'
 import { api } from '~/trpc/react'
 import { type RouterOutputs } from '~/trpc/shared'
-import { estimatedMax } from '~/utils/core'
+import { getEstimatedMax, getLiftPercentageOfBodyWeight } from '~/utils/core'
 
 type LiftPageParams = {
   params: {
@@ -39,10 +39,17 @@ export default function LiftPage({ params }: LiftPageParams) {
           <h1 className='text-xl'>{lift.data.name}</h1>
           <div className='flex items-center gap-3 text-xs text-neutral-800 dark:text-neutral-200'>
             Current 1RM:{' '}
-            {estimatedMax({
+            {getEstimatedMax({
               weight: latestSet?.weight ?? 0,
               reps: latestSet?.reps ?? 0
             })}
+            <span>
+              {getLiftPercentageOfBodyWeight({
+                lift: lift.data.personal_record,
+                weight: lift.data.compositions?.weight ?? 0
+              })}
+              % of body weight
+            </span>
             <Tooltip.Provider>
               <Tooltip.Root delayDuration={100}>
                 <Tooltip.Trigger>
@@ -55,6 +62,7 @@ export default function LiftPage({ params }: LiftPageParams) {
                     align='center'
                     className='radix-state-closed:animate-scale-out-content radix-state-delayed-open:animate-scale-in-content'
                   >
+                    <Tooltip.Arrow className='fill-neutral-100 dark:fill-neutral-800' />
                     <div className='rounded bg-neutral-100 p-2 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200'>
                       <p className='text-xs'>
                         Based on your latest set of {latestSet?.weight}x{latestSet?.reps}
