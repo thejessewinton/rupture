@@ -26,7 +26,7 @@ export const setsRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       await ctx.db.transaction(async (db) => {
-        const [latestComposition] = await db.query.composition.findMany({
+        const [latestComposition] = await db.query.compositions.findMany({
           where: eq(compositions.user_id, ctx.session.user.id),
           orderBy: [desc(compositions.created_at)]
         })
