@@ -32,24 +32,24 @@ export default function LiftPage({ params }: LiftPageParams) {
 
   const [latestSet] = lift.data.sets
 
+  const currentMax = getEstimatedMax({
+    weight: latestSet?.weight ?? 0,
+    reps: latestSet?.reps ?? 0
+  })
+
+  const currentPercentageofBodyWeight = getLiftPercentageOfBodyWeight({
+    lift: currentMax,
+    weight: lift.data.compositions?.weight ?? 0
+  })
+
   return (
     <>
       <div className='flex items-center justify-between pb-4'>
         <div>
           <h1 className='text-xl'>{lift.data.name}</h1>
           <div className='flex items-center gap-3 text-xs text-neutral-800 dark:text-neutral-200'>
-            Current 1RM:{' '}
-            {getEstimatedMax({
-              weight: latestSet?.weight ?? 0,
-              reps: latestSet?.reps ?? 0
-            })}
-            <span>
-              {getLiftPercentageOfBodyWeight({
-                lift: lift.data.personal_record,
-                weight: lift.data.compositions?.weight ?? 0
-              })}
-              % of body weight
-            </span>
+            Current 1RM: {currentMax} lbs.
+            <span>{currentPercentageofBodyWeight}% of body weight</span>
             <Tooltip.Provider>
               <Tooltip.Root delayDuration={100}>
                 <Tooltip.Trigger>

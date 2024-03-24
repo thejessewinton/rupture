@@ -2,13 +2,12 @@
 
 import { type Route } from 'next'
 import Link from 'next/link'
-import { usePathname, useSelectedLayoutSegment } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
 import { classNames } from '~/utils/core'
 
 export const Navigation = () => {
   const pathname = usePathname()
-  const selectedSegment = useSelectedLayoutSegment()
 
   const items: Array<{
     label: string
@@ -29,7 +28,7 @@ export const Navigation = () => {
             href={item.href}
             key={item.href}
             className={classNames('border-b border-transparent px-3 pb-2 pt-1 transition-all', {
-              'border-neutral-500': selectedSegment?.includes(item.href) ?? pathname === item.href
+              'border-neutral-500': pathname === item.href
             })}
           >
             {item.label}
