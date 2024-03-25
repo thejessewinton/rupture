@@ -9,7 +9,6 @@ import { useDateIntervalStore } from '~/state/use-date-interval-store'
 import { type RouterOutputs } from '~/trpc/shared'
 import { getEstimatedMax, getLiftPercentageOfBodyWeight } from '~/utils/core'
 import { getDaysBetween } from '~/utils/date'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../shared/table'
 
 type LiftProgressChartProps = {
   lift: NonNullable<RouterOutputs['lifts']['getBySlug']>
