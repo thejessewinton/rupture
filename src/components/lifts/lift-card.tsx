@@ -12,7 +12,7 @@ type LiftCardProps = {
 }
 
 export const LiftCard = ({ lift }: LiftCardProps) => {
-  const dates = getDaysBetween(dayjs().subtract(7, 'days'), dayjs())
+  const dates = getDaysBetween(dayjs().subtract(30, 'days'), dayjs())
 
   const data = dates.map((date) => {
     const sets = lift.sets.filter((set) => dayjs(set.date).isSame(dayjs(date), 'day'))

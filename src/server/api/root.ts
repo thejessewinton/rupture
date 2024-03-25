@@ -1,4 +1,5 @@
 import { liftsRouter } from '~/server/api/routers/lifts'
+import { marketingRouter } from '~/server/api/routers/marketing'
 import { setsRouter } from '~/server/api/routers/sets'
 import { userRouter } from '~/server/api/routers/user'
 import { createTRPCRouter } from '~/server/api/trpc'
@@ -11,7 +12,8 @@ import { createTRPCRouter } from '~/server/api/trpc'
 export const appRouter = createTRPCRouter({
   user: userRouter,
   lifts: liftsRouter,
-  sets: setsRouter
+  sets: setsRouter,
+  marketing: marketingRouter
 })
 
 // export type definition of API

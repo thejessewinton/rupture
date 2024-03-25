@@ -35,7 +35,7 @@ const monoFont = Roboto_Mono({
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={classNames('bg-white font-sans dark:bg-neutral-900', sansFont.variable, monoFont.variable)}>
+      <body className={`bg-white font-sans dark:bg-neutral-900 ${sansFont.variable} ${monoFont.variable}`}>
         <SessionProvider>
           <ThemeProvider attribute='class'>
             <TRPCReactProvider cookies={cookies().toString()}>
