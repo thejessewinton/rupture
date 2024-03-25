@@ -10,7 +10,6 @@ import { HotkeysProvider } from '~/providers/hotkeys'
 import { SessionProvider } from '~/providers/session'
 import { ThemeProvider } from '~/providers/theme'
 import { TRPCReactProvider } from '~/trpc/react'
-import { classNames } from '~/utils/core'
 
 export const metadata: Metadata = {
   title: {
@@ -35,7 +34,9 @@ const monoFont = Roboto_Mono({
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={`bg-white font-sans dark:bg-neutral-900 ${sansFont.variable} ${monoFont.variable}`}>
+      <body
+        className={`bg-white bg-noise font-sans bg-blend-multiply dark:bg-neutral-900 ${sansFont.variable} ${monoFont.variable}`}
+      >
         <SessionProvider>
           <ThemeProvider attribute='class'>
             <TRPCReactProvider cookies={cookies().toString()}>

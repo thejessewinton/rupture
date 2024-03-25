@@ -16,7 +16,7 @@ export const LiftsGrid = () => {
           <p className='text-sm font-light text-gray-400'>{`You don't have any lifts yet.`}</p>
         </EmptyState>
       ) : (
-        <div className='grid grid-cols-3 gap-4'>
+        <div className='grid gap-4'>
           {lifts.data.map((lift) => (
             <LiftCard key={lift.id} lift={lift} />
           ))}

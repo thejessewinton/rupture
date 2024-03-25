@@ -7,8 +7,9 @@ import { type NameType, type ValueType } from 'recharts/types/component/DefaultT
 import { IntervalSwitcher } from '~/components/lifts/interval-switcher'
 import { useDateIntervalStore } from '~/state/use-date-interval-store'
 import { type RouterOutputs } from '~/trpc/shared'
-import { getEstimatedMax } from '~/utils/core'
+import { getEstimatedMax, getLiftPercentageOfBodyWeight } from '~/utils/core'
 import { getDaysBetween } from '~/utils/date'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../shared/table'
 
 type LiftProgressChartProps = {
   lift: NonNullable<RouterOutputs['lifts']['getBySlug']>
@@ -46,7 +47,7 @@ export const LiftProgressChart = ({ lift }: LiftProgressChartProps) => {
           <IntervalSwitcher />
         </div>
       </div>
-      <ResponsiveContainer className='relative h-full min-h-80'>
+      <ResponsiveContainer className='relative h-full min-h-52'>
         <BarChart data={data} className='text-xs'>
           <XAxis tickLine={false} dataKey='day' />
           <YAxis tickLine={false} orientation='right' />
@@ -73,6 +74,39 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
           {p.name === 'estimatedMax' ? 'Estimated max' : 'Weight'}: {p.value}
         </div>
       ))}
+    </div>
+  )
+}
+
+type LiftsDataTableProps = {
+  lift: RouterOutputs['lifts']['getBySlug']
+}
+
+export const LiftDataTable = ({ lift }: LiftsDataTableProps) => {
+  if (!lift) return null
+
+  const currentPercentageofBodyWeight = getLiftPercentageOfBodyWeight({
+    lift: lift.personal_record,
+    weight: lift.compositions?.weight ?? 0
+  })
+
+  return (
+    <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+      <div className='relative w-full space-y-4 rounded-md border border-neutral-200 p-8 dark:border-neutral-800'>
+        <div>
+          <h2 className='text-neutral-800 dark:text-neutral-500'>Current max</h2>
+          <span className='text-4xl dark:text-white'>
+            {lift.personal_record} {lift.unit}.
+          </span>
+        </div>
+      </div>
+
+      <div className='relative w-full space-y-4 rounded-md border border-neutral-200 p-8 dark:border-neutral-800'>
+        <div>
+          <h2 className='text-neutral-800 dark:text-neutral-500'>Percent of Bodyweight</h2>
+          <span className='text-4xl dark:text-white'>{currentPercentageofBodyWeight}%</span>
+        </div>
+      </div>
     </div>
   )
 }

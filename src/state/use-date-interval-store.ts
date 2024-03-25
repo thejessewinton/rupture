@@ -3,8 +3,7 @@ import { create } from 'zustand'
 export const intervals = [
   { label: '7D', days: 7 },
   { label: '15D', days: 15 },
-  { label: '30D', days: 30 },
-  { label: '1Y', days: 365 }
+  { label: '30D', days: 30 }
 ] as const
 
 type DateInterval = (typeof intervals)[number]

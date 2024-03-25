@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
+import { type RouterOutputs } from '~/trpc/shared'
+
 export const classNames = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
 }
@@ -43,4 +45,18 @@ export const getEstimatedMax = (set: { reps: number; weight: number }) => {
 
 export const getLiftPercentageOfBodyWeight = ({ weight, lift }: { weight: number; lift: number }) => {
   return Math.round((lift / weight) * 100)
+}
+
+export const getPercentagesOfMax = (max: number) => {
+  const percentages = [0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.1]
+  return percentages.map((percentage) => {
+    return {
+      percentage: `${Math.round(percentage * 100)}%`,
+      value: Math.round(max * percentage)
+    }
+  })
+}
+
+export const getAllTimeMax = (sets: NonNullable<RouterOutputs['lifts']['getBySlug']>['sets']) => {
+  return Math.max(...sets.map((set) => getEstimatedMax(set)))
 }

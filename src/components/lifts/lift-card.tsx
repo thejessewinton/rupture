@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import dayjs from 'dayjs'
-import { Bar, BarChart, Line, LineChart, ResponsiveContainer, XAxis } from 'recharts'
+import { Bar, BarChart, ResponsiveContainer, XAxis } from 'recharts'
 import { sortBy } from 'remeda'
 
 import { type RouterOutputs } from '~/trpc/shared'
@@ -31,16 +31,19 @@ export const LiftCard = ({ lift }: LiftCardProps) => {
   return (
     <Link
       href={`/lift/${lift.slug}`}
-      className='relative block rounded border border-neutral-200 px-6 py-2 dark:border-neutral-800'
+      className='relative block rounded border border-neutral-200 p-8 dark:border-neutral-800'
     >
-      <div className='grid grid-cols-12 items-end justify-end'>
-        <ResponsiveContainer className='relative -z-10 col-span-7 h-full max-h-32 min-h-32'>
-          <LineChart data={data} className='text-xs'>
-            <Line dot={false} dataKey='weight' className='[&>path]:stroke-blue-800' />
-          </LineChart>
-        </ResponsiveContainer>
-        <h2 className='col-span-5'>{lift.name}</h2>
+      <div className='absolute right-0 top-0 h-[1px] w-80 bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700' />
+      <div className='mb-10'>
+        <h2>{lift.name}</h2>
       </div>
+
+      <ResponsiveContainer className='relative -z-10 h-full max-h-40 min-h-40'>
+        <BarChart data={data} className='text-xs'>
+          <XAxis dataKey='day' tickLine={false} />
+          <Bar barSize={4} dataKey='weight' className='fill-green-800' />
+        </BarChart>
+      </ResponsiveContainer>
     </Link>
   )
 }

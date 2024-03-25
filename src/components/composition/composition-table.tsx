@@ -23,7 +23,7 @@ export const CompositionTable = ({
             <TableCell>
               {composition.weight} {composition.unit}.
             </TableCell>
-            <TableCell>{composition.body_fat_percentage}</TableCell>
+            <TableCell>{composition.body_fat_percentage}%</TableCell>
             <TableCell>{dayjs(composition.created_at).format('MM/DD/YY')}</TableCell>
           </TableRow>
         ))}
