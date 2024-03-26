@@ -18,5 +18,8 @@ export const useDateIntervalStore = create<DateIntervalState>((set) => ({
     label: '7D',
     days: 7
   },
-  setInterval: (interval) => set({ interval: intervals.find((i) => i.label === interval) })
+  setInterval: (interval) =>
+    set((get) => ({
+      interval: get.interval.label === interval ? get.interval : intervals.find((i) => i.label === interval)
+    }))
 }))

@@ -49,9 +49,11 @@ export const LiftCard = ({ lift }: LiftCardProps) => {
             <Line connectNulls type='monotone' dot={false} stroke='#93c5fd' fill='#222' dataKey='weight' />
           </LineChart>
         </ResponsiveContainer>
-        <span className='block pr-4 pt-2 text-right text-2xs text-neutral-500'>
-          {lift.sets.filter((s) => s.tracked).length} sets
-        </span>
+        <div>
+          <span className='block pr-4 pt-2 text-right text-2xs text-neutral-500'>
+            {lift.sets.filter((s) => s.tracked).length} tracked sets
+          </span>
+        </div>
       </div>
 
       <div className='px-6 pb-4'>
