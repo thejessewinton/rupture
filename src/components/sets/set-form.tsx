@@ -20,7 +20,7 @@ export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
       reps: 0,
       weight: 0,
       lift_id: lift?.id,
-      tracked: false
+      tracked: true
     }
   })
 

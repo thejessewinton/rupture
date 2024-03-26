@@ -21,18 +21,6 @@ export const metadata: Metadata = {
   icons: [{ rel: 'icon', url: '/favicon.ico' }]
 }
 
-// const sansFont = Inter({
-//   variable: '--font-sans',
-//   display: 'swap',
-//   subsets: ['latin']
-// })
-
-// const monoFont = Roboto_Mono({
-//   variable: '--font-mono',
-//   display: 'swap',
-//   subsets: ['latin']
-// })
-
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang='en' suppressHydrationWarning>
