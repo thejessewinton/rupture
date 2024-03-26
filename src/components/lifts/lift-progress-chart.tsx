@@ -86,14 +86,23 @@ type LiftsDataTableProps = {
 }
 
 export const LiftDataTable = ({ lift }: LiftsDataTableProps) => {
+  const { interval } = useDateIntervalStore()
   if (!lift) return null
+
+  const dates = getDaysBetween(dayjs().subtract(interval.days, 'days'), dayjs())
+
+  const sets = dates
+    .map((date) => {
+      return lift.sets.filter((set) => dayjs(set.date).isSame(dayjs(date), 'date') && set.tracked)
+    })
+    .flatMap((s) => s)
 
   const currentPercentageofBodyWeight = getLiftPercentageOfBodyWeight({
     lift: lift.personal_record,
     weight: lift.compositions?.weight ?? 0
   })
 
-  const { lowest, highest } = getLowestHighestWeights(lift.sets)
+  const { lowest, highest } = getLowestHighestWeights(sets)
 
   const percentageChange = getWeightPercentageChange({
     lowest,
@@ -111,7 +120,7 @@ export const LiftDataTable = ({ lift }: LiftsDataTableProps) => {
             </span>
           </div>
           <div>
-            <h2 className='text-xs text-neutral-800 dark:text-neutral-500'>Percent of bodyweight</h2>
+            <h2 className='text-xs text-neutral-800 dark:text-neutral-500'>% of bodyweight</h2>
             <span className='text-2xl dark:text-white'>{currentPercentageofBodyWeight}%</span>
           </div>
         </div>
@@ -120,7 +129,7 @@ export const LiftDataTable = ({ lift }: LiftsDataTableProps) => {
       <div className='relative w-full space-y-4 rounded-md border border-neutral-200 p-8 dark:border-neutral-800'>
         <div className='grid grid-cols-2 gap-4'>
           <div>
-            <h2 className='text-xs text-neutral-800 dark:text-neutral-500'>Percentage over time</h2>
+            <h2 className='text-xs text-neutral-800 dark:text-neutral-500'>% over time</h2>
             <span className='text-2xl dark:text-white'>{percentageChange.percentage}%</span>
           </div>
           <div>

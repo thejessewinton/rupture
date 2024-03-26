@@ -74,7 +74,9 @@ export const getWeightPercentageChange = ({ lowest, highest }: { lowest?: number
   }
 }
 
-export const getLowestHighestWeights = (sets: RouterOutputs['lifts']['getAll'][number]['sets']) => {
+export const getLowestHighestWeights = (
+  sets: RouterOutputs['lifts']['getAll'][number]['sets'] | NonNullable<RouterOutputs['lifts']['getBySlug']>['sets']
+) => {
   if (sets.length === 0) {
     return {
       lowest: 0,

@@ -30,7 +30,7 @@ export default function LiftPage({ params }: LiftPageParams) {
 
   return (
     <>
-      <div className='flex items-center justify-between pb-4'>
+      <div className='flex flex-col justify-between gap-2 pb-4 md:flex-row md:items-center'>
         <div>
           <h1 className='text-xl'>{lift.data.name}</h1>
         </div>
@@ -44,7 +44,6 @@ export default function LiftPage({ params }: LiftPageParams) {
           >
             Add set
           </Button>
-
           <LiftActions lift={lift.data} />
         </div>
       </div>
