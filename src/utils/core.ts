@@ -61,15 +61,31 @@ export const getAllTimeMax = (sets: NonNullable<RouterOutputs['lifts']['getBySlu
   return Math.max(...sets.map((set) => getEstimatedMax(set)))
 }
 
-export const getWeightPercentageChange = ({ previous, current }: { previous?: number; current?: number }) => {
-  if (!previous || !current) {
+export const getWeightPercentageChange = ({ lowest, highest }: { lowest?: number; highest?: number }) => {
+  if (!lowest || !highest) {
     return {
       percentage: 0,
       value: 0
     }
   }
   return {
-    percentage: (((current - previous) / previous) * 100).toFixed(),
-    value: current - previous
+    percentage: (((highest - lowest) / lowest) * 100).toFixed(),
+    value: highest - lowest
+  }
+}
+
+export const getLowestHighestWeights = (sets: RouterOutputs['lifts']['getAll'][number]['sets']) => {
+  if (sets.length === 0) {
+    return {
+      lowest: 0,
+      highest: 0
+    }
+  }
+  const setWithLowestWeight = sets.reduce((acc, set) => (set.weight < acc.weight ? set : acc))
+  const setWithHighestWeight = sets.reduce((acc, set) => (set.weight > acc.weight ? set : acc))
+
+  return {
+    lowest: setWithLowestWeight.weight,
+    highest: setWithHighestWeight.weight
   }
 }

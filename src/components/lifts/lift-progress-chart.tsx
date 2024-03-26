@@ -7,7 +7,12 @@ import { sortBy } from 'remeda'
 
 import { useDateIntervalStore } from '~/state/use-date-interval-store'
 import { type RouterOutputs } from '~/trpc/shared'
-import { getEstimatedMax, getLiftPercentageOfBodyWeight, getWeightPercentageChange } from '~/utils/core'
+import {
+  getEstimatedMax,
+  getLiftPercentageOfBodyWeight,
+  getLowestHighestWeights,
+  getWeightPercentageChange
+} from '~/utils/core'
 import { getDaysBetween } from '~/utils/date'
 
 type LiftProgressChartProps = {
@@ -40,11 +45,11 @@ export const LiftProgressChart = ({ lift }: LiftProgressChartProps) => {
       <div className='mb-20 flex justify-between'>
         <div>
           <h2 className='text-neutral-800 dark:text-neutral-500'>Total sets</h2>
-          <span className='text-4xl dark:text-white'>{lift.sets.length}</span>
+          <span className='text-4xl dark:text-white'>{lift.sets.filter((s) => s.tracked).length}</span>
         </div>
       </div>
       <ResponsiveContainer className='relative h-full min-h-52'>
-        <LineChart data={data}>
+        <LineChart data={data} className='text-2xs'>
           <XAxis tickLine={false} dataKey='day' />
           <YAxis tickLine={false} orientation='right' />
           <Tooltip cursor={false} content={<CustomTooltip />} />
@@ -88,12 +93,11 @@ export const LiftDataTable = ({ lift }: LiftsDataTableProps) => {
     weight: lift.compositions?.weight ?? 0
   })
 
-  const firstSet = lift.sets[0]
-  const lastSet = lift.sets[lift.sets.length - 1]
+  const { lowest, highest } = getLowestHighestWeights(lift.sets)
 
   const percentageChange = getWeightPercentageChange({
-    previous: firstSet?.weight,
-    current: lastSet?.weight
+    lowest,
+    highest
   })
 
   return (
@@ -107,7 +111,7 @@ export const LiftDataTable = ({ lift }: LiftsDataTableProps) => {
             </span>
           </div>
           <div>
-            <h2 className='text-xs text-neutral-800 dark:text-neutral-500'>Percent of Bodyweight</h2>
+            <h2 className='text-xs text-neutral-800 dark:text-neutral-500'>Percent of bodyweight</h2>
             <span className='text-2xl dark:text-white'>{currentPercentageofBodyWeight}%</span>
           </div>
         </div>

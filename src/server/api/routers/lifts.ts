@@ -9,10 +9,10 @@ export const liftsRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.query.lift.findMany({
       where: eq(lift.user_id, ctx.session.user.id),
-      orderBy: [desc(lift.created_at)],
+      orderBy: [desc(lift.updated_at)],
       with: {
         sets: {
-          orderBy: [desc(set.date)]
+          orderBy: [desc(set.created_at)]
         }
       }
     })

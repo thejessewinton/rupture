@@ -32,6 +32,13 @@ export const setsRouter = createTRPCRouter({
           orderBy: [desc(compositions.created_at)]
         })
 
+        await db
+          .update(lift)
+          .set({
+            updated_at: dayjs().toDate()
+          })
+          .where(eq(lift.id, input.lift_id))
+
         return await db.insert(set).values({
           user_id: ctx.session.user.id,
           date: dayjs(input.date).toDate(),
@@ -39,8 +46,7 @@ export const setsRouter = createTRPCRouter({
           weight: input.weight,
           tracked: input.tracked,
           composition_id: latestComposition?.id,
-          lift_id: input.lift_id,
-          unit: 'lbs'
+          lift_id: input.lift_id
         })
       })
     }),
