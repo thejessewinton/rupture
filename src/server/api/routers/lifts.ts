@@ -1,8 +1,8 @@
-import { and, desc, eq } from 'drizzle-orm'
+import { and, asc, desc, eq } from 'drizzle-orm'
 import { z } from 'zod'
 
-import { compositions, lift, set, units } from '~/server/db/schema'
-import { slugify } from '~/utils/core'
+import { compositions, lift, personalRecord, set, units } from '~/server/db/schema'
+import dayjs from '~/utils/date'
 import { createTRPCRouter, protectedProcedure } from '../trpc'
 
 export const liftsRouter = createTRPCRouter({
@@ -13,6 +13,15 @@ export const liftsRouter = createTRPCRouter({
       with: {
         sets: {
           orderBy: [desc(set.created_at)]
+        },
+        personal_records: {
+          where({ lift_id, user_id }, { and, eq }) {
+            return and(eq(personalRecord.lift_id, lift_id), eq(personalRecord.user_id, user_id))
+          },
+          orderBy: [desc(personalRecord.date)],
+          columns: {
+            weight: true
+          }
         }
       }
     })
@@ -21,7 +30,7 @@ export const liftsRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
-        personal_record: z.number(),
+        weight: z.number(),
         unit: z.enum(units)
       })
     )
@@ -29,15 +38,23 @@ export const liftsRouter = createTRPCRouter({
       await ctx.db.transaction(async (db) => {
         const [latestComposition] = await db.query.compositions.findMany({
           where: eq(compositions.user_id, ctx.session.user.id),
-          orderBy: [desc(compositions.created_at)]
+          orderBy: [desc(compositions.created_at)],
+          limit: 1
         })
 
-        return await db.insert(lift).values({
-          name: input.name,
-          user_id: ctx.session.user.id,
-          personal_record: input.personal_record,
-          slug: slugify(input.name),
-          composition_id: latestComposition?.id
+        const [newLift] = await db
+          .insert(lift)
+          .values({
+            name: input.name,
+            user_id: ctx.session.user.id,
+            composition_id: latestComposition?.id
+          })
+          .returning({ id: lift.id })
+
+        await db.insert(personalRecord).values({
+          weight: input.weight,
+          lift_id: newLift!.id,
+          user_id: ctx.session.user.id
         })
       })
     }),
@@ -58,6 +75,16 @@ export const liftsRouter = createTRPCRouter({
           columns: {
             weight: true
           }
+        },
+        personal_records: {
+          where({ lift_id, user_id }, { and, eq }) {
+            return and(eq(personalRecord.lift_id, lift_id), eq(personalRecord.user_id, user_id))
+          },
+          orderBy: [desc(personalRecord.date)],
+          columns: {
+            weight: true,
+            date: true
+          }
         }
       }
     })
@@ -65,17 +92,18 @@ export const liftsRouter = createTRPCRouter({
   updatePersonalRecord: protectedProcedure
     .input(
       z.object({
-        id: z.number(),
-        personal_record: z.number()
+        lift_id: z.number(),
+        weight: z.number(),
+        date: z.string()
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db
-        .update(lift)
-        .set({
-          personal_record: input.personal_record
-        })
-        .where(eq(lift.id, input.id))
+      return await ctx.db.insert(personalRecord).values({
+        weight: input.weight,
+        date: dayjs(input.date).toDate(),
+        user_id: ctx.session.user.id,
+        lift_id: input.lift_id
+      })
     }),
   deleteLift: protectedProcedure
     .input(

@@ -21,6 +21,9 @@ export default {
         'fade-in': 'fade-in 0.2s ease',
         'fade-out': 'fade-out 0.2s ease'
       },
+      boxShadow: ({ colors }) => ({
+        autofill: `inset 0 0 0 1000px ${colors.neutral[800]}`
+      }),
       keyframes: {
         'scale-in-content': {
           '0%': { transform: 'rotateX(-30deg) scale(0.9)', opacity: '0' },
@@ -55,5 +58,5 @@ export default {
       }
     }
   },
-  plugins: [require('tailwindcss-radix'), require('@tailwindcss/typography')]
+  plugins: [require('tailwindcss-radix'), require('@tailwindcss/typography'), require('@tailwindcss/forms')]
 } satisfies Config

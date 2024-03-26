@@ -15,7 +15,7 @@ export const LiftForm = ({ lift }: { lift?: NewLiftValues }) => {
   const { register, handleSubmit } = useForm<NewLiftValues>({
     defaultValues: lift ?? {
       name: '',
-      personal_record: 0,
+      weight: 0,
       unit: 'lbs'
     }
   })
@@ -55,7 +55,7 @@ export const LiftForm = ({ lift }: { lift?: NewLiftValues }) => {
         <div className='flex overflow-hidden rounded transition-all focus-within:ring-1 focus-within:ring-blue-400'>
           <Input
             placeholder='PR'
-            {...register('personal_record', {
+            {...register('weight', {
               valueAsNumber: true
             })}
             required

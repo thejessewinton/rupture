@@ -9,8 +9,9 @@ import { getPercentagesOfMax } from '~/utils/core'
 import { DeleteConfirm } from '../actions/delete-confirm'
 import { Dropdown, DropdownItem } from '../shared/dropdown'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../shared/table'
+import { PersonalRecordForm } from './personal-record-form'
 
-type LiftActionsProps = { lift: RouterOutputs['lifts']['getAll'][number] }
+type LiftActionsProps = { lift: RouterOutputs['lifts']['getBySlug'] }
 
 export const LiftActions = ({ lift }: LiftActionsProps) => {
   const { handleDialog, setIsOpen } = useDialogStore()
@@ -33,6 +34,8 @@ export const LiftActions = ({ lift }: LiftActionsProps) => {
     }
   })
 
+  if (!lift) return null
+
   return (
     <Dropdown
       trigger={
@@ -46,12 +49,25 @@ export const LiftActions = ({ lift }: LiftActionsProps) => {
         <button
           onClick={() => {
             handleDialog({
-              component: <LiftPercentagesTable currentMax={lift.personal_record} />,
+              component: <LiftPercentagesTable currentMax={lift.personal_records[0]!.weight} />,
               title: 'Lift percentages'
             })
           }}
         >
           View percentages
+        </button>
+      </DropdownItem>
+      <DropdownItem>
+        <button
+          className=''
+          onClick={() => {
+            handleDialog({
+              title: 'Delete lift',
+              component: <PersonalRecordForm lift={lift} />
+            })
+          }}
+        >
+          Add Personal Record
         </button>
       </DropdownItem>
       <DropdownItem>

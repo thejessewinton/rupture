@@ -13,6 +13,7 @@ import {
   timestamp,
   varchar
 } from 'drizzle-orm/pg-core'
+import { nanoid } from 'nanoid'
 
 // Necessary for Next Auth
 export const users = pgTable('user', {
@@ -31,7 +32,8 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   unit: one(unit, { fields: [users.id], references: [unit.user_id] }),
   lifts: many(lift),
   compositions: many(compositions),
-  sets: many(set)
+  sets: many(set),
+  personal_records: many(personalRecord)
 }))
 
 export const units = ['kgs', 'lbs'] as const
@@ -143,9 +145,8 @@ export const lift = pgTable(
   {
     id: serial('id').primaryKey(),
     name: varchar('name', { length: 255 }).notNull(),
-    personal_record: bigint('personal_record', { mode: 'number' }).notNull(),
     unit: unitEmum('value').notNull().default('lbs'),
-    slug: varchar('slug', { length: 255 }).notNull(),
+    slug: varchar('slug', { length: 255 }).$default(nanoid).notNull(),
     user_id: varchar('user_id', { length: 255 })
       .notNull()
       .references(() => users.id),
@@ -162,7 +163,25 @@ export const lift = pgTable(
 export const liftRelations = relations(lift, ({ one, many }) => ({
   user: one(users, { fields: [lift.user_id], references: [users.id] }),
   compositions: one(compositions, { fields: [lift.composition_id], references: [compositions.id] }),
-  sets: many(set)
+  sets: many(set),
+  personal_records: many(personalRecord)
+}))
+
+export const personalRecord = pgTable('personal_record', {
+  id: serial('id').primaryKey(),
+  user_id: varchar('user_id', { length: 255 })
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  lift_id: bigint('lift_id', { mode: 'number' }).references(() => lift.id, { onDelete: 'cascade' }),
+  weight: bigint('weight', { mode: 'number' }).notNull(),
+  date: timestamp('date', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`),
+  created_at: timestamp('created_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`),
+  updated_at: timestamp('updated_at', { mode: 'date' }).default(sql`CURRENT_TIMESTAMP`)
+})
+
+export const personalRecordRelations = relations(personalRecord, ({ one }) => ({
+  user: one(users, { fields: [personalRecord.user_id], references: [users.id] }),
+  lift: one(lift, { fields: [personalRecord.lift_id], references: [lift.id] })
 }))
 
 export const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as const

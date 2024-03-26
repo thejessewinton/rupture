@@ -6,6 +6,7 @@ import { type NameType, type ValueType } from 'recharts/types/component/DefaultT
 import { sortBy } from 'remeda'
 
 import { useDateIntervalStore } from '~/state/use-date-interval-store'
+import { useDialogStore } from '~/state/use-dialog-store'
 import { type RouterOutputs } from '~/trpc/shared'
 import {
   getEstimatedMax,
@@ -14,6 +15,7 @@ import {
   getWeightPercentageChange
 } from '~/utils/core'
 import { getDaysBetween } from '~/utils/date'
+import { PersonalRecordForm } from './personal-record-form'
 
 type LiftProgressChartProps = {
   lift: NonNullable<RouterOutputs['lifts']['getBySlug']>
@@ -98,7 +100,7 @@ export const LiftDataTable = ({ lift }: LiftsDataTableProps) => {
     .flatMap((s) => s)
 
   const currentPercentageofBodyWeight = getLiftPercentageOfBodyWeight({
-    lift: lift.personal_record,
+    lift: lift.personal_records[0]?.weight ?? 0,
     weight: lift.compositions?.weight ?? 0
   })
 
@@ -116,7 +118,7 @@ export const LiftDataTable = ({ lift }: LiftsDataTableProps) => {
           <div>
             <h2 className='text-xs text-neutral-800 dark:text-neutral-500'>Current max</h2>
             <span className='text-2xl dark:text-white'>
-              {lift.personal_record} {lift.unit}.
+              {lift.personal_records[0]?.weight} {lift.unit}.
             </span>
           </div>
           <div>
