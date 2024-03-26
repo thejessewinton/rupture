@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang='en' suppressHydrationWarning>
       <body
-        className={`bg-white bg-noise font-sans bg-blend-multiply dark:bg-neutral-900 ${sansFont.variable} ${monoFont.variable}`}
+        className={`bg-white font-sans bg-blend-multiply dark:bg-neutral-900 ${sansFont.variable} ${monoFont.variable}`}
       >
         <SessionProvider>
           <ThemeProvider attribute='class'>
