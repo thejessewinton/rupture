@@ -16,7 +16,7 @@ export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
   const { setIsOpen } = useDialogStore()
   const { register, handleSubmit } = useForm<SetValues>({
     defaultValues: set ?? {
-      date: new Date(),
+      date: new Date().toISOString().split('T')[0],
       reps: 0,
       weight: 0,
       lift_id: lift?.id,
@@ -66,15 +66,7 @@ export const SetForm = ({ set, lift }: { set?: SetValues; lift: Lift }) => {
           type='number'
           step={1}
         />
-        <Input
-          {...register('date', {
-            valueAsDate: true
-          })}
-          label='Date'
-          required
-          type='date'
-          step={1}
-        />
+        <Input {...register('date')} label='Date' required type='date' step={1} />
       </div>
       <div className='flex items-center justify-between'>
         <Button type='submit' disabled={submit.isLoading}>

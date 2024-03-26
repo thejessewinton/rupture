@@ -1,7 +1,7 @@
 'use client'
 
 import dayjs from 'dayjs'
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, type TooltipProps } from 'recharts'
+import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, type TooltipProps } from 'recharts'
 import { type NameType, type ValueType } from 'recharts/types/component/DefaultTooltipContent'
 
 import { IntervalSwitcher } from '~/components/lifts/interval-switcher'
@@ -47,13 +47,12 @@ export const LiftProgressChart = ({ lift }: LiftProgressChartProps) => {
         </div>
       </div>
       <ResponsiveContainer className='relative h-full min-h-52'>
-        <BarChart data={data} className='text-xs'>
+        <LineChart defaultShowTooltip={false} data={data} className='text-xs'>
           <XAxis tickLine={false} dataKey='day' />
           <YAxis tickLine={false} orientation='right' />
           <Tooltip cursor={false} content={<CustomTooltip />} />
-          <Bar barSize={4} dataKey='weight' className='fill-slate-500' width={4} />
-          <Bar barSize={4} dataKey='estimatedMax' className='fill-green-700' width={4} />
-        </BarChart>
+          <Line stroke='#93c5fd' dataKey='weight' />
+        </LineChart>
       </ResponsiveContainer>
     </div>
   )
@@ -70,7 +69,10 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
     <div className='flex flex-col gap-1 rounded border border-neutral-200 bg-white px-4 py-2 dark:border-neutral-800 dark:bg-neutral-900'>
       {payload?.map((p) => (
         <div key={p.name}>
-          {p.name === 'estimatedMax' ? 'Estimated max' : 'Weight'}: {p.value}
+          <span className='block text-xs text-neutral-500'>
+            {p.name === 'estimatedMax' ? 'Estimated max' : 'Weight'}
+          </span>
+          <span className='text-base'>{p.value}</span>
         </div>
       ))}
     </div>

@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { desc, eq } from 'drizzle-orm'
 import { z } from 'zod'
 
@@ -19,7 +20,7 @@ export const setsRouter = createTRPCRouter({
         reps: z.number(),
         weight: z.number(),
         lift_id: z.number(),
-        date: z.date(),
+        date: z.string(),
         tracked: z.boolean().default(false),
         notes: z.string().max(255).optional()
       })
@@ -36,7 +37,7 @@ export const setsRouter = createTRPCRouter({
           reps: input.reps,
           weight: input.weight,
           lift_id: input.lift_id,
-          date: input.date,
+          date: dayjs(input.date).toDate(),
           tracked: input.tracked,
           composition_id: latestComposition?.id
         })

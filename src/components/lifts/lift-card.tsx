@@ -1,11 +1,10 @@
 import Link from 'next/link'
 
-import dayjs from 'dayjs'
-import { Bar, BarChart, ResponsiveContainer, XAxis } from 'recharts'
+import { Line, LineChart, ResponsiveContainer } from 'recharts'
 import { sortBy } from 'remeda'
 
 import { type RouterOutputs } from '~/trpc/shared'
-import { getDaysBetween } from '~/utils/date'
+import dayjs, { getDaysBetween } from '~/utils/date'
 
 type LiftCardProps = {
   lift: RouterOutputs['lifts']['getAll'][number]
@@ -29,21 +28,20 @@ export const LiftCard = ({ lift }: LiftCardProps) => {
   })
 
   return (
-    <Link
-      href={`/lift/${lift.slug}`}
-      className='relative block rounded border border-neutral-200 p-8 dark:border-neutral-800'
-    >
-      <div className='absolute right-0 top-0 h-[1px] w-80 bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700' />
-      <div className='mb-10'>
-        <h2>{lift.name}</h2>
+    <Link href={`/lift/${lift.slug}`} className='relative rounded border border-neutral-200 dark:border-neutral-800'>
+      <div className='mb-4 mt-8 max-h-24 min-h-24'>
+        <ResponsiveContainer className='relative -z-10 min-h-16'>
+          <LineChart defaultShowTooltip={false} data={data} className='text-xs'>
+            <Line type='monotone' dot={false} stroke='#93c5fd' dataKey='weight' />
+          </LineChart>
+        </ResponsiveContainer>
+        <span className='block pr-4 text-right text-2xs text-neutral-500'>{lift.sets.length} sets</span>
       </div>
 
-      <ResponsiveContainer className='relative -z-10 h-full max-h-40 min-h-40'>
-        <BarChart data={data} className='text-xs'>
-          <XAxis dataKey='day' tickLine={false} />
-          <Bar barSize={4} dataKey='weight' className='fill-green-800' />
-        </BarChart>
-      </ResponsiveContainer>
+      <div className='px-6 pb-4'>
+        <h2>{lift.name}</h2>
+        <span className='text-2xs text-neutral-500'>Last updated {dayjs(lift.updated_at).fromNow()}</span>
+      </div>
     </Link>
   )
 }

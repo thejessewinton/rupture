@@ -12,7 +12,7 @@ const socials = [
 export const Footer = () => {
   return (
     <footer className='mb-0 mt-12 flex h-14 w-full items-center border-t border-t-neutral-300 dark:border-t-neutral-800'>
-      <div className='mx-auto flex w-full max-w-5xl flex-row items-center justify-between gap-4 px-8 text-neutral-900 dark:text-neutral-400'>
+      <div className='mx-auto flex w-full max-w-6xl flex-row items-center justify-between gap-4 px-8 text-neutral-900 dark:text-neutral-400'>
         <nav className='flex items-center justify-between gap-6 text-sm'>
           {socials.map((social) => (
             <a href={social.href} key={social.label} target='_blank'>

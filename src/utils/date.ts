@@ -1,4 +1,9 @@
-import { type Dayjs } from 'dayjs'
+import dayjs, { type Dayjs } from 'dayjs'
+import relative from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(relative)
+
+export default dayjs
 
 export const getDaysBetween = (start: Dayjs, end: Dayjs) => {
   const range = []

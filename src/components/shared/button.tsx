@@ -10,8 +10,7 @@ const button = cva(
   {
     variants: {
       variant: {
-        default:
-          'dark:text-white bg-neutral-50 dark:bg-neutral-900 text-neutral-900 border border-neutral-200 dark:border-neutral-800',
+        default: 'dark:text-white text-neutral-900 border border-neutral-200 dark:border-neutral-800',
         danger: 'bg-red-500/25 text-red-500 border border-red-500/25'
       }
     },
