@@ -34,12 +34,13 @@ export const setsRouter = createTRPCRouter({
 
         return await db.insert(set).values({
           user_id: ctx.session.user.id,
+          date: dayjs(input.date).toDate(),
           reps: input.reps,
           weight: input.weight,
-          lift_id: input.lift_id,
-          date: dayjs(input.date).toDate(),
           tracked: input.tracked,
-          composition_id: latestComposition?.id
+          composition_id: latestComposition?.id,
+          lift_id: input.lift_id,
+          unit: 'lbs'
         })
       })
     }),

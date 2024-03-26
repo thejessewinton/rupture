@@ -60,3 +60,16 @@ export const getPercentagesOfMax = (max: number) => {
 export const getAllTimeMax = (sets: NonNullable<RouterOutputs['lifts']['getBySlug']>['sets']) => {
   return Math.max(...sets.map((set) => getEstimatedMax(set)))
 }
+
+export const getWeightPercentageChange = ({ previous, current }: { previous?: number; current?: number }) => {
+  if (!previous || !current) {
+    return {
+      percentage: 0,
+      value: 0
+    }
+  }
+  return {
+    percentage: (((current - previous) / previous) * 100).toFixed(),
+    value: current - previous
+  }
+}

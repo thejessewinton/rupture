@@ -29,10 +29,10 @@ export const LiftCard = ({ lift }: LiftCardProps) => {
 
   return (
     <Link href={`/lift/${lift.slug}`} className='relative rounded border border-neutral-200 dark:border-neutral-800'>
-      <div className='mb-4 mt-8 max-h-24 min-h-24'>
+      <div className='mb-4 mt-8 max-h-24 min-h-24 w-full border-b border-neutral-800'>
         <ResponsiveContainer className='relative -z-10 min-h-16'>
-          <LineChart defaultShowTooltip={false} data={data} className='text-xs'>
-            <Line type='monotone' dot={false} stroke='#93c5fd' dataKey='weight' />
+          <LineChart defaultShowTooltip={false} data={data} className='w-full text-xs'>
+            <Line type='monotone' dot={false} stroke='#93c5fd' fill='#222' dataKey='weight' />
           </LineChart>
         </ResponsiveContainer>
         <span className='block pr-4 text-right text-2xs text-neutral-500'>{lift.sets.length} sets</span>
