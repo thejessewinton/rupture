@@ -5,15 +5,13 @@ import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { intervals, useDateIntervalStore } from '~/state/use-date-interval-store'
 
 export const IntervalSwitcher = () => {
-  const { interval, setInterval } = useDateIntervalStore()
+  const { setInterval } = useDateIntervalStore()
 
   return (
     <ToggleGroup.Root
       type='single'
       defaultValue={intervals[0].label}
-      onValueChange={(e) => {
-        e.length && setInterval(e)
-      }}
+      onValueChange={(e) => e.length && setInterval(e)}
       className='relative flex w-fit shrink-0 gap-1 rounded border border-neutral-200 text-xs dark:border-neutral-800'
     >
       {intervals.map((int) => (
