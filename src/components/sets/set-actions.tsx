@@ -1,6 +1,7 @@
+import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
+
 import { DeleteConfirm } from '~/components/actions/delete-confirm'
 import { Dropdown, DropdownItem } from '~/components/shared/dropdown'
-import SvgEllipsis from '~/components/svg/ellipsis'
 import { useDialogStore } from '~/state/use-dialog-store'
 import { api } from '~/trpc/react'
 import { type RouterOutputs } from '~/trpc/shared'
@@ -37,7 +38,7 @@ export const SetActions = ({ set }: SetActionsProps) => {
     <Dropdown
       trigger={
         <button className='rounded p-1 outline-none transition-all hover:bg-neutral-50 focus:ring-2 focus:ring-blue-400 hover:dark:bg-neutral-800'>
-          <SvgEllipsis className='h-4 w-4' />
+          <EllipsisHorizontalIcon className='h-4 w-4' />
         </button>
       }
       align='end'

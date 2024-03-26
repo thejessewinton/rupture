@@ -1,9 +1,10 @@
 'use client'
 
+import { PlusIcon } from '@heroicons/react/24/outline'
+
 import { CompositionTable } from '~/components/composition/composition-table'
 import { CompositionForm } from '~/components/settings/composition-action'
 import { ProfileForm } from '~/components/settings/profile-form'
-import SvgPlus from '~/components/svg/plus'
 import { useDialogStore } from '~/state/use-dialog-store'
 import { api } from '~/trpc/react'
 
@@ -30,7 +31,7 @@ export default function SettingsPage() {
                 handleDialog({ component: <CompositionForm />, title: 'Add composition' })
               }}
             >
-              <SvgPlus className='h-4 w-4' />
+              <PlusIcon className='h-4 w-4' />
             </button>
           </div>
           <CompositionTable compositions={data.compositions} />

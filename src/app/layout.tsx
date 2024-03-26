@@ -2,8 +2,10 @@ import '~/styles/globals.css'
 
 import { type ReactNode } from 'react'
 import { type Metadata } from 'next'
-import { Inter, Roboto_Mono } from 'next/font/google'
 import { cookies } from 'next/headers'
+
+import { GeistMono } from 'geist/font/mono'
+import { GeistSans } from 'geist/font/sans'
 
 import { Dialog } from '~/components/shared/dialog'
 import { HotkeysProvider } from '~/providers/hotkeys'
@@ -19,23 +21,23 @@ export const metadata: Metadata = {
   icons: [{ rel: 'icon', url: '/favicon.ico' }]
 }
 
-const sansFont = Inter({
-  variable: '--font-sans',
-  display: 'swap',
-  subsets: ['latin']
-})
+// const sansFont = Inter({
+//   variable: '--font-sans',
+//   display: 'swap',
+//   subsets: ['latin']
+// })
 
-const monoFont = Roboto_Mono({
-  variable: '--font-mono',
-  display: 'swap',
-  subsets: ['latin']
-})
+// const monoFont = Roboto_Mono({
+//   variable: '--font-mono',
+//   display: 'swap',
+//   subsets: ['latin']
+// })
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang='en' suppressHydrationWarning>
       <body
-        className={`bg-white font-sans bg-blend-multiply dark:bg-neutral-900 ${sansFont.variable} ${monoFont.variable}`}
+        className={`bg-white font-sans bg-blend-multiply dark:bg-neutral-900 ${GeistSans.variable} ${GeistMono.variable}`}
       >
         <SessionProvider>
           <ThemeProvider attribute='class'>
